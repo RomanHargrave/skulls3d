@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Lmain.lib; SDLmain.lib; sdl.lib"
+				AdditionalDependencies="SDLmain.lib sdl.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				GenerateDebugInformation="true"
