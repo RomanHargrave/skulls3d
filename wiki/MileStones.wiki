@@ -1,0 +1,15 @@
+= Skulls 3d Milestones =
+
+Here we define the tasks to be implemented followed by their respective deadlines.
+
+=== Details ===
+
+----
+Id: 1 
+From: 2/20/2010 To: 3/22/2010
+  * To convert the *SWEGL*( https://code.google.com/p/swegl/ ) into a library
+----
+Id: 2 
+From: 2/20/2010 To: 3/22/2010
+  * To make the *SWEGL* library support _wad_ file format
+----
