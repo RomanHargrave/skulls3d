@@ -1,0 +1,19 @@
+= Compile skulls3d =
+
+You need:
+ * The [http://www.libsdl.org/ SDL], as of 2010-02, the latest development version is 1.2.14-VC8 ([http://www.libsdl.org/release/SDL-devel-1.2.14-VC8.zip download]).
+ * [http://code.google.com/p/swegl/ swegl], the 3D software renderer.
+
+
+The source tree should look like this:
+{{{
+mycode/swegl/
+            /main.cpp
+            /...
+      /SDL/
+          /lib
+          /...
+      /skulls3d/
+               /projects
+               /...
+}}}
