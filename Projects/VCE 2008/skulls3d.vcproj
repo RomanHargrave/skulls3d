@@ -63,9 +63,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib sdl.lib"
+				OutputFile="..\..\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)$(TargetName).pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -137,10 +139,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Lmain.lib; SDLmain.lib; sdl.lib"
+				AdditionalDependencies="SDLmain.lib sdl.lib"
+				OutputFile="..\..\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)$(TargetName).pdb"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
