@@ -14,12 +14,13 @@ namespace doom
 		char * m_name;
 		int m_position;
 		int m_size;
+		char * m_data;
 
 		Lump(WadFile * wadfile, char * name, int pos, int size);
 		~Lump();
 
-		virtual void Load() = 0;
-		virtual void UnLoad() = 0;
+		virtual int Load();
+		virtual void UnLoad();
 	};
 };
 

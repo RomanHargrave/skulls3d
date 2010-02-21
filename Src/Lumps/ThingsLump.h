@@ -12,7 +12,7 @@ namespace doom
 	protected:
 		ThingLump * operator[](int index) const;
 
-		virtual void Load();
+		virtual int Load();
 		virtual void UnLoad();
 	};
 };
