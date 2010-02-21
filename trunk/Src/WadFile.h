@@ -5,14 +5,14 @@
 #include <vector>
 #include "File.h"
 
-namespace Doom
+namespace doom
 {
 	class Lump;
 
 	class WadFile : public File
 	{
 	private:
-		std::vector<Lump> m_lumps;
+		std::vector<Lump*> m_lumps;
 
 	public:
 		WadFile(const char * filename);
@@ -20,7 +20,7 @@ namespace Doom
 		virtual int Load();
 		virtual void UnLoad();
 
-		Lump& GetLump(int index);
+		Lump* GetLump(int index);
 	};
 };
 

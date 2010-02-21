@@ -1,6 +1,12 @@
 
 #include "ThingLump.h"
 
-namespace Doom
+namespace doom
 {
+	void ThingLump::Load()
+	{
+	}
+	void ThingLump::UnLoad()
+	{
+	}
 };
