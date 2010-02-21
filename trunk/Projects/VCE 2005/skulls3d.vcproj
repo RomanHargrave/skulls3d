@@ -180,15 +180,53 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="Lumps"
 			>
 			<File
-				RelativePath="..\..\Src\main.cpp"
+				RelativePath="..\..\Src\Lumps\Lump.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\Lump.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\ThingLump.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\ThingLump.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\ThingsLump.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\ThingsLump.h"
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\Src\File.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\File.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\WadFile.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\WadFile.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
