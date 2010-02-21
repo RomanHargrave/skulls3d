@@ -8,8 +8,7 @@ namespace doom
 {
 	class ThingLump : public Lump
 	{
-
-		virtual void Load();
+		virtual int Load();
 		virtual void UnLoad();
 	};
 };

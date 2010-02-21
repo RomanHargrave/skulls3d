@@ -10,8 +10,9 @@ namespace doom
 		return dynamic_cast<ThingLump*> (m_wadfile->GetLump(index));
 	}
 
-	void ThingsLump::Load()
+	int ThingsLump::Load()
 	{
+		return 0;
 	}
 	void ThingsLump::UnLoad()
 	{

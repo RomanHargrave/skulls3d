@@ -3,8 +3,9 @@
 
 namespace doom
 {
-	void ThingLump::Load()
+	int ThingLump::Load()
 	{
+		return 0;
 	}
 	void ThingLump::UnLoad()
 	{

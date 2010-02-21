@@ -21,18 +21,21 @@ public:
 	 */
 	int Open();
 	void Close();
-	bool IsOpen();
+	bool IsOpen() const;
+
+	void MoveTo(const int seek_position);
+	void Skip(const int byte_count);
 
 	/**
-	 * Success = 0,
-	 * UnknownError = 1,
-	 * FileNotOpen = 2,
+	 * Error = 0
+	 * Bytes read > 1
 	 */
-	virtual int Load();
-	virtual void UnLoad();
-
-	void MoveTo(int seek_position);
-	void Skip(int byte_count);
+	int ReadString(char * buffer, const int length) const;
+	/**
+	 * Error = 0
+	 * Bytes read > 1
+	 */
+	int ReadInt4(int * result) const;
 };
 
 #endif // SK_FILE
