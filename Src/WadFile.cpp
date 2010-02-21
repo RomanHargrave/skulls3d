@@ -4,7 +4,7 @@
 #include "WadFile.h"
 #include "Lumps/Lump.h"
 
-namespace Doom
+namespace doom
 {
 	WadFile::WadFile(const char * filename)
 		:File(filename)
@@ -22,7 +22,7 @@ namespace Doom
 		this->m_lumps.clear();
 	}
 	
-	Lump& WadFile::GetLump(int index)
+	Lump* WadFile::GetLump(int index)
 	{
 		return m_lumps[index];
 	}
