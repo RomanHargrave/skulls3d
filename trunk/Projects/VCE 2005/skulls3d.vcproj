@@ -183,6 +183,14 @@
 			Name="Lumps"
 			>
 			<File
+				RelativePath="..\..\Src\Lumps\LevelLump.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Lumps\LevelLump.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\Lumps\Lump.cpp"
 				>
 			</File>

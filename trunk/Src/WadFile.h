@@ -18,17 +18,22 @@ namespace doom
 
 	public:
 		WadFile(const char * filename);
+		virtual ~WadFile();
 
 		/**
 		 * 0: Success
 		 * 1: Unknown error
+		 * 2: Error reading dictionary
+		 * 3: Error reading levels
 		 */
 		virtual int Load();
 		virtual void UnLoad();
 
 		int ReadLumpDictionary();
+		int ReadLevels();
 
 		Lump* GetLump(int index);
+		void SetLump(Lump * lump);
 	};
 };
 
