@@ -3,6 +3,7 @@
 #include "File.h"
 #include "WadFile.h"
 #include "Lumps/Lump.h"
+#include "Lumps/LevelLump.h"
 
 namespace doom
 {
@@ -10,8 +11,19 @@ namespace doom
 		:File(filename)
 	{
 	}
+	WadFile::~WadFile()
+	{
+		UnLoad();
+	}
 
+	Lump* WadFile::GetLump(int index)
+	{
+		return m_lumps[index];
+	}
 
+	void WadFile::SetLump(Lump * lump)
+	{
+	}
 
 	int WadFile::Load()
 	{
@@ -34,7 +46,13 @@ namespace doom
 		if (4 != ReadInt4(&m_directory_potision))
 			return 1;
 
-		return ReadLumpDictionary();
+		if (ReadLumpDictionary() != 0)
+			return 2;
+
+		if (ReadLevels() != 0)
+			return 3;
+
+		return 0;
 	}
 
 	void WadFile::UnLoad()
@@ -58,15 +76,29 @@ namespace doom
 			memset(lump_name, 0, 9);
 			if (8 != ReadString(lump_name, 8))
 				return 1;
-			Lump * lump = new Lump(this, lump_name, lump_pos, lump_size);
+			Lump * lump = new Lump(this, i, lump_name, lump_pos, lump_size);
 			m_lumps[i] = lump;
 			printf("%08d + %08d %s\n", lump_pos, lump_size, lump_name);
 		}
 		return 0;
 	}
 	
-	Lump* WadFile::GetLump(int index)
+	int WadFile::ReadLevels()
 	{
-		return m_lumps[index];
+		int lump_count = (int)m_lumps.size();
+		LevelLump * current_level = NULL;
+		for (int i=0 ; i<lump_count ; i++)
+		{
+			if (   m_lumps[i]->m_name[0] == 'E' && m_lumps[i]->m_name[2] == 'M'
+				&& m_lumps[i]->m_name[1] >= '0' && m_lumps[i]->m_name[3] <= '9'
+				&& strlen(m_lumps[i]->m_name) == 4)
+			{
+				// Get may return NULL
+				current_level = LevelLump::Get(m_lumps[i]);
+				if (current_level == NULL)
+					continue;
+			}
+		}
+		return 0;
 	}
 };

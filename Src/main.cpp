@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-	doom::WadFile doomwad("data\\doom.wad");
+	doom::WadFile doomwad("doom.wad");
 	if (doomwad.Open() != 0)
 		return -1;
 	if (doomwad.Load() != 0)
