@@ -21,6 +21,10 @@ namespace doom
 		i++;
 		//SetThingsLump(ThingsLump::Get(m_wadfile->GetLump[i]));
 		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->GetLump(i));
+		if (m_things == NULL)
+			return 1;
+		m_things->Load();
+
 		/*
 		// LINEDEFS
 		i++;

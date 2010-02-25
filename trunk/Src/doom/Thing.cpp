@@ -5,7 +5,8 @@
 
 namespace doom
 {
-	Thing::Thing()
+	Thing::Thing(WadFile * wadFile, int offset)
 	{
+
 	}
 };
