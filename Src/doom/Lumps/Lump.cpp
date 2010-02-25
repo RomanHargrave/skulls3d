@@ -44,4 +44,10 @@ namespace doom
 		if (m_data != NULL)
 			delete m_data;
 	}
+
+	char* Lump::ToString()
+	{
+		static char s[128] = {'\0'};
+		return s;
+	}
 }

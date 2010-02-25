@@ -6,7 +6,7 @@
 #include "SDL/SDL.h"
 #endif
 
-#include "WadFile.h"
+#include "doom/WadFile.h"
 
 int main(int argc, char *argv[])
 {

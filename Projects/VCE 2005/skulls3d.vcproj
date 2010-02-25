@@ -180,40 +180,52 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Lumps"
+			Name="doom"
 			>
 			<File
-				RelativePath="..\..\Src\Lumps\LevelLump.cpp"
+				RelativePath="..\..\Src\doom\Thing.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Src\Lumps\LevelLump.h"
+				RelativePath="..\..\Src\doom\Thing.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Src\Lumps\Lump.cpp"
+				RelativePath="..\..\Src\doom\WadFile.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Src\Lumps\Lump.h"
+				RelativePath="..\..\Src\doom\WadFile.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Src\Lumps\ThingLump.cpp"
+			<Filter
+				Name="lumps"
 				>
-			</File>
-			<File
-				RelativePath="..\..\Src\Lumps\ThingLump.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\Lumps\ThingsLump.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\Lumps\ThingsLump.h"
-				>
-			</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LevelLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LevelLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\Lump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\Lump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\ThingsLump.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\..\Src\File.cpp"
@@ -225,14 +237,6 @@
 		</File>
 		<File
 			RelativePath="..\..\Src\main.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Src\WadFile.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Src\WadFile.h"
 			>
 		</File>
 	</Files>
