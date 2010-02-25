@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-#include "File.h"
+#include "../File.h"
 #include "WadFile.h"
 #include "Lumps/Lump.h"
 #include "Lumps/LevelLump.h"
@@ -21,8 +21,12 @@ namespace doom
 		return m_lumps[index];
 	}
 
-	void WadFile::SetLump(Lump * lump)
+	void WadFile::SetLump(Lump * newLump)
 	{
+		Lump * oldLump = m_lumps[newLump->m_dictionary_position];
+		if (oldLump != NULL)
+			delete oldLump;
+		m_lumps[newLump->m_dictionary_position] = newLump;
 	}
 
 	int WadFile::Load()
@@ -94,7 +98,7 @@ namespace doom
 				&& strlen(m_lumps[i]->m_name) == 4)
 			{
 				// Get may return NULL
-				current_level = LevelLump::Get(m_lumps[i]);
+				current_level = GetLump((LevelLump*)m_lumps[i]);
 				if (current_level == NULL)
 					continue;
 			}

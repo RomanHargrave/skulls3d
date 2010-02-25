@@ -7,23 +7,10 @@
 
 namespace doom
 {
-	LevelLump * LevelLump::Get(Lump * lump)
-	{
-		LevelLump * result = dynamic_cast<LevelLump*>(lump);
-		if (result == NULL)
-		{
-			// Lump has not been transformed yet, transform it now
-			result = new LevelLump(lump);
-			// Update the dictionary reference and dispose of the old lump
-			result->m_wadfile->SetLump(result);
-		}	
-		printf("New level found : %s\n", result->m_name);
-		return result;
-	}
-
 	LevelLump::LevelLump(Lump * lump)
 		:Lump(lump)
 	{
+		m_things = NULL;
 	}
 
 	int LevelLump::Load()
@@ -33,6 +20,7 @@ namespace doom
 		// THINGS
 		i++;
 		//SetThingsLump(ThingsLump::Get(m_wadfile->GetLump[i]));
+		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->GetLump(i));
 		/*
 		// LINEDEFS
 		i++;
@@ -66,5 +54,12 @@ namespace doom
 	}
 	void LevelLump::UnLoad()
 	{
+	}
+
+	char* LevelLump::ToString()
+	{
+		static char s[128] = {'\0'};
+		sprintf_s(s, "Level %s", m_name);
+		return s;
 	}
 };

@@ -23,6 +23,9 @@ namespace doom
 
 		virtual int Load();
 		virtual void UnLoad();
+
+		// TODO : This is for debug only, remove later
+		virtual char* ToString();
 	};
 };
 
