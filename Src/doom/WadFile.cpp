@@ -101,6 +101,7 @@ namespace doom
 				current_level = GetLump((LevelLump*)m_lumps[i]);
 				if (current_level == NULL)
 					continue;
+				current_level->Load();
 			}
 		}
 		return 0;

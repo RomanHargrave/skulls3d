@@ -8,8 +8,6 @@ namespace doom
 	ThingsLump::ThingsLump(Lump * lump)
 		:Lump(lump)
 	{
-		// Each ThingLump has 10 bytes of data
-		m_things.resize(m_size/10);
 	}
 	Thing* ThingsLump::operator[](int index) const
 	{
@@ -20,6 +18,17 @@ namespace doom
 
 	int ThingsLump::Load()
 	{
+		// Each ThingLump has 10 bytes of data
+		int count = m_size/10;
+		m_things.resize(count);
+
+		printf("%d Things\n", count);
+
+		for (int i=0 ; i<count ; i++)
+		{
+			m_things[i] = new Thing(m_wadfile, m_position+10*i);
+		}
+
 		return 0;
 	}
 	void ThingsLump::UnLoad()
