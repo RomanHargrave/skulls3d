@@ -4,6 +4,7 @@
 
 #include "Lump.h"
 #include "ThingsLump.h"
+#include "VertexesLump.h"
 
 namespace doom
 {
@@ -11,6 +12,7 @@ namespace doom
 	{
 	public:
 		ThingsLump * m_things;
+		VertexesLump* m_vertexes;
 
 		static LevelLump * Get(Lump * lump);
 
