@@ -90,6 +90,7 @@ void VideoWorks(SDL_Surface *screen)
 		for (int i=0 ; i<SCR_WIDTH ; i++)
 			((unsigned int*)screen->pixels)[(int) (j*screen->pitch/4 + i)] = 0;
 
+	// Plotting things
 	doom::LevelLump * level = g_doomwad->GetLevel(0);
 	for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
 	{

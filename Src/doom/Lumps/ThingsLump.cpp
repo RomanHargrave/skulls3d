@@ -11,8 +11,6 @@ namespace doom
 	}
 	Thing* ThingsLump::operator[](int index) const
 	{
-		// TODO : maybe index won't be global in m_wadfile->m_lumps
-		// but local to this THINGS collection
 		return m_things[index];
 	}
 

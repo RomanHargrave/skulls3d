@@ -3,19 +3,19 @@
 
 #include <vector>
 #include "Lump.h"
-#include "../Vertexes.h"
+#include "../Vertex.h"
 
 namespace doom
 {
 	class VertexesLump : public Lump
 	{
 	protected:
-		std::vector<Vertexes*> m_vertexes;
+		std::vector<Vertex*> m_vertexes;
 
 	public:
 		VertexesLump(Lump * lump);
 
-		Vertexes * operator[](int index) const;
+		Vertex * operator[](int index) const;
 
 		virtual int Load();
 		virtual void UnLoad();
