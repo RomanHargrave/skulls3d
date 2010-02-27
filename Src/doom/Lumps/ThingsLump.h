@@ -10,10 +10,9 @@ namespace doom
 {
 	class ThingsLump : public Lump
 	{
-	protected:
+	public:
 		std::vector<Thing*> m_things;
 
-	public:
 		ThingsLump(Lump * lump);
 
 		Thing * operator[](int index) const;

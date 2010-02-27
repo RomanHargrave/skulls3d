@@ -9,10 +9,9 @@ namespace doom
 {
 	class LevelLump : public Lump
 	{
-	protected:
+	public:
 		ThingsLump * m_things;
 
-	public:
 		static LevelLump * Get(Lump * lump);
 
 		LevelLump(Lump * lump);

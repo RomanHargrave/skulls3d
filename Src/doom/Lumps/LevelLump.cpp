@@ -11,6 +11,11 @@ namespace doom
 		:Lump(lump)
 	{
 		m_things = NULL;
+		
+		// Debug:
+		char * debugStr = ToString();
+		if (debugStr[0] != 0)
+			printf("Found this lump : %s\n", debugStr);
 	}
 
 	int LevelLump::Load()
@@ -23,7 +28,8 @@ namespace doom
 		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->GetLump(i));
 		if (m_things == NULL)
 			return 1;
-		m_things->Load();
+		if (m_things->Load() != 0)
+			return 2;
 
 		/*
 		// LINEDEFS

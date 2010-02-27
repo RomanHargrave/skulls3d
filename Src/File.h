@@ -36,6 +36,7 @@ public:
 	 * Bytes read > 1
 	 */
 	int ReadInt4(int * result) const;
+	int ReadInt2(short * result) const;
 };
 
 #endif // SK_FILE

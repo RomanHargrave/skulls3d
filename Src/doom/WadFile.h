@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "../File.h"
+#include "lumps/LevelLump.h"
 
 namespace doom
 {
@@ -15,6 +16,14 @@ namespace doom
 		bool m_internal; // true: IWAD (Internal wad), false: PWAD (Patch wad)
 		int m_directory_potision; // offset in the file
 		std::vector<Lump*> m_lumps;
+		std::vector<int> m_levels;
+
+		int ReadLumpDictionary();
+		int ReadLevels();
+
+	protected:
+		void SetLump(Lump * newLump);
+
 
 	public:
 		WadFile(const char * filename);
@@ -29,11 +38,10 @@ namespace doom
 		virtual int Load();
 		virtual void UnLoad();
 
-		int ReadLumpDictionary();
-		int ReadLevels();
+		LevelLump * GetLevel(unsigned int level_number);
+
 
 		Lump* GetLump(int index);
-		void SetLump(Lump * newLump);
 
 		template <class LUMPTYPE>
 		LUMPTYPE* GetLump(LUMPTYPE * lump);
@@ -51,11 +59,6 @@ namespace doom
 			// Update the dictionary reference and dispose of the old lump
 			result->m_wadfile->SetLump(result); // deletes the old one automatically
 		}
-
-		// Debug:
-		char * debugStr = result->ToString();
-		if (debugStr[0] != 0)
-			printf("Found this lump : %s\n", debugStr);
 
 		return result;
 	}
