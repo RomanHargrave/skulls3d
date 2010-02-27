@@ -191,6 +191,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\Vertex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Vertex.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\WadFile.cpp"
 				>
 			</File>
@@ -223,6 +231,14 @@
 				</File>
 				<File
 					RelativePath="..\..\Src\doom\Lumps\ThingsLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\VertexesLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\VertexesLump.h"
 					>
 				</File>
 			</Filter>

@@ -1,11 +1,11 @@
 
 #include <stdlib.h>
-#include "Vertexes.h"
+#include "Vertex.h"
 #include "WadFile.h"
 
 namespace doom
 {
-	Vertexes::Vertexes(WadFile * wadFile, int offset)
+	Vertex::Vertex(WadFile * wadFile, int offset)
 	{
 
 	}

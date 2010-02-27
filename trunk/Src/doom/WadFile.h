@@ -4,11 +4,11 @@
 
 #include <vector>
 #include "../File.h"
-#include "lumps/LevelLump.h"
 
 namespace doom
 {
 	class Lump;
+	class LevelLump;
 
 	class WadFile : public File
 	{
@@ -50,6 +50,7 @@ namespace doom
 	template<class LUMPTYPE>
 	LUMPTYPE * WadFile::GetLump(LUMPTYPE * l)
 	{
+		// l may not be of LUMPTYPE yet, check if it is
 		Lump * lump = l;
 		LUMPTYPE * result = dynamic_cast<LUMPTYPE*>(lump);
 		if (result == NULL)
