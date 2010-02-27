@@ -10,6 +10,7 @@ namespace doom
 	WadFile::WadFile(const char * filename)
 		:File(filename)
 	{
+		m_levels.resize(0);
 	}
 	WadFile::~WadFile()
 	{
@@ -24,7 +25,7 @@ namespace doom
 	void WadFile::SetLump(Lump * newLump)
 	{
 		Lump * oldLump = m_lumps[newLump->m_dictionary_position];
-		if (oldLump != NULL)
+		if (oldLump != NULL && oldLump != newLump)
 			delete oldLump;
 		m_lumps[newLump->m_dictionary_position] = newLump;
 	}
@@ -101,9 +102,22 @@ namespace doom
 				current_level = GetLump((LevelLump*)m_lumps[i]);
 				if (current_level == NULL)
 					continue;
-				current_level->Load();
+				if (0 == current_level->Load())
+				{
+					// Load successful
+					m_levels.push_back(i);
+				}
+
 			}
 		}
 		return 0;
+	}
+
+	
+	LevelLump * WadFile::GetLevel(unsigned int level_number)
+	{
+		if (level_number > m_levels.size())
+			return NULL;
+		else return GetLump((LevelLump*)GetLump(m_levels[level_number]));
 	}
 };

@@ -70,3 +70,15 @@ int File::ReadInt4(int * result) const
 	return retval;
 }
 
+int File::ReadInt2(short * result) const
+{
+	if (!IsOpen())
+		return 0;
+
+	unsigned char buffer[2];
+	short retval = (int) fread(&buffer, 1, 2, m_handle);
+	// wad files are Little endian
+	* result = (buffer[1]<<8) | (buffer[0]);
+	return retval;
+}
+

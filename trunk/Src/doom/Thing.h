@@ -2,13 +2,13 @@
 #ifndef SK_THINGLUMP
 #define SK_THINGLUMP
 
-#include "WadFile.h"
-
 namespace doom
 {
+	class WadFile;
+
 	class Thing
 	{
-	protected:
+	public:
 		short m_x;
 		short m_y;
 		short m_angle;
@@ -17,8 +17,11 @@ namespace doom
 		bool m_is_on_skill_4_5;
 		bool m_deaf;
 		bool m_not_in_single_player;
-	public:
+
 		Thing(WadFile * wadFile, int offset);
+
+		virtual int Load();
+		virtual void UnLoad();
 	};
 };
 
