@@ -19,7 +19,7 @@ namespace doom
 		return m_patches[index];
 	}
 
-	int PatchesLump::Load(PlayPalLump * palettes)
+	int PatchesLump::Load()
 	{
 		// Each PatchLump has 10 bytes of data
 		int count;
@@ -40,7 +40,7 @@ namespace doom
 		for (int i=0 ; i<count ; i++)
 		{
 			if (m_patches[i] != NULL)
-				m_patches[i]->Load(palettes);
+				m_patches[i]->Load();
 		}
 
 		return 0;

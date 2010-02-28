@@ -20,7 +20,6 @@ namespace doom
 		std::vector<Lump*> m_lumps;
 		std::vector<int> m_levels;
 		PatchesLump * m_patches;
-		PlayPalLump * m_palettes;
 
 		int LoadLumpDictionary();
 		int LoadLevels();
@@ -31,6 +30,8 @@ namespace doom
 
 
 	public:
+		PlayPalLump * m_palettes;
+
 		WadFile(const char * filename);
 		virtual ~WadFile();
 

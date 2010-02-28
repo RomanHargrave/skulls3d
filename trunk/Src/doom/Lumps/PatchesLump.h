@@ -5,7 +5,6 @@
 #include <vector>
 #include "Lump.h"
 #include "PatchLump.h"
-#include "PlayPalLump.h"
 
 namespace doom
 {
@@ -19,7 +18,7 @@ namespace doom
 
 		PatchLump * operator[](int index) const;
 
-		virtual int Load(PlayPalLump * palettes);
+		virtual int Load();
 		virtual void UnLoad();
 	};
 };
