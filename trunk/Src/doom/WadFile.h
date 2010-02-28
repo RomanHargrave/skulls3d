@@ -36,6 +36,9 @@ namespace doom
 		virtual ~WadFile();
 
 		/**
+		 * Loading a wad file does not load all its data in memory, it prepares
+		 * the data structure so that it is ready to load relevant data like levels.
+		 * Loading a level will make the wadfile load the related data.
 		 * 0: Success
 		 * 1: Unknown error
 		 * 2: Error reading dictionary
@@ -44,7 +47,7 @@ namespace doom
 		virtual int Load();
 		virtual void UnLoad();
 
-		LevelLump * GetLevel(unsigned int level_number);
+		LevelLump * LoadLevel(unsigned int level_number);
 
 		Lump* Get(int index);
 		Lump* Get(char * name);

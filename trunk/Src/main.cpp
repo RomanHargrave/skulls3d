@@ -93,7 +93,7 @@ void VideoWorks(SDL_Surface *screen)
 			((unsigned int*)screen->pixels)[(int) (j*screen->pitch/4 + i)] = 0;
 
 	// Plotting things
-	doom::LevelLump * level = g_doomwad->GetLevel(0);
+	doom::LevelLump * level = g_doomwad->LoadLevel(0);
 	for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
 	{
 		doom::Thing * thing = level->m_things->m_things[i];
@@ -131,6 +131,7 @@ void VideoWorks(SDL_Surface *screen)
 	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("DOOR2_4"));
 	if (doorPatchLump != NULL)
 	{
+		doorPatchLump->Load();
 		for (unsigned int j=0 ; j<doorPatchLump->m_h ; j++)
 			for (unsigned int i=0 ; i<doorPatchLump->m_w ; i++)
 			{

@@ -21,6 +21,9 @@ namespace doom
 
 	int PatchesLump::Load()
 	{
+		if (m_patches.size() != 0)
+			return 0; //Already loaded
+
 		// Each PatchLump has 10 bytes of data
 		int count;
 		m_wadfile->MoveTo(m_position);
@@ -36,11 +39,6 @@ namespace doom
 		{
 			m_wadfile->ReadString(name, 8);
 			m_patches[i] = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(name));
-		}
-		for (int i=0 ; i<count ; i++)
-		{
-			if (m_patches[i] != NULL)
-				m_patches[i]->Load();
 		}
 
 		return 0;

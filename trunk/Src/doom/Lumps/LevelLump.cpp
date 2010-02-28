@@ -20,8 +20,11 @@ namespace doom
 
 	int LevelLump::Load()
 	{
+		if (m_things != NULL)
+			return 0; // Already loaded
+
 		int i = m_dictionary_position;
-		
+
 		// THINGS
 		i++;
 		//SetThingsLump(ThingsLump::Get(m_wadfile->GetLump[i]));

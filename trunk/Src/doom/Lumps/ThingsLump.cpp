@@ -20,6 +20,9 @@ namespace doom
 
 	int ThingsLump::Load()
 	{
+		if (m_things.size() != 0)
+			return 0; //Already loaded
+
 		// Each Thing has 10 bytes of data
 		int count = m_size/10;
 		m_things.resize(count);
