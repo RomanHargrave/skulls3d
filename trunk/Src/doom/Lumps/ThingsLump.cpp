@@ -9,6 +9,10 @@ namespace doom
 		:Lump(lump)
 	{
 	}
+	ThingsLump::~ThingsLump()
+	{
+	}
+
 	Thing* ThingsLump::operator[](int index) const
 	{
 		return m_things[index];
@@ -16,7 +20,7 @@ namespace doom
 
 	int ThingsLump::Load()
 	{
-		// Each ThingLump has 10 bytes of data
+		// Each Thing has 10 bytes of data
 		int count = m_size/10;
 		m_things.resize(count);
 

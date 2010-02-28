@@ -37,6 +37,7 @@ public:
 	 */
 	int ReadInt4(int * result) const;
 	int ReadInt2(short * result) const;
+	int ReadInt1(char * result) const;
 };
 
 #endif // SK_FILE

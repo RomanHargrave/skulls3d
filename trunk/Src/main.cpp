@@ -8,6 +8,7 @@
 
 #include "doom/WadFile.h"
 #include "doom/lumps/LevelLump.h"
+#include "doom/lumps/PatchLump.h"
 #include "doom/Thing.h"
 
 #define SCR_WIDTH 800
@@ -110,6 +111,33 @@ void VideoWorks(SDL_Surface *screen)
 		((unsigned int*)screen->pixels)[((int)y)*(screen->pitch/4) + (int)x] = 0xFFFFFFFF;
 	}
 
+	// Painting the palette
+	doom::PlayPalLump * paletteLump = g_doomwad->GetLump((doom::PlayPalLump*)g_doomwad->Get("PLAYPAL"));
+	if (paletteLump != NULL)
+	{
+		for (unsigned int j=0 ; j<16 ; j++)
+			for (unsigned int i=0 ; i<16 ; i++)
+			{
+				int color = paletteLump->m_palettes[0][j*16 + i];
+				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
+			}
+	}
+
+	// Painting an arbitrary Patch
+	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("DOOR2_4"));
+	if (doorPatchLump != NULL)
+	{
+		for (unsigned int j=0 ; j<doorPatchLump->m_h ; j++)
+			for (unsigned int i=0 ; i<doorPatchLump->m_w ; i++)
+			{
+				int color = doorPatchLump->m_texture[j*doorPatchLump->m_w + i];
+				((unsigned int*)screen->pixels)[((int)j)*(screen->pitch/4) + (int)i+32] = (int) color;
+			}
+	}
+	
 	// Print fps
 	/*
 	sprintf_s(fps, "%.2f fps", 1000.0f/(SDL_GetTicks()-fpsticks));

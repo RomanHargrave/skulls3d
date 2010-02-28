@@ -4,6 +4,8 @@
 #include "WadFile.h"
 #include "Lumps/Lump.h"
 #include "Lumps/LevelLump.h"
+#include "Lumps/PatchesLump.h"
+#include "Lumps/PlayPalLump.h"
 
 namespace doom
 {
@@ -11,15 +13,26 @@ namespace doom
 		:File(filename)
 	{
 		m_levels.resize(0);
+		m_patches = NULL;
 	}
 	WadFile::~WadFile()
 	{
 		UnLoad();
 	}
 
-	Lump* WadFile::GetLump(int index)
+	Lump* WadFile::Get(int index)
 	{
 		return m_lumps[index];
+	}
+	Lump* WadFile::Get(char * name)
+	{
+		unsigned int size = (unsigned int) m_lumps.size();
+		for (unsigned int i=0 ; i<size ; i++)
+		{
+			if (strncmp(name, m_lumps[i]->m_name, 8) == 0)
+				return m_lumps[i];
+		}
+		return NULL;
 	}
 
 	void WadFile::SetLump(Lump * newLump)
@@ -48,14 +61,25 @@ namespace doom
 			return 1;
 		m_lumps.resize(lump_count);
 
+		// Read directory position in file
 		if (4 != ReadInt4(&m_directory_potision))
 			return 1;
 
-		if (ReadLumpDictionary() != 0)
+		// Load the dictionary
+		if (LoadLumpDictionary() != 0)
 			return 2;
 
-		if (ReadLevels() != 0)
+		// Load the palettes
+		m_palettes = GetLump((PlayPalLump*)Get("PLAYPAL"));
+		m_palettes->Load();
+
+		// Search the lumps for levels and load them
+		if (LoadLevels() != 0)
 			return 3;
+
+		// Search the lumps for Patches (texture bits) and load them
+		if (LoadPatches() != 0)
+			return 4;
 
 		return 0;
 	}
@@ -65,7 +89,7 @@ namespace doom
 		this->m_lumps.clear();
 	}
 
-	int WadFile::ReadLumpDictionary()
+	int WadFile::LoadLumpDictionary()
 	{
 		MoveTo(m_directory_potision);
 
@@ -88,7 +112,7 @@ namespace doom
 		return 0;
 	}
 	
-	int WadFile::ReadLevels()
+	int WadFile::LoadLevels()
 	{
 		int lump_count = (int)m_lumps.size();
 		LevelLump * current_level = NULL;
@@ -113,11 +137,18 @@ namespace doom
 		return 0;
 	}
 
+	int WadFile::LoadPatches()
+	{
+		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
+		if (m_patches == NULL)
+			return -1;
+		m_patches->Load(m_palettes);
+	}
 	
 	LevelLump * WadFile::GetLevel(unsigned int level_number)
 	{
 		if (level_number > m_levels.size())
 			return NULL;
-		else return GetLump((LevelLump*)GetLump(m_levels[level_number]));
+		else return GetLump((LevelLump*)Get(m_levels[level_number]));
 	}
 };

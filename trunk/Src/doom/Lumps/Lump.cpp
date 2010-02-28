@@ -33,9 +33,9 @@ namespace doom
 
 	int Lump::Load()
 	{
-		m_data = new char[m_size];
+		m_data = new unsigned char[m_size];
 		m_wadfile->MoveTo(m_position);
-		if (0 == m_wadfile->ReadString(m_data, m_size))
+		if (0 == m_wadfile->ReadString((char*)m_data, m_size))
 			return 1; // Error
 		return 0;
 	}

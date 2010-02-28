@@ -14,6 +14,7 @@ namespace doom
 		std::vector<Thing*> m_things;
 
 		ThingsLump(Lump * lump);
+		~ThingsLump();
 
 		Thing * operator[](int index) const;
 

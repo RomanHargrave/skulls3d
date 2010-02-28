@@ -14,8 +14,6 @@ namespace doom
 		ThingsLump * m_things;
 		VertexesLump* m_vertexes;
 
-		static LevelLump * Get(Lump * lump);
-
 		LevelLump(Lump * lump);
 
 		virtual int Load();
