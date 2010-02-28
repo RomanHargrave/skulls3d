@@ -226,6 +226,30 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchesLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchesLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PlayPalLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PlayPalLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
 					>
 				</File>

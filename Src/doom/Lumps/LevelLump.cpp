@@ -25,7 +25,7 @@ namespace doom
 		// THINGS
 		i++;
 		//SetThingsLump(ThingsLump::Get(m_wadfile->GetLump[i]));
-		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->GetLump(i));
+		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->Get(i));
 		if (m_things == NULL)
 			return 1;
 		if (m_things->Load() != 0)

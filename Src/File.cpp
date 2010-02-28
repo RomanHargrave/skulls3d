@@ -82,3 +82,11 @@ int File::ReadInt2(short * result) const
 	return retval;
 }
 
+int File::ReadInt1(char * result) const
+{
+	if (!IsOpen())
+		return 0;
+	short retval = (int) fread(result, 1, 1, m_handle);
+	return retval;
+}
+

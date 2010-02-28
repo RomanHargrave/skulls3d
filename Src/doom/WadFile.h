@@ -9,6 +9,8 @@ namespace doom
 {
 	class Lump;
 	class LevelLump;
+	class PatchesLump;
+	class PlayPalLump;
 
 	class WadFile : public File
 	{
@@ -17,9 +19,12 @@ namespace doom
 		int m_directory_potision; // offset in the file
 		std::vector<Lump*> m_lumps;
 		std::vector<int> m_levels;
+		PatchesLump * m_patches;
+		PlayPalLump * m_palettes;
 
-		int ReadLumpDictionary();
-		int ReadLevels();
+		int LoadLumpDictionary();
+		int LoadLevels();
+		int LoadPatches();
 
 	protected:
 		void SetLump(Lump * newLump);
@@ -40,8 +45,8 @@ namespace doom
 
 		LevelLump * GetLevel(unsigned int level_number);
 
-
-		Lump* GetLump(int index);
+		Lump* Get(int index);
+		Lump* Get(char * name);
 
 		template <class LUMPTYPE>
 		LUMPTYPE* GetLump(LUMPTYPE * lump);
@@ -50,6 +55,9 @@ namespace doom
 	template<class LUMPTYPE>
 	LUMPTYPE * WadFile::GetLump(LUMPTYPE * l)
 	{
+		if (l == NULL)
+			return NULL;
+		
 		// l may not be of LUMPTYPE yet, check if it is
 		Lump * lump = l;
 		LUMPTYPE * result = dynamic_cast<LUMPTYPE*>(lump);
