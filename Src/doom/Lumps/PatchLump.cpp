@@ -10,6 +10,8 @@ namespace doom
 	PatchLump::PatchLump(Lump * lump)
 		:Lump(lump)
 	{
+		m_texture = NULL;
+
 		// Debug
 		printf("%s is a Patch Lump\n", m_name);
 	}
@@ -22,6 +24,9 @@ namespace doom
 
 	int PatchLump::Load()
 	{
+		if (m_texture != NULL)
+			return 0; //Already loaded
+
 		m_wadfile->MoveTo(m_position);
 		m_wadfile->ReadInt2((short*)&m_w);
 		m_wadfile->ReadInt2((short*)&m_h);

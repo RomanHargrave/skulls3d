@@ -45,6 +45,9 @@ namespace doom
 
 	int WadFile::Load()
 	{
+		if (m_lumps.size() != 0)
+			return 0; //Already loaded
+
 		char buffer[10];
 
 		// Reading header
@@ -78,8 +81,9 @@ namespace doom
 			return 3;
 
 		// Search the lumps for Patches (texture bits) and load them
-		if (LoadPatches() != 0)
-			return 4;
+		//if (LoadPatches() != 0)
+		//	return 4;
+
 
 		return 0;
 	}
@@ -143,12 +147,20 @@ namespace doom
 		if (m_patches == NULL)
 			return -1;
 		m_patches->Load();
+
+		return 0;
 	}
 	
-	LevelLump * WadFile::GetLevel(unsigned int level_number)
+	LevelLump * WadFile::LoadLevel(unsigned int level_number)
 	{
 		if (level_number > m_levels.size())
 			return NULL;
-		else return GetLump((LevelLump*)Get(m_levels[level_number]));
+		else
+		{
+			LevelLump * result = GetLump((LevelLump*)Get(m_levels[level_number]));
+			if (result != NULL)
+				result->Load();
+			return result;
+		}
 	}
 };

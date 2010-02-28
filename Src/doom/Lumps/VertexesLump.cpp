@@ -16,6 +16,9 @@ namespace doom
 
 	int VertexesLump::Load()
 	{
+		if (m_vertexes.size() != 0)
+			return 0; //Already loaded
+
 		// Each Vertex has 4 bytes of data
 		int count = m_size/4;
 		m_vertexes.resize(count);

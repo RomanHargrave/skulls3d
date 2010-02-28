@@ -13,6 +13,9 @@ namespace doom
 
 	int PlayPalLump::Load()
 	{
+		if (m_palette != NULL)
+			return 0; // Already loaded
+
 		m_wadfile->MoveTo(m_position);
 
 		m_palette = new unsigned int[256];
