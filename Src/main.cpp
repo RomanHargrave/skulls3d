@@ -9,6 +9,7 @@
 #include "doom/WadFile.h"
 #include "doom/lumps/LevelLump.h"
 #include "doom/lumps/PatchLump.h"
+#include "doom/lumps/PlayPalLump.h"
 #include "doom/Thing.h"
 
 #define SCR_WIDTH 800
@@ -118,7 +119,7 @@ void VideoWorks(SDL_Surface *screen)
 		for (unsigned int j=0 ; j<16 ; j++)
 			for (unsigned int i=0 ; i<16 ; i++)
 			{
-				int color = paletteLump->m_palettes[0][j*16 + i];
+				int color = paletteLump->m_palette[j*16 + i];
 				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
 				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
 				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;

@@ -15,7 +15,6 @@ namespace doom
 		int m_dictionary_position;
 		int m_position;
 		int m_size;
-		unsigned char * m_data;
 
 		Lump(WadFile * wadfile, int dictionary_position, char * name, int pos, int size);
 		Lump(Lump * lump);

@@ -3,7 +3,6 @@
 #define SK_PATCHLUMP
 
 #include "Lump.h"
-#include "PlayPalLump.h"
 
 namespace doom
 {
@@ -16,7 +15,7 @@ namespace doom
 		PatchLump(Lump * other);
 		virtual ~PatchLump();
 
-		virtual int Load(PlayPalLump * palettes);
+		virtual int Load();
 		virtual void UnLoad();
 	};
 };

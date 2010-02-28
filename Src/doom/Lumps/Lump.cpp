@@ -12,7 +12,6 @@ namespace doom
 		this->m_name = _strdup(name);
 		this->m_position = pos;
 		this->m_size = size;
-		this->m_data = NULL;
 	}
 
 	Lump::Lump(Lump * other)
@@ -22,7 +21,6 @@ namespace doom
 		this->m_name = _strdup(other->m_name);
 		this->m_position = other->m_position;
 		this->m_size = other->m_size;
-		this->m_data = NULL;
 	}
 
 	Lump::~Lump()
@@ -33,16 +31,10 @@ namespace doom
 
 	int Lump::Load()
 	{
-		m_data = new unsigned char[m_size];
-		m_wadfile->MoveTo(m_position);
-		if (0 == m_wadfile->ReadString((char*)m_data, m_size))
-			return 1; // Error
 		return 0;
 	}
 	void Lump::UnLoad()
 	{
-		if (m_data != NULL)
-			delete m_data;
 	}
 
 	char* Lump::ToString()

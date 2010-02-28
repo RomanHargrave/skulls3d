@@ -20,7 +20,7 @@ namespace doom
 	}
 	
 
-	int PatchLump::Load(PlayPalLump * palettes)
+	int PatchLump::Load()
 	{
 		m_wadfile->MoveTo(m_position);
 		m_wadfile->ReadInt2((short*)&m_w);
@@ -56,7 +56,7 @@ namespace doom
 					}
 					unsigned char color;
 					m_wadfile->ReadInt1((char*)&color);
-					m_texture[(row+pix)*m_w + i] = palettes->m_palettes[0][color];
+					m_texture[(row+pix)*m_w + i] = m_wadfile->m_palettes->m_palette[color];
 				}
 				m_wadfile->Skip(1);
 			}while(1);

@@ -142,7 +142,7 @@ namespace doom
 		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
 		if (m_patches == NULL)
 			return -1;
-		m_patches->Load(m_palettes);
+		m_patches->Load();
 	}
 	
 	LevelLump * WadFile::GetLevel(unsigned int level_number)

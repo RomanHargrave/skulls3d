@@ -9,7 +9,7 @@ namespace doom
 	class PlayPalLump : public Lump
 	{
 	public:
-		unsigned int ** m_palettes;
+		unsigned int * m_palette;
 
 		PlayPalLump(Lump * lump);
 
