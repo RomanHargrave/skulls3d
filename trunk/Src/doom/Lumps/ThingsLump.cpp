@@ -38,5 +38,8 @@ namespace doom
 	}
 	void ThingsLump::UnLoad()
 	{
+		Lump::UnLoad();
+
+		m_things.clear();
 	}
 };

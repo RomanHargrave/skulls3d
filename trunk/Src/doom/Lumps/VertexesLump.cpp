@@ -34,5 +34,8 @@ namespace doom
 	}
 	void VertexesLump::UnLoad()
 	{
+		Lump::UnLoad();
+
+		m_vertexes.clear();
 	}
 };

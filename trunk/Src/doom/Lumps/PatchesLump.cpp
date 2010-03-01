@@ -45,5 +45,8 @@ namespace doom
 	}
 	void PatchesLump::UnLoad()
 	{
+		Lump::UnLoad();
+
+		m_patches.clear();
 	}
 };

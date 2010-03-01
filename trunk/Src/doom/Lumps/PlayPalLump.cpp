@@ -32,7 +32,12 @@ namespace doom
 	}
 	void PlayPalLump::UnLoad()
 	{
+		Lump::UnLoad();
+
 		if (m_palette != NULL)
+		{
 			delete m_palette;
+			m_palette = NULL;
+		}
 	}
 };

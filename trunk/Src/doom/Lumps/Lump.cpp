@@ -26,7 +26,6 @@ namespace doom
 	Lump::~Lump()
 	{
 		UnLoad();
-		delete m_name;
 	}
 
 	int Lump::Load()
@@ -35,6 +34,11 @@ namespace doom
 	}
 	void Lump::UnLoad()
 	{
+		if (m_name != NULL)
+		{
+			delete m_name;
+			m_name = NULL;
+		}
 	}
 
 	char* Lump::ToString()
