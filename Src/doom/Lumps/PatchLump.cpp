@@ -35,7 +35,9 @@ namespace doom
 		// Create bitmap
 		m_texture = new unsigned int[m_w*m_h];
 		// TODO: set to transparent
-		memset(m_texture, m_w*m_h, 0);
+		for (int j=0 ; j<m_h ; j++)
+			for (int i=0 ; i<m_w ; i++)
+				m_texture[j*m_w + i] = 0xFF000000; // alpha = 255
 
 		unsigned int *col_offset = new unsigned int[m_w];
 		for (int i=0 ; i<m_w ; i++)

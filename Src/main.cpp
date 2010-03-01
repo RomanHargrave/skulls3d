@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #if defined(_MSC_VER)
 #include "SDL.h"
@@ -128,7 +129,10 @@ void VideoWorks(SDL_Surface *screen)
 	}
 
 	// Painting an arbitrary Patch
-	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("DOOR2_4"));
+	int ticks = (SDL_GetTicks()>>8) % 4;
+	char name[9];
+	sprintf(name, "CYBR%c1", 'A'+ticks);
+	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get(name));
 	if (doorPatchLump != NULL)
 	{
 		doorPatchLump->Load();
@@ -136,7 +140,12 @@ void VideoWorks(SDL_Surface *screen)
 			for (unsigned int i=0 ; i<doorPatchLump->m_w ; i++)
 			{
 				int color = doorPatchLump->m_texture[j*doorPatchLump->m_w + i];
-				((unsigned int*)screen->pixels)[((int)j)*(screen->pitch/4) + (int)i+32] = (int) color;
+				if (color == 0xFF000000)
+					continue;
+				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + 32+(int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + 32+(int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + 32+(int)i*2+1] = (int) color;
+				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + 32+(int)i*2+1] = (int) color;
 			}
 	}
 	
