@@ -13,7 +13,7 @@ namespace doom
 		:File(filename)
 	{
 		m_levels.resize(0);
-		m_patches = NULL;
+		//m_patches = NULL;
 	}
 	WadFile::~WadFile()
 	{
@@ -90,7 +90,13 @@ namespace doom
 
 	void WadFile::UnLoad()
 	{
-		this->m_lumps.clear();
+		m_lumps.clear();
+		m_levels.clear();
+		if (m_palettes != NULL)
+		{
+			delete m_palettes;
+			m_palettes = NULL;
+		}
 	}
 
 	int WadFile::LoadLumpDictionary()
@@ -141,6 +147,7 @@ namespace doom
 		return 0;
 	}
 
+	/*
 	int WadFile::LoadPatches()
 	{
 		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
@@ -150,6 +157,7 @@ namespace doom
 
 		return 0;
 	}
+	*/
 	
 	LevelLump * WadFile::LoadLevel(unsigned int level_number)
 	{

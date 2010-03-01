@@ -67,6 +67,18 @@ namespace doom
 	}
 	void LevelLump::UnLoad()
 	{
+		Lump::UnLoad();
+
+		if (m_things != NULL)
+		{
+			delete m_things;
+			m_things = NULL;
+		}
+		if (m_vertexes != NULL)
+		{
+			delete m_vertexes;
+			m_vertexes = NULL;
+		}
 	}
 
 	char* LevelLump::ToString()

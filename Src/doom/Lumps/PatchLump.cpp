@@ -75,7 +75,11 @@ namespace doom
 	void PatchLump::UnLoad()
 	{
 		Lump::UnLoad();
+
 		if (m_texture != NULL)
+		{
 			delete m_texture;
+			m_texture = NULL;
+		}
 	}
 };

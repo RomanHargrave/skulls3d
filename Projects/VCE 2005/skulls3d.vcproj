@@ -210,6 +210,14 @@
 				Name="lumps"
 				>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\FlatLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\FlatLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\LevelLump.cpp"
 					>
 				</File>

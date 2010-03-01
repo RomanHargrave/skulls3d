@@ -11,6 +11,7 @@
 #include "doom/lumps/LevelLump.h"
 #include "doom/lumps/PatchLump.h"
 #include "doom/lumps/PlayPalLump.h"
+#include "doom/lumps/FlatLump.h"
 #include "doom/Thing.h"
 
 #define SCR_WIDTH 800
@@ -142,10 +143,26 @@ void VideoWorks(SDL_Surface *screen)
 				int color = doorPatchLump->m_texture[j*doorPatchLump->m_w + i];
 				if (color == 0xFF000000)
 					continue;
-				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + 32+(int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + 32+(int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + 32+(int)i*2+1] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + 32+(int)i*2+1] = (int) color;
+				((unsigned int*)screen->pixels)[(128+32+(int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[(128+32+(int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[(128+32+(int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				((unsigned int*)screen->pixels)[(128+32+(int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
+			}
+	}
+
+	// Painting an arbitrary Flat
+	doom::FlatLump * floorFlat = g_doomwad->GetLump((doom::FlatLump*)g_doomwad->Get("FLOOR5_1"));
+	if (floorFlat != NULL)
+	{
+		floorFlat->Load();
+		for (unsigned int j=0 ; j<64 ; j++)
+			for (unsigned int i=0 ; i<64 ; i++)
+			{
+				int color = floorFlat->m_texture[j*64 + i];
+				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[(32+(int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
+				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				((unsigned int*)screen->pixels)[(32+(int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
 			}
 	}
 	
