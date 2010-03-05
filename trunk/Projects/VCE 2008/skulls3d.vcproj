@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib sdl.lib"
-				OutputFile="..\..\$(ProjectName).exe"
+				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				GenerateDebugInformation="true"
@@ -140,7 +140,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDLmain.lib sdl.lib"
-				OutputFile="..\..\$(ProjectName).exe"
+				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				GenerateDebugInformation="true"
@@ -179,15 +179,121 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="doom"
 			>
 			<File
-				RelativePath="..\..\Src\main.cpp"
+				RelativePath="..\..\Src\doom\Thing.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Src\doom\Thing.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Vertex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Vertex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\WadFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\WadFile.h"
+				>
+			</File>
+			<Filter
+				Name="lumps"
+				>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\FlatLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\FlatLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LevelLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LevelLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\Lump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\Lump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchesLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchesLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PatchLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PlayPalLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\PlayPalLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\TextureLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\TextureLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\ThingsLump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\VertexesLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\VertexesLump.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Src\File.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\File.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\main.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
