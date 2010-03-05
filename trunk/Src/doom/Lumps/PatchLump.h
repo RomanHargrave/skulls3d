@@ -10,7 +10,7 @@ namespace doom
 	{
 	public:
 		unsigned short m_w, m_h;
-		unsigned int * m_texture;
+		unsigned int * m_bitmap;
 
 		PatchLump(Lump * other);
 		virtual ~PatchLump();

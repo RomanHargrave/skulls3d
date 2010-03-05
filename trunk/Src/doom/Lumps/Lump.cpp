@@ -40,10 +40,4 @@ namespace doom
 			m_name = NULL;
 		}
 	}
-
-	char* Lump::ToString()
-	{
-		static char s[128] = {'\0'};
-		return s;
-	}
 }

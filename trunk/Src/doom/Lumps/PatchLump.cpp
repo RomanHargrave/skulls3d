@@ -10,21 +10,21 @@ namespace doom
 	PatchLump::PatchLump(Lump * lump)
 		:Lump(lump)
 	{
-		m_texture = NULL;
+		m_bitmap = NULL;
 
 		// Debug
 		printf("%s is a Patch Lump\n", m_name);
 	}
 	PatchLump::~PatchLump()
 	{
-		if (m_texture != NULL)
-			delete m_texture;
+		if (m_bitmap != NULL)
+			delete m_bitmap;
 	}
 	
 
 	int PatchLump::Load()
 	{
-		if (m_texture != NULL)
+		if (m_bitmap != NULL)
 			return 0; //Already loaded
 
 		m_wadfile->MoveTo(m_position);
@@ -33,11 +33,11 @@ namespace doom
 		m_wadfile->Skip(4); // Remaining of the header
 
 		// Create bitmap
-		m_texture = new unsigned int[m_w*m_h];
+		m_bitmap = new unsigned int[m_w*m_h];
 		// TODO: set to transparent
 		for (int j=0 ; j<m_h ; j++)
 			for (int i=0 ; i<m_w ; i++)
-				m_texture[j*m_w + i] = 0xFF000000; // alpha = 255
+				m_bitmap[j*m_w + i] = 0xFF000000; // alpha = 255
 
 		unsigned int *col_offset = new unsigned int[m_w];
 		for (int i=0 ; i<m_w ; i++)
@@ -63,7 +63,7 @@ namespace doom
 					}
 					unsigned char color;
 					m_wadfile->ReadInt1((char*)&color);
-					m_texture[(row+pix)*m_w + i] = m_wadfile->m_palettes->m_palette[color];
+					m_bitmap[(row+pix)*m_w + i] = m_wadfile->m_palettes->m_palette[color];
 				}
 				m_wadfile->Skip(1);
 			}while(1);
@@ -76,10 +76,10 @@ namespace doom
 	{
 		Lump::UnLoad();
 
-		if (m_texture != NULL)
+		if (m_bitmap != NULL)
 		{
-			delete m_texture;
-			m_texture = NULL;
+			delete m_bitmap;
+			m_bitmap = NULL;
 		}
 	}
 };

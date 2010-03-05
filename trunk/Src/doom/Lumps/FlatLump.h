@@ -9,7 +9,7 @@ namespace doom
 	class FlatLump : public Lump
 	{
 	public:
-		unsigned int * m_texture;
+		unsigned int * m_bitmap;
 
 		FlatLump(Lump * other);
 		

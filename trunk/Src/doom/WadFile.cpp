@@ -13,7 +13,6 @@ namespace doom
 		:File(filename)
 	{
 		m_levels.resize(0);
-		//m_patches = NULL;
 	}
 	WadFile::~WadFile()
 	{
@@ -80,11 +79,6 @@ namespace doom
 		if (LoadLevels() != 0)
 			return 3;
 
-		// Search the lumps for Patches (texture bits) and load them
-		//if (LoadPatches() != 0)
-		//	return 4;
-
-
 		return 0;
 	}
 
@@ -141,23 +135,10 @@ namespace doom
 					// Load successful
 					m_levels.push_back(i);
 				}
-
 			}
 		}
 		return 0;
 	}
-
-	/*
-	int WadFile::LoadPatches()
-	{
-		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
-		if (m_patches == NULL)
-			return -1;
-		m_patches->Load();
-
-		return 0;
-	}
-	*/
 	
 	LevelLump * WadFile::LoadLevel(unsigned int level_number)
 	{
