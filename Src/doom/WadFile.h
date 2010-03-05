@@ -19,15 +19,12 @@ namespace doom
 		int m_directory_potision; // offset in the file
 		std::vector<Lump*> m_lumps;
 		std::vector<int> m_levels;
-		//PatchesLump * m_patches; // useless ?
 
 		int LoadLumpDictionary();
 		int LoadLevels();
-		//int LoadPatches();
 
 	protected:
 		void SetLump(Lump * newLump);
-
 
 	public:
 		PlayPalLump * m_palettes;

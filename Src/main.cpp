@@ -129,7 +129,7 @@ void VideoWorks(SDL_Surface *screen)
 		for (unsigned int j=0 ; j<doorPatchLump->m_h ; j++)
 			for (unsigned int i=0 ; i<doorPatchLump->m_w ; i++)
 			{
-				int color = doorPatchLump->m_texture[j*doorPatchLump->m_w + i];
+				int color = doorPatchLump->m_bitmap[j*doorPatchLump->m_w + i];
 				if (color == 0xFF000000)
 					continue;
 				Put4Pixels(screen, (int)i*2, 128+32+(int)j*2, color);
@@ -144,7 +144,7 @@ void VideoWorks(SDL_Surface *screen)
 		for (unsigned int j=0 ; j<64 ; j++)
 			for (unsigned int i=0 ; i<64 ; i++)
 			{
-				int color = floorFlat->m_texture[j*64 + i];
+				int color = floorFlat->m_bitmap[j*64 + i];
 				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
 				((unsigned int*)screen->pixels)[(32+(int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
 				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
