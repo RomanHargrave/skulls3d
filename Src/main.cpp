@@ -19,6 +19,10 @@
 SDL_Surface *InitSDL();
 void VideoWorks(SDL_Surface *screen);
 int KeyboardWorks();
+void MapToScreenCoords(int map_x, int map_y, int & screen_x, int & screen_y);
+void PutMapPixel(SDL_Surface *screen, int x, int y, int color);
+void PutPixel(SDL_Surface *screen, int x, int y, int color);
+void Put4Pixels(SDL_Surface *screen, int x, int y, int color);
 
 // Rendering parameters
 int g_x = 1000;
@@ -99,19 +103,7 @@ void VideoWorks(SDL_Surface *screen)
 	for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
 	{
 		doom::Thing * thing = level->m_things->m_things[i];
-
-		float x = (g_x - thing->m_x) * g_zoom;
-		x = SCR_WIDTH/2.0f - x;
-
-		float y = (g_y - thing->m_y) * g_zoom;
-		y = SCR_HEIGHT/2.0f - y;
-
-		if (y < 0 || y >= screen->h)
-			continue;
-		if (x < 0 || x >= screen->w)
-			continue;
-
-		((unsigned int*)screen->pixels)[((int)y)*(screen->pitch/4) + (int)x] = 0xFFFFFFFF;
+		PutMapPixel(screen, thing->m_x, thing->m_y, 0x00FFFFFF); // white at x,y
 	}
 
 	// Painting the palette
@@ -122,17 +114,14 @@ void VideoWorks(SDL_Surface *screen)
 			for (unsigned int i=0 ; i<16 ; i++)
 			{
 				int color = paletteLump->m_palette[j*16 + i];
-				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
-				((unsigned int*)screen->pixels)[((int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				Put4Pixels(screen, (int)i*2, (int)j*2, color);
 			}
 	}
 
 	// Painting an arbitrary Patch
 	int ticks = (SDL_GetTicks()>>8) % 4;
 	char name[9];
-	sprintf(name, "CYBR%c1", 'A'+ticks);
+	sprintf(name, "BOSS%c1", 'A'+ticks);
 	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get(name));
 	if (doorPatchLump != NULL)
 	{
@@ -143,10 +132,7 @@ void VideoWorks(SDL_Surface *screen)
 				int color = doorPatchLump->m_texture[j*doorPatchLump->m_w + i];
 				if (color == 0xFF000000)
 					continue;
-				((unsigned int*)screen->pixels)[(128+32+(int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[(128+32+(int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[(128+32+(int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
-				((unsigned int*)screen->pixels)[(128+32+(int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				Put4Pixels(screen, (int)i*2, 128+32+(int)j*2, color);
 			}
 	}
 
@@ -294,4 +280,38 @@ int KeyboardWorks()
 	}
 
 	return 0;
+}
+
+void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y)
+{
+	float l_x = (g_x - map_x) * g_zoom;
+	*screen_x = (int) (SCR_WIDTH/2.0f - l_x);
+
+	float l_y = (g_y - map_y) * g_zoom;
+	*screen_y = (int) (SCR_HEIGHT/2.0f - l_y);
+}
+
+void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
+{
+	int screen_x, screen_y;
+	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
+	PutPixel(screen, screen_x, screen_y, color);
+}
+
+void PutPixel(SDL_Surface *screen, int x, int y, int color)
+{
+	if (y < 0 || y >= screen->h)
+		return;
+	if (x < 0 || x >= screen->w)
+		return;
+	
+	((unsigned int*)screen->pixels)[y*(screen->pitch/4) + x] = color;
+}
+
+void Put4Pixels(SDL_Surface *screen, int x, int y, int color)
+{
+	PutPixel(screen, x  , y  , color);
+	PutPixel(screen, x+1, y  , color);
+	PutPixel(screen, x  , y+1, color);
+	PutPixel(screen, x+1, y+1, color);
 }
