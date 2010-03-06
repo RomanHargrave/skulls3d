@@ -183,6 +183,14 @@
 			Name="doom"
 			>
 			<File
+				RelativePath="..\..\Src\doom\Texture.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Texture.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Thing.cpp"
 				>
 			</File>

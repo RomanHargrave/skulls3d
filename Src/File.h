@@ -25,6 +25,7 @@ public:
 
 	void MoveTo(const int seek_position);
 	void Skip(const int byte_count);
+	int GetPos();
 
 	/**
 	 * Error = 0

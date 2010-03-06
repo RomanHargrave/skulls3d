@@ -6,6 +6,7 @@
 #include "Lumps/LevelLump.h"
 #include "Lumps/PatchesLump.h"
 #include "Lumps/PlayPalLump.h"
+#include "Texture.h"
 
 namespace doom
 {
@@ -13,6 +14,10 @@ namespace doom
 		:File(filename)
 	{
 		m_levels.resize(0);
+		m_lumps.resize(0);
+		m_textures.resize(0);
+		m_palettes = NULL;
+		m_patches = NULL;
 	}
 	WadFile::~WadFile()
 	{
@@ -75,6 +80,14 @@ namespace doom
 		m_palettes = GetLump((PlayPalLump*)Get("PLAYPAL"));
 		m_palettes->Load();
 
+		// Load the patches dictionary (sprites & texture pieces)
+		m_patches =  GetLump((PatchesLump*)Get("PNAMES"));
+		m_patches->Load();
+
+		// Load the texture
+		if (LoadTextures() != 0)
+			return 4;
+
 		// Search the lumps for levels and load them
 		if (LoadLevels() != 0)
 			return 3;
@@ -86,10 +99,16 @@ namespace doom
 	{
 		m_lumps.clear();
 		m_levels.clear();
+		m_textures.clear();
 		if (m_palettes != NULL)
 		{
 			delete m_palettes;
 			m_palettes = NULL;
+		}
+		if (m_patches != NULL)
+		{
+			delete m_patches;
+			m_patches = NULL;
 		}
 	}
 
@@ -139,17 +158,52 @@ namespace doom
 		}
 		return 0;
 	}
+
+	int WadFile::LoadTextures()
+	{
+		Lump * l = Get("TEXTURE1");
+		if (l == NULL)
+			return -1;
+
+		MoveTo(l->m_position);
+
+		int numTex;
+		ReadInt4(&numTex);
+		m_textures.resize(numTex);
+
+		// Skip offset table
+		Skip(numTex * 4);
+
+		// Read texture maps
+		for (int i=0 ; i<numTex ; i++)
+		{
+			Texture * tex = new Texture(this);
+			m_textures[i] = tex;
+			tex->Load();
+		}
+
+		return 0;
+	}
 	
-	LevelLump * WadFile::LoadLevel(unsigned int level_number)
+	LevelLump * WadFile::GetLevel(unsigned int level_number)
 	{
 		if (level_number > m_levels.size())
 			return NULL;
 		else
 		{
 			LevelLump * result = GetLump((LevelLump*)Get(m_levels[level_number]));
-			if (result != NULL)
-				result->Load();
 			return result;
 		}
+	}
+	
+	Texture * WadFile::GetTexture(char * name)
+	{
+		for (unsigned int i=0 ; i<m_textures.size() ; i++)
+		{
+			Texture * tex = m_textures[i];
+			if (strcmp(tex->m_name, name) == 0)
+				return tex;
+		}
+		return NULL;
 	}
 };

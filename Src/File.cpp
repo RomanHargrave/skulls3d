@@ -50,6 +50,11 @@ void File::Skip(const int byte_count)
 	fseek(m_handle, byte_count, SEEK_CUR);
 }
 
+int File::GetPos()
+{
+	return ftell(m_handle);
+}
+
 int File::ReadString(char * buffer, const int length) const
 {
 	if (!IsOpen())
