@@ -4,13 +4,25 @@
 
 namespace doom
 {
+	class WadFile;
+	class PatchLump;
+
 	class Texture
 	{
+	private:
+		void MergePatchIntoTexture(PatchLump * patch, short orig_x, short orig_y);
+
 	public:
-		int * m_bitmap;
+		char * m_name;
+		unsigned int * m_bitmap;
+		unsigned short m_w, m_h;
+		WadFile * m_wadfile;
 
-		Texture();
+		Texture(WadFile * m_wadfile);
 
+		/**
+		 * The file must come with its read pointer at the right position.
+		 */
 		virtual int Load();
 		virtual void UnLoad();
 	};

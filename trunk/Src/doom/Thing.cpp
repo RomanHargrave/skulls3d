@@ -169,7 +169,7 @@ namespace doom
 		{20, "SUIT", "A", 	false,  true, false, false},
 		{20, "PMAP", "ABCDCB",true,  true, false, false},
 		{16, "COLU", "A", 	false, false,  true, false},
-		{10, "BAR1", "AB",+ 	false, false,  true, false},
+		{10, "BAR1", "AB", 	false, false,  true, false},
 		{20, "PVIS", "AB", 	 true,  true, false, false},
 		{20, "BROK", "A", 	false,  true, false, false},
 		{20, "CELL", "A", 	false,  true, false, false},

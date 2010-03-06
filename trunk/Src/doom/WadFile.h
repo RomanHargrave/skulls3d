@@ -11,6 +11,7 @@ namespace doom
 	class LevelLump;
 	class PatchesLump;
 	class PlayPalLump;
+	class Texture;
 
 	class WadFile : public File
 	{
@@ -19,15 +20,18 @@ namespace doom
 		int m_directory_potision; // offset in the file
 		std::vector<Lump*> m_lumps;
 		std::vector<int> m_levels;
+		std::vector<Texture*> m_textures;
 
 		int LoadLumpDictionary();
 		int LoadLevels();
+		int LoadTextures();
 
 	protected:
 		void SetLump(Lump * newLump);
 
 	public:
 		PlayPalLump * m_palettes;
+		PatchesLump * m_patches;
 
 		WadFile(const char * filename);
 		virtual ~WadFile();
@@ -44,7 +48,8 @@ namespace doom
 		virtual int Load();
 		virtual void UnLoad();
 
-		LevelLump * LoadLevel(unsigned int level_number);
+		LevelLump * GetLevel(unsigned int level_number);
+		Texture * GetTexture(char * name);
 
 		Lump* Get(int index);
 		Lump* Get(char * name);

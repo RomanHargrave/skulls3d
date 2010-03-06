@@ -13,7 +13,10 @@
 #include "doom/lumps/PlayPalLump.h"
 #include "doom/lumps/FlatLump.h"
 #include "doom/Thing.h"
+#include "doom/Texture.h"
 
+// Keyboard action are taken into account every KEYBOARD_RATE_MS milliseconds
+#define KEYBOARD_RATE_MS 5
 #define SCR_WIDTH 800
 #define SCR_HEIGHT 600
 SDL_Surface *InitSDL();
@@ -99,11 +102,15 @@ void VideoWorks(SDL_Surface *screen)
 			((unsigned int*)screen->pixels)[(int) (j*screen->pitch/4 + i)] = 0;
 
 	// Plotting things
-	doom::LevelLump * level = g_doomwad->LoadLevel(0);
-	for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
+	doom::LevelLump * level = g_doomwad->GetLevel(0);
+	if (level != NULL)
 	{
-		doom::Thing * thing = level->m_things->m_things[i];
-		PutMapPixel(screen, thing->m_x, thing->m_y, 0x00FFFFFF); // white at x,y
+		level->Load();
+		for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
+		{
+			doom::Thing * thing = level->m_things->m_things[i];
+			PutMapPixel(screen, thing->m_x, thing->m_y, 0x00FFFFFF); // white at x,y
+		}
 	}
 
 	// Painting the palette
@@ -119,10 +126,12 @@ void VideoWorks(SDL_Surface *screen)
 	}
 
 	// Painting an arbitrary Patch
-	int ticks = (SDL_GetTicks()>>8) % 4;
+	/*int ticks = (SDL_GetTicks()>>8) % 4;
 	char name[9];
 	sprintf(name, "BOSS%c1", 'A'+ticks);
 	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get(name));
+	*/
+	doom::PatchLump * doorPatchLump = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("PLAYW0"));
 	if (doorPatchLump != NULL)
 	{
 		doorPatchLump->Load();
@@ -145,10 +154,22 @@ void VideoWorks(SDL_Surface *screen)
 			for (unsigned int i=0 ; i<64 ; i++)
 			{
 				int color = floorFlat->m_bitmap[j*64 + i];
-				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[(32+(int)j*2+1)*(screen->pitch/4) + (int)i*2  ] = (int) color;
-				((unsigned int*)screen->pixels)[(32+(int)j*2  )*(screen->pitch/4) + (int)i*2+1] = (int) color;
-				((unsigned int*)screen->pixels)[(32+(int)j*2+1)*(screen->pitch/4) + (int)i*2+1] = (int) color;
+				Put4Pixels(screen, (int)i*2, 32+(int)j*2, color);
+			}
+	}
+
+	// Painting an arbitrary Texture
+	doom::Texture * tex = g_doomwad->GetTexture("COMP2");
+	if (tex != NULL)
+	{
+		tex->Load();
+		for (unsigned int j=0 ; j<tex->m_h ; j++)
+			for (unsigned int i=0 ; i<tex->m_w ; i++)
+			{
+				int color = tex->m_bitmap[j*tex->m_w + i];
+				if (color == 0xFF000000)
+					continue;
+				Put4Pixels(screen, SCR_WIDTH-tex->m_w+(int)i*2, (int)j*2, color);
 			}
 	}
 	
@@ -257,7 +278,7 @@ int KeyboardWorks()
 		}
 	}
 
-	if ( (SDL_GetTicks())-keystick > 5 ) // Limit the keyrate
+	while ( (SDL_GetTicks())-keystick > KEYBOARD_RATE_MS ) // Limit the keyrate
 	{
 		if (g_keys['d'])
 			g_x -= (int) (1/g_zoom);
@@ -276,7 +297,7 @@ int KeyboardWorks()
 			g_zoom /= 1.01f;
 		}
 
-		keystick = SDL_GetTicks();
+		keystick += KEYBOARD_RATE_MS;
 	}
 
 	return 0;
