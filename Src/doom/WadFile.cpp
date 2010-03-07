@@ -85,8 +85,10 @@ namespace doom
 		m_patches->Load();
 
 		// Load the texture
-		if (LoadTextures() != 0)
+		if (LoadTextures("TEXTURE1") != 0)
 			return 4;
+		if (LoadTextures("TEXTURE2") != 0)
+			return 5;
 
 		// Search the lumps for levels and load them
 		if (LoadLevels() != 0)
@@ -159,9 +161,9 @@ namespace doom
 		return 0;
 	}
 
-	int WadFile::LoadTextures()
+	int WadFile::LoadTextures(char * lumpName)
 	{
-		Lump * l = Get("TEXTURE1");
+		Lump * l = Get(lumpName);
 		if (l == NULL)
 			return -1;
 

@@ -284,11 +284,27 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Src\display.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\display.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Src\File.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\Src\File.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\input.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\input.h"
 			>
 		</File>
 		<File

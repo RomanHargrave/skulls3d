@@ -24,7 +24,7 @@ namespace doom
 
 		int LoadLumpDictionary();
 		int LoadLevels();
-		int LoadTextures();
+		int LoadTextures(char * lumpName);
 
 	protected:
 		void SetLump(Lump * newLump);
