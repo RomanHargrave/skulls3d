@@ -13,7 +13,7 @@ namespace doom
 		m_bitmap = NULL;
 
 		// Debug
-		printf("%s is a Patch Lump\n", m_name);
+		//printf("%s is a Patch Lump\n", m_name);
 	}
 	PatchLump::~PatchLump()
 	{

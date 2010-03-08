@@ -31,7 +31,7 @@ namespace doom
 		
 		m_patches.resize(count);
 
-		printf("%d Patches\n", count);
+		//printf("%d Patches\n", count);
 
 		char name[9];
 		name[8] = 0;

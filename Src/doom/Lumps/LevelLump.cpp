@@ -11,11 +11,6 @@ namespace doom
 		:Lump(lump)
 	{
 		m_things = NULL;
-		
-		// Debug:
-		char * debugStr = ToString();
-		if (debugStr[0] != 0)
-			printf("Found this lump : %s\n", debugStr);
 	}
 
 	int LevelLump::Load()
@@ -79,12 +74,5 @@ namespace doom
 			delete m_vertexes;
 			m_vertexes = NULL;
 		}
-	}
-
-	char* LevelLump::ToString()
-	{
-		static char s[128] = {'\0'};
-		sprintf_s(s, "Level %s", m_name);
-		return s;
 	}
 };

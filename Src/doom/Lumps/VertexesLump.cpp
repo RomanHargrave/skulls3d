@@ -23,7 +23,7 @@ namespace doom
 		int count = m_size/4;
 		m_vertexes.resize(count);
 
-		printf("%d Vertexes\n", count);
+		//printf("%d Vertexes\n", count);
 
 		for (int i=0 ; i<count ; i++)
 		{
