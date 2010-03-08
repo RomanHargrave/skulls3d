@@ -9,18 +9,14 @@
 
 #include "display.h"
 #include "input.h"
+#include "mainmenu.h"
 #include "doom/WadFile.h"
-#include "doom/lumps/LevelLump.h"
-#include "doom/lumps/PatchLump.h"
-#include "doom/lumps/PlayPalLump.h"
-#include "doom/lumps/FlatLump.h"
-#include "doom/Thing.h"
-#include "doom/Texture.h"
 
 SDL_Surface *Init();
 
 // Rendering parameters
 doom::WadFile *g_doomwad = NULL;
+SDL_Surface *g_screen;
 
 // Keyboard action are taken into account every KEYBOARD_RATE_MS milliseconds
 #define KEYBOARD_RATE_MS 5
@@ -30,8 +26,8 @@ int HandleInput();
 
 int main(int argc, char *argv[])
 {
-    SDL_Surface *screen = Init();
-	if (screen == NULL) return -1;
+    g_screen = Init();
+	if (g_screen == NULL) return -1;
 
 	g_doomwad = new doom::WadFile("doom.wad");
 	if (g_doomwad == NULL)
@@ -41,12 +37,16 @@ int main(int argc, char *argv[])
 	if (g_doomwad->Load() != 0)
 		return -1;
 
+	ShowMainMenu();
+
+	/*
 	while (1)
 	{
-		RefreshDisplay(screen);
+		RefreshDebugDisplay(screen);
 		if (int a=HandleInput() < 0)
 			return -a;
 	}
+	*/
 	return 0;
 }
 
@@ -71,7 +71,7 @@ SDL_Surface *Init()
 	atexit(SDL_Quit);
 
 	// Attempt to create a SCR_WIDTHxSCR_HEIGHT window with 32bit pixels.
-	screen = SDL_SetVideoMode(g_scr_width, g_scr_height, 32, SDL_SWSURFACE);
+	screen = SDL_SetVideoMode(g_scr_w, g_scr_h, 32, SDL_SWSURFACE);
 	return screen;
 }
 

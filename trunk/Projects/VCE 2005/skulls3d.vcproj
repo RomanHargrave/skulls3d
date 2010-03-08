@@ -311,6 +311,14 @@
 			RelativePath="..\..\Src\main.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\Src\mainmenu.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\mainmenu.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -7,22 +7,32 @@
 
 namespace doom
 {
-	Texture::Texture(WadFile * wadfile)
+	Texture::Texture(WadFile * wadfile, int position)
 	{
 		m_name = NULL;
 		m_bitmap = NULL;
 		m_wadfile = wadfile;
-	}
+		m_position = position;
 
-	int Texture::Load()
-	{
-		if (m_name != NULL)
-			return 0; // Already loaded
-
+		// Load name
+		int pos = wadfile->GetPos();
+		wadfile->MoveTo(position);
 		char buffer[9];
 		memset(buffer, 0, 9);
 		m_wadfile->ReadString(buffer, 8);
 		m_name = _strdup(buffer);
+		wadfile->MoveTo(pos);
+	}
+
+	int Texture::Load()
+	{
+		if (m_bitmap != NULL)
+			return 0; // Already loaded
+
+		m_wadfile->MoveTo(m_position);
+
+		// Skipping name, already read
+		m_wadfile->Skip(8);
 
 		//Skipping flag
 		m_wadfile->Skip(4);
@@ -73,11 +83,8 @@ namespace doom
 	}
 	void Texture::UnLoad()
 	{
-		if (m_name != NULL)
-		{
-			delete m_name;
-			m_name = NULL;
-		}
+		// Keep the name so the texture can be found in wadfile->m_textures
+
 		if (m_bitmap != NULL)
 		{
 			delete m_bitmap;

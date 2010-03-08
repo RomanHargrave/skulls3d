@@ -81,16 +81,16 @@ namespace doom
 		m_palettes->Load();
 
 		// Load the patches dictionary (sprites & texture pieces)
-		m_patches =  GetLump((PatchesLump*)Get("PNAMES"));
+		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
 		m_patches->Load();
 
-		// Load the texture
+		// Load the texture dictionary
 		if (LoadTextures("TEXTURE1") != 0)
 			return 4;
 		if (LoadTextures("TEXTURE2") != 0)
 			return 5;
 
-		// Search the lumps for levels and load them
+		// Fill the levels dictionary
 		if (LoadLevels() != 0)
 			return 3;
 
@@ -132,7 +132,7 @@ namespace doom
 				return 1;
 			Lump * lump = new Lump(this, i, lump_name, lump_pos, lump_size);
 			m_lumps[i] = lump;
-			printf("%08d + %08d %s\n", lump_pos, lump_size, lump_name);
+			//printf("%08d + %08d %s\n", lump_pos, lump_size, lump_name);
 		}
 		return 0;
 	}
@@ -173,15 +173,20 @@ namespace doom
 		ReadInt4(&numTex);
 		m_textures.resize(numTex);
 
-		// Skip offset table
-		Skip(numTex * 4);
-
 		// Read texture maps
 		for (int i=0 ; i<numTex ; i++)
 		{
-			Texture * tex = new Texture(this);
+			int offset;
+			ReadInt4(&offset);
+			// offset is relative to the beginning of the lump
+			// From the position of the lump in the file we have
+			// to skip the number of textures (4 bytes) and the
+			// offset table (4 bytes per texture)
+			offset += l->m_position + 4 + 4*numTex;
+
+			Texture * tex = new Texture(this, offset);
 			m_textures[i] = tex;
-			tex->Load();
+			//tex->Load();
 		}
 
 		return 0;

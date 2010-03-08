@@ -27,7 +27,7 @@ namespace doom
 		int count = m_size/10;
 		m_things.resize(count);
 
-		printf("%d Things\n", count);
+		//printf("%d Things\n", count);
 
 		for (int i=0 ; i<count ; i++)
 		{

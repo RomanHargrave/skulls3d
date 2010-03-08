@@ -8,8 +8,13 @@
 #include "SDL/SDL.h"
 #endif
 
-extern unsigned int g_scr_width;
-extern unsigned int g_scr_height;
+typedef struct { int x,y,w,h; }Rect;
+
+extern unsigned int g_scr_w;
+extern unsigned int g_scr_h;
+extern float g_strech_w;
+extern float g_strech_h;
+
 extern int g_x;
 extern int g_y;
 extern float g_zoom;
@@ -19,6 +24,15 @@ void PutMapPixel(SDL_Surface *screen, int x, int y, int color);
 void PutPixel(SDL_Surface *screen, int x, int y, int color);
 void Put4Pixels(SDL_Surface *screen, int x, int y, int color);
 
-void RefreshDisplay(SDL_Surface *screen);
+void Draw(SDL_Surface *screen,
+		  unsigned int * bitmap, Rect dimensions,
+		  Rect bitmap_what, Rect screen_where,
+		  unsigned char shade);
+
+void DrawBackGround(SDL_Surface *screen,
+					unsigned int * bitmap, unsigned int bitmap_w, unsigned int bitmap_h,
+					unsigned char shade);
+
+void RefreshDebugDisplay(SDL_Surface *screen);
 
 #endif // SK_DISPLAY

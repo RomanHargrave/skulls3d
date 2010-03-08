@@ -15,12 +15,17 @@
 #include "doom/Thing.h"
 #include "doom/Texture.h"
 
-unsigned int g_scr_width = 800;
-unsigned int g_scr_height = 600;
+// [New vs Original] screen sizes
+unsigned int g_scr_w = 800;
+unsigned int g_scr_h = 600;
+float g_strech_w = g_scr_w / (float)320;
+float g_strech_h = g_scr_h / (float)200;
+
+// map display
 int g_x = 1000;
 int g_y = -3000;
 float g_zoom = 0.2f;
-
+	
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 
@@ -28,10 +33,10 @@ extern doom::WadFile *g_doomwad;
 void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y)
 {
 	float l_x = (g_x - map_x) * g_zoom;
-	*screen_x = (int) (g_scr_width/2.0f - l_x);
+	*screen_x = (int) (g_scr_w/2.0f - l_x);
 
 	float l_y = (g_y - map_y) * g_zoom;
-	*screen_y = (int) (g_scr_height/2.0f - l_y);
+	*screen_y = (int) (g_scr_h/2.0f - l_y);
 }
 
 void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
@@ -59,7 +64,47 @@ void Put4Pixels(SDL_Surface *screen, int x, int y, int color)
 	PutPixel(screen, x+1, y+1, color);
 }
 
-void RefreshDisplay(SDL_Surface *screen)
+void Draw(SDL_Surface *screen,
+		  unsigned int * bitmap, Rect dimensions,
+		  Rect bitmap_what, Rect screen_where,
+		  unsigned char shade)
+{
+
+}
+
+void DrawBackGround(SDL_Surface *screen,
+					unsigned int * bitmap, unsigned int bitmap_w, unsigned int bitmap_h,
+					unsigned char shade)
+{
+	// Lock surface if needed
+	if (SDL_MUSTLOCK(screen)) 
+		if (SDL_LockSurface(screen) < 0) 
+			return;
+
+	for (unsigned int j=0 ; j<g_scr_h ; j++)
+		for (unsigned int i=0 ; i<g_scr_w ; i++)
+		{
+			int bitmap_x = (int) ((i/(float)g_scr_w) * bitmap_w);
+			int bitmap_y = (int) ((j/(float)g_scr_h) * bitmap_h);
+			int color = bitmap[bitmap_y*bitmap_w + bitmap_x];
+			if (color == 0xFF000000)
+				continue;
+			// Apply shade
+			color = ((((color&0xFF0000)*(shade+1))>>8)&0xFF0000)
+				  | ((((color&0x00FF00)*(shade+1))>>8)&0x00FF00)
+				  | ((((color&0x0000FF)*(shade+1))>>8)&0x0000FF);
+			PutPixel(screen, i, j, color);
+		}
+
+	// Unlock if needed
+	if (SDL_MUSTLOCK(screen)) 
+		SDL_UnlockSurface(screen);
+
+	// Tell SDL to update the whole screen
+	SDL_UpdateRect(screen, 0, 0, g_scr_w, g_scr_h); 
+}
+
+void RefreshDebugDisplay(SDL_Surface *screen)
 {
 	/* fps stuff
 	static int fpsticks = SDL_GetTicks();
@@ -72,8 +117,8 @@ void RefreshDisplay(SDL_Surface *screen)
 			return;
 
 	// Cleaning
-	for (unsigned int j=0 ; j<g_scr_width ; j++)
-		for (unsigned int i=0 ; i<g_scr_height ; i++)
+	for (unsigned int j=0 ; j<g_scr_w ; j++)
+		for (unsigned int i=0 ; i<g_scr_h ; i++)
 			((unsigned int*)screen->pixels)[(int) (j*screen->pitch/4 + i)] = 0;
 
 	// Plotting things
@@ -144,7 +189,7 @@ void RefreshDisplay(SDL_Surface *screen)
 				int color = tex->m_bitmap[j*tex->m_w + i];
 				if (color == 0xFF000000)
 					continue;
-				Put4Pixels(screen, g_scr_width-tex->m_w+(int)i*2, (int)j*2, color);
+				Put4Pixels(screen, g_scr_w-tex->m_w+(int)i*2, (int)j*2, color);
 			}
 	}
 	
@@ -165,5 +210,5 @@ void RefreshDisplay(SDL_Surface *screen)
 		SDL_UnlockSurface(screen);
 
 	// Tell SDL to update the whole screen
-	SDL_UpdateRect(screen, 0, 0, g_scr_width, g_scr_height); 
+	SDL_UpdateRect(screen, 0, 0, g_scr_w, g_scr_h); 
 }
