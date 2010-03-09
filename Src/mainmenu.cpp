@@ -8,8 +8,10 @@
 #include "mainmenu.h"
 #include "input.h"
 #include "display.h"
+#include "audio.h"
 #include "doom/WadFile.h"
 #include "doom/lumps/PatchLump.h"
+#include "doom/lumps/SoundLump.h"
 
 // in main.cpp
 extern doom::WadFile *g_doomwad;
@@ -24,6 +26,9 @@ static doom::PatchLump * gs_newGame = NULL;
 static doom::PatchLump * gs_options = NULL;
 static doom::PatchLump * gs_readThis = NULL;
 static doom::PatchLump * gs_quitGame = NULL;
+
+static doom::SoundLump *gs_menuEnter = NULL;
+static doom::SoundLump *gs_menuExit = NULL;
 
 int HandleMenuInput();
 void ShowTopMenu();
@@ -57,6 +62,14 @@ void ShowMainMenu()
 	gs_quitGame = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_QUITG"));
 	if (gs_quitGame == NULL) goto mainMenuEnd;
 	if (gs_quitGame->Load() != 0) goto mainMenuEnd;
+
+	gs_menuEnter = g_doomwad->GetLump((doom::SoundLump*)g_doomwad->Get("DSSWTCHN"));
+	if (gs_menuEnter == NULL) goto mainMenuEnd;
+	if (gs_menuEnter->Load() != 0) goto mainMenuEnd;
+
+	gs_menuExit = g_doomwad->GetLump((doom::SoundLump*)g_doomwad->Get("DSSWTCHX"));
+	if (gs_menuExit == NULL) goto mainMenuEnd;
+	if (gs_menuExit->Load() != 0) goto mainMenuEnd;
 
 	bckg_dimensions.x = 0;
 	bckg_dimensions.y = 0;
@@ -103,11 +116,13 @@ int HandleMenuInput()
 					{
 						Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 128);
 						Draw_320x200(g_screen, gs_logo->m_bitmap, logo_dimensions, logo_dimensions, logo_screen_where, (unsigned char)255);
+						PlaySound(gs_menuEnter->m_soundData, gs_menuEnter->m_len);
 						ShowTopMenu();
 						gs_show_menu = true;
 					}
 					else
 					{
+						PlaySound(gs_menuExit->m_soundData, gs_menuExit->m_len);
 						Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 255);
 						gs_show_menu = false;
 					}

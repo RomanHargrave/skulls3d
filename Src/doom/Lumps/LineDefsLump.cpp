@@ -25,7 +25,7 @@ namespace doom
 		if (m_linedefs.size() != 0)
 			return 0; //Already loaded
 
-		// Each Thing has 10 bytes of data
+		// Each Thing has 14 bytes of data
 		int count = m_size/14;
 		m_linedefs.resize(count);
 

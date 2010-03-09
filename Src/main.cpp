@@ -7,6 +7,7 @@
 #include "SDL/SDL.h"
 #endif
 
+#include "audio.h"
 #include "display.h"
 #include "input.h"
 #include "mainmenu.h"
@@ -47,6 +48,8 @@ int main(int argc, char *argv[])
 			return -a;
 	}
 	*/
+
+	CloseAudio();
 	return 0;
 }
 
@@ -54,6 +57,7 @@ int main(int argc, char *argv[])
 SDL_Surface *Init()
 {
 	InitKeyboardInput();
+	InitAudio();
 
 	SDL_Surface *screen;
 	// Initialize SDL's subsystems - in this case, only video.

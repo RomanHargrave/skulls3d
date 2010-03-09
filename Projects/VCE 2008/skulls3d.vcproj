@@ -182,6 +182,14 @@
 			Name="doom"
 			>
 			<File
+				RelativePath="..\..\Src\doom\LineDef.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\LineDef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Texture.cpp"
 				>
 			</File>
@@ -233,6 +241,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\Lump.cpp"
 					>
 				</File>
@@ -265,6 +281,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\SoundLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\SoundLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
 					>
 				</File>
@@ -283,6 +307,22 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Src\audio.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\audio.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\display.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\display.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Src\File.cpp"
 			>
 		</File>
@@ -291,7 +331,23 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\Src\input.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\input.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Src\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\mainmenu.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\mainmenu.h"
 			>
 		</File>
 	</Files>
