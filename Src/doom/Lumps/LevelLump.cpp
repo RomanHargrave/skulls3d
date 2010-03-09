@@ -29,17 +29,23 @@ namespace doom
 		if (m_things->Load() != 0)
 			return 2;
 
-		/*
+		//*
 		// LINEDEFS
 		i++;
-		SetLineDefsLump(LineDefsLump::Get(m_wadfile->m_lumps[i]));
+		//SetLineDefsLump(LineDefsLump::Get(m_wadfile->m_lumps[i]));
 		// SIDEDEFS
 		i++;
-		SetSideDefsLump(SideDefsLump::Get(m_wadfile->m_lumps[i]));
+		//SetSideDefsLump(SideDefsLump::Get(m_wadfile->m_lumps[i]));
 		// VERTEXES
 		i++;
-		SetVertexesLump(VertexesLump::Get(m_wadfile->m_lumps[i]));
+		//SetVertexesLump(VertexesLump::Get(m_wadfile->m_lumps[i]));
+		m_vertexes = m_wadfile->GetLump((VertexesLump*)m_wadfile->Get(i));
+		if (m_vertexes == NULL)
+			return 1;
+		if (m_vertexes->Load() != 0)
+			return 2;
 		// SEGS
+		/*
 		i++;
 		SetSegsLump(SegsLump::Get(m_wadfile->m_lumps[i]));
 		// SSECTORS
