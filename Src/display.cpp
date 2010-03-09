@@ -64,36 +64,34 @@ void Put4Pixels(SDL_Surface *screen, int x, int y, int color)
 	PutPixel(screen, x+1, y+1, color);
 }
 
-void Draw(SDL_Surface *screen,
+void Draw_320x200(SDL_Surface *screen,
 		  unsigned int * bitmap, Rect dimensions,
 		  Rect bitmap_what, Rect screen_where,
 		  unsigned char shade)
-{
-
-}
-
-void DrawBackGround(SDL_Surface *screen,
-					unsigned int * bitmap, unsigned int bitmap_w, unsigned int bitmap_h,
-					unsigned char shade)
 {
 	// Lock surface if needed
 	if (SDL_MUSTLOCK(screen)) 
 		if (SDL_LockSurface(screen) < 0) 
 			return;
 
-	for (unsigned int j=0 ; j<g_scr_h ; j++)
-		for (unsigned int i=0 ; i<g_scr_w ; i++)
+	for (unsigned int j=bitmap_what.y ; j<bitmap_what.h ; j++)
+		for (unsigned int i=bitmap_what.x ; i<bitmap_what.w ; i++)
 		{
-			int bitmap_x = (int) ((i/(float)g_scr_w) * bitmap_w);
-			int bitmap_y = (int) ((j/(float)g_scr_h) * bitmap_h);
-			int color = bitmap[bitmap_y*bitmap_w + bitmap_x];
+			unsigned int color = bitmap[(bitmap_what.y+j)*dimensions.w + (bitmap_what.x+i)];
 			if (color == 0xFF000000)
 				continue;
 			// Apply shade
 			color = ((((color&0xFF0000)*(shade+1))>>8)&0xFF0000)
 				  | ((((color&0x00FF00)*(shade+1))>>8)&0x00FF00)
 				  | ((((color&0x0000FF)*(shade+1))>>8)&0x0000FF);
-			PutPixel(screen, i, j, color);
+
+			int screen_x_1 = (int) ((screen_where.x + i  ) * g_strech_w);
+			int screen_x_2 = (int) ((screen_where.x + i+1) * g_strech_w);
+			int screen_y_1 = (int) ((screen_where.y + j  ) * g_strech_h);
+			int screen_y_2 = (int) ((screen_where.y + j+1) * g_strech_h);
+			for (int l=screen_y_1 ; l<screen_y_2 ; l++)
+				for (int k=screen_x_1 ; k<screen_x_2 ; k++)
+					PutPixel(screen, k, l, color);
 		}
 
 	// Unlock if needed
