@@ -37,7 +37,7 @@ int CloseAudio()
 	return 0;
 }
 
-#define NUM_SOUNDS 8
+#define NUM_SOUNDS 1
 struct sample {
     Uint8 *data;
     Uint32 dpos;
@@ -47,7 +47,7 @@ struct sample {
 void mixaudio(void *unused, Uint8 *stream, int len)
 {
     int i;
-    Uint32 amount;
+    int amount;
 
     for ( i=0; i<NUM_SOUNDS; ++i ) {
         amount = (sounds[i].dlen-sounds[i].dpos);
@@ -59,7 +59,7 @@ void mixaudio(void *unused, Uint8 *stream, int len)
     }
 }
 
-void PlaySound(unsigned char *data, unsigned int len)
+void SKPlaySound(unsigned char *data, unsigned int len)
 {  
 	SDL_LockAudio();
     sounds[0].data = data;

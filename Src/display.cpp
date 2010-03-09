@@ -74,8 +74,8 @@ void Draw_320x200(SDL_Surface *screen,
 		if (SDL_LockSurface(screen) < 0) 
 			return;
 
-	for (unsigned int j=bitmap_what.y ; j<bitmap_what.h ; j++)
-		for (unsigned int i=bitmap_what.x ; i<bitmap_what.w ; i++)
+	for (unsigned int j=0 ; j<bitmap_what.h ; j++)
+		for (unsigned int i=0 ; i<bitmap_what.w ; i++)
 		{
 			unsigned int color = bitmap[(bitmap_what.y+j)*dimensions.w + (bitmap_what.x+i)];
 			if (color == 0xFF000000)

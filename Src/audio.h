@@ -4,6 +4,6 @@
 
 int InitAudio();
 int CloseAudio();
-void PlaySound(unsigned char *data, unsigned int len);
+void SKPlaySound(unsigned char *data, unsigned int len);
 
 #endif // SK_AUDIO
