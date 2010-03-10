@@ -32,6 +32,7 @@ namespace doom
 		//*
 		// LINEDEFS
 		i++;
+		short linedefsIndex = i;
 		//SetLineDefsLump(LineDefsLump::Get(m_wadfile->m_lumps[i]));
 		// SIDEDEFS
 		i++;
@@ -44,6 +45,15 @@ namespace doom
 			return 1;
 		if (m_vertexes->Load() != 0)
 			return 2;
+		
+		//*
+		// LINEDEFS
+		m_linedefs = m_wadfile->GetLump((LineDefsLump*)m_wadfile->Get(linedefsIndex));
+		if (m_linedefs == NULL)
+			return 1;
+		if (m_linedefs->Load(this) != 0)
+			return 2;		
+		
 		// SEGS
 		/*
 		i++;

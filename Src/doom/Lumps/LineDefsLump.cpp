@@ -7,9 +7,8 @@
 
 namespace doom
 {
-	LineDefsLump::LineDefsLump(LevelLump * levelLump) :Lump(levelLump)
-	{
-		m_level = levelLump;	
+	LineDefsLump::LineDefsLump(Lump * Lump) :Lump(Lump)
+	{		
 	}
 	LineDefsLump::~LineDefsLump()
 	{
@@ -20,8 +19,10 @@ namespace doom
 		return m_linedefs[index];
 	}
 
-	int LineDefsLump::Load()
+	int LineDefsLump::Load(LevelLump* levelLump)
 	{
+		m_level = levelLump;	
+
 		if (m_linedefs.size() != 0)
 			return 0; //Already loaded
 
