@@ -1,7 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skulls3d", "skulls3d.vcproj", "{01F847D4-C93A-45E7-9191-CF155A004326}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0} = {08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "swegl", "..\..\..\swegl\Projects\swegl vc2008\swegl.vcproj", "{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sweglTest", "..\..\..\swegl\swegltest vc2008\swegltest.vcproj", "{75537C12-41B7-426E-94CC-992B5D1551F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +20,14 @@ Global
 		{01F847D4-C93A-45E7-9191-CF155A004326}.Debug|Win32.Build.0 = Debug|Win32
 		{01F847D4-C93A-45E7-9191-CF155A004326}.Release|Win32.ActiveCfg = Release|Win32
 		{01F847D4-C93A-45E7-9191-CF155A004326}.Release|Win32.Build.0 = Release|Win32
+		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}.Debug|Win32.Build.0 = Debug|Win32
+		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}.Release|Win32.ActiveCfg = Release|Win32
+		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}.Release|Win32.Build.0 = Release|Win32
+		{75537C12-41B7-426E-94CC-992B5D1551F8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{75537C12-41B7-426E-94CC-992B5D1551F8}.Debug|Win32.Build.0 = Debug|Win32
+		{75537C12-41B7-426E-94CC-992B5D1551F8}.Release|Win32.ActiveCfg = Release|Win32
+		{75537C12-41B7-426E-94CC-992B5D1551F8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

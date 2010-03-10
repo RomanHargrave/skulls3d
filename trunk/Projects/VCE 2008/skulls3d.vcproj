@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\SDL\include"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,12 +120,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\SDL\include"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -328,6 +327,14 @@
 		</File>
 		<File
 			RelativePath="..\..\Src\File.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\gameplay.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\gameplay.h"
 			>
 		</File>
 		<File
