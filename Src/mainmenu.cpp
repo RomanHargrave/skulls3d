@@ -10,6 +10,7 @@
 #include "input.h"
 #include "display.h"
 #include "audio.h"
+#include "gameplay.h"
 #include "doom/WadFile.h"
 #include "doom/lumps/PatchLump.h"
 #include "doom/lumps/SoundLump.h"
@@ -104,7 +105,7 @@ void ShowMainMenu()
 	while (1)
 	{
 		if (HandleMenuInput() < 0)
-			goto mainMenuEnd;
+			break;
 	}
 
 mainMenuEnd:
@@ -137,9 +138,6 @@ int HandleMenuInput()
 		{
 			switch (event.type) 
 			{
-				case SDL_MOUSEMOTION:
-					break;
-
 				case SDL_KEYDOWN:
 					// If escape is pressed, return (and thus, quit)
 					if (event.key.keysym.sym == SDLK_ESCAPE)
@@ -178,15 +176,27 @@ int HandleMenuInput()
 					}
 					else if (event.key.keysym.sym == SDLK_RETURN)
 					{
+						if (gs_whichMenu == TopMenu)
+						{
+							if (gs_topMenuPos == 0)
+							{
+								PlayLevel(g_doomwad->GetLevel(0));
+								SKPlaySound(gs_menuEnter->m_soundData, gs_menuEnter->m_len);
+								DrawTopMenu();
+								DrawMenuCursor(gs_topMenuPos);
+							}
+							else if (gs_topMenuPos == 3)
+							{
+								return -1;
+							}
+						}
 					}
-					break;
-					
-				case SDL_KEYUP:
 					break;
 				case SDL_QUIT:
 					return -3;
 			}
 		}
+		Sleep(1);
 	}
 	return 0;
 }
