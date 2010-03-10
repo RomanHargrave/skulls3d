@@ -5,6 +5,7 @@
 #include "Lump.h"
 #include "ThingsLump.h"
 #include "VertexesLump.h"
+#include "LineDefsLump.h"
 
 namespace doom
 {
@@ -13,7 +14,7 @@ namespace doom
 	public:
 		ThingsLump * m_things;
 		VertexesLump* m_vertexes;
-
+		LineDefsLump* m_linedefs;
 		LevelLump(Lump * lump);
 
 		virtual int Load();

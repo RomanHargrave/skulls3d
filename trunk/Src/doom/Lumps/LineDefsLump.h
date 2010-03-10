@@ -15,12 +15,12 @@ namespace doom
 
 		std::vector<LineDef*> m_linedefs;
 		
-		LineDefsLump(LevelLump * levelLump);
+		LineDefsLump(Lump * Lump);
 		~LineDefsLump();
 
 		LineDef * operator[](int index) const;
 
-		virtual int Load();
+		virtual int Load(LevelLump * levelLump);
 		virtual void UnLoad();
 	};
 };
