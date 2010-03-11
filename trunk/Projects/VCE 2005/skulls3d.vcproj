@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="skulls3d"
 	ProjectGUID="{01F847D4-C93A-45E7-9191-CF155A004326}"
 	RootNamespace="skulls3d"
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\SDL\include"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\SDL\include"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -183,6 +183,14 @@
 			Name="doom"
 			>
 			<File
+				RelativePath="..\..\Src\doom\LineDef.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\LineDef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Texture.cpp"
 				>
 			</File>
@@ -234,6 +242,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\Lump.cpp"
 					>
 				</File>
@@ -266,6 +282,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Src\doom\Lumps\SoundLump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\doom\Lumps\SoundLump.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
 					>
 				</File>
@@ -284,6 +308,14 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Src\audio.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\audio.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Src\display.cpp"
 			>
 		</File>
@@ -297,6 +329,14 @@
 		</File>
 		<File
 			RelativePath="..\..\Src\File.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\gameplay.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\gameplay.h"
 			>
 		</File>
 		<File
