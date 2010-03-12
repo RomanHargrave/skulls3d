@@ -5,15 +5,24 @@ You need:
  * [http://code.google.com/p/swegl/ swegl], the 3D software renderer.
 
 
-The source tree should look like this:
+Once downloaded the source tree should look like this:
 {{{
-mycode/swegl/
-            /main.cpp
-            /...
-      /SDL/
-          /lib
-          /...
-      /skulls3d/
-               /projects
-               /...
+mycodefolder/skulls3d/DOOM.WAD
+                     /SDL.lib
+                     /Src/main.cpp
+                         /...
+                     /Projects/VC 2008/skulls3d.sln
+                                      /...
+                     /Projects/VCE 2005/skulls3d.sln
+                                       /...
+            /swegl/Projects/VC 2008/swegl.sln
+                                   /...
+                           /VCE 2005/swegl.sln
+                                    /...
+                  /Src/DataClasses
+                      /...
 }}}
+
+You now need to change a user preference in the project. Open skulls3d.sln right-click on the project, open the properties box. Select the configuration "All configurations". Now select Configuration Properties > Debugging. As Working Directory, set "$(ProjectDir)\..\..\" without the quotes. This way, when debugging or running from visual studio, the program runs in the root folder of the project, thus having access to doom.wad and sdl.dll.
+
+Now press F5 and hope for the best.
