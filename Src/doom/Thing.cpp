@@ -3,8 +3,6 @@
 #include "Thing.h"
 #include "WadFile.h"
 
-namespace doom
-{
 	typedef struct
 	{
 		unsigned char radius;
@@ -17,46 +15,6 @@ namespace doom
 		// TODO...
 
 	}ThingDef;
-	ThingDef thingdefs[];
-
-	Thing::Thing(WadFile * wadFile, int offset)
-	{
-		m_sprites.resize(0);
-		wadFile->MoveTo(offset);
-		wadFile->ReadInt2(&m_x);
-		wadFile->ReadInt2(&m_y);
-		wadFile->ReadInt2(&m_angle);
-		wadFile->ReadInt2((short*)&m_type);
-		short flags;
-		wadFile->ReadInt2(&flags);
-		if (flags & 1) m_is_on_skill_1_2 = true;
-		else           m_is_on_skill_1_2 = false;
-		if (flags & 2) m_is_on_skill_3 = true;
-		else           m_is_on_skill_3 = false;
-		if (flags & 4) m_is_on_skill_4_5 = true;
-		else           m_is_on_skill_4_5 = false;
-		if (flags & 8) m_deaf = true;
-		else           m_deaf = false;
-		if (flags & 16) m_not_in_single_player = true;
-		else            m_not_in_single_player = false;
-	}
-	Thing::~Thing()
-	{
-		UnLoad();
-	}
-	
-	int Thing::Load()
-	{
-		
-		return 0;
-	}
-	void Thing::UnLoad()
-	{
-		if (m_sprites.size() != 0)
-			m_sprites.clear();
-	}
-
-	
 	ThingDef thingdefs[] = {
 		{16, "PLAY", NULL, false, false, false, false},
 		{16, "PLAY", NULL, false, false, false, false},
@@ -175,11 +133,92 @@ namespace doom
 		{20, "CELL", "A", 	false,  true, false, false},
 		{20, "AMMO", "A", 	false,  true, false, false},
 		{20, "SBOX", "A", 	false,  true, false, false},
-		{20, "TROO", NULL,	false, false,  true, false},
-		{30, "SARG", NULL,	false, false,  true, false},
-		{24, "BOSS", NULL,	false, false,  true, false},
-		{20, "POSS", NULL,	false, false,  true, false},
-		{31, "HEAD", NULL,	false, false,  true,  true},
-		{16, "SKUL", NULL,	false, false,  true,  true}
+		{20, "TROO", "A",	false, false,  true, false},
+		{30, "SARG", "A",	false, false,  true, false},
+		{24, "BOSS", "A",	false, false,  true, false},
+		{20, "POSS", "A",	false, false,  true, false},
+		{31, "HEAD", "A",	false, false,  true,  true},
+		{16, "SKUL", "A",	false, false,  true,  true}
 	};
+
+namespace doom
+{
+
+	Thing::Thing(WadFile * wadFile, int offset)
+	{
+		m_wadfile = wadFile;
+		m_sprites.resize(0);
+		wadFile->MoveTo(offset);
+		wadFile->ReadInt2(&m_x);
+		wadFile->ReadInt2(&m_y);
+		wadFile->ReadInt2(&m_angle);
+		wadFile->ReadInt2((short*)&m_type);
+		short flags;
+		wadFile->ReadInt2(&flags);
+		if (flags & 1) m_is_on_skill_1_2 = true;
+		else           m_is_on_skill_1_2 = false;
+		if (flags & 2) m_is_on_skill_3 = true;
+		else           m_is_on_skill_3 = false;
+		if (flags & 4) m_is_on_skill_4_5 = true;
+		else           m_is_on_skill_4_5 = false;
+		if (flags & 8) m_deaf = true;
+		else           m_deaf = false;
+		if (flags & 16) m_not_in_single_player = true;
+		else            m_not_in_single_player = false;
+	}
+	Thing::~Thing()
+	{
+		UnLoad();
+	}
+	
+	int Thing::Load()
+	{
+		if (m_sprites.size() != 0)
+			return 0; // Already loaded
+
+		int type = m_type;
+		if (type >= 2001 && type < 3000)
+			type = type - 2001 + 90;
+		else if (type >= 3001)
+			type = type - 3001 + 2050 - 2001 + 90;
+
+		PatchLump * sprite;
+
+		if (thingdefs[type].sprite != NULL)
+		{
+			if (thingdefs[type].sequence != NULL)
+			{
+				char spriteName[9];
+				sprintf(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+				sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
+				if (sprite == NULL)
+				{
+					sprintf(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+					sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
+				}
+			}
+			else
+			{
+				sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(thingdefs[type].sprite));
+			}
+		}
+		else
+		{
+			sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get("PLAYA1"));
+		}
+		if (sprite == 0)
+			return -1;
+		if (sprite->Load() != 0)
+			return -2;
+
+		m_sprites.push_back(sprite);
+		return 0;
+	}
+	void Thing::UnLoad()
+	{
+		if (m_sprites.size() != 0)
+			m_sprites.clear();
+	}
+
+	
 };

@@ -68,8 +68,8 @@ SDL_Surface *Init()
 		exit(1);
 	}
 
-	//SDL_WM_GrabInput(SDL_GRAB_ON);
-	//SDL_ShowCursor(0);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_ShowCursor(0);
 
 	// Register SDL_Quit to be called at exit; makes sure things are
 	// cleaned up when we quit.

@@ -12,6 +12,7 @@ namespace doom
 	class Thing
 	{
 	public:
+		WadFile * m_wadfile;
 		short m_x;
 		short m_y;
 		short m_angle;
