@@ -11,6 +11,7 @@
 #include "display.h"
 #include "input.h"
 #include "mainmenu.h"
+#include "minimap.h"
 #include "doom/WadFile.h"
 
 SDL_Surface *Init();
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
 		return -1;
 
 	ShowMainMenu();
-
+	
 	/*
 	while (1)
 	{
@@ -80,32 +81,3 @@ SDL_Surface *Init()
 }
 
 
-
-int HandleInput()
-{
-	static int keystick = SDL_GetTicks();
-	
-	while ( (SDL_GetTicks())-keystick > KEYBOARD_RATE_MS ) // Limit the keyrate
-	{
-		if (g_keys['d'])
-			g_x -= (int) (1/g_zoom);
-		if (g_keys['a'])
-			g_x += (int) (1/g_zoom);
-		if (g_keys['w'])
-			g_y += (int) (1/g_zoom);
-		if (g_keys['s'])
-			g_y -= (int) (1/g_zoom);
-		if (g_keys['e'])
-		{
-			g_zoom *= 1.01f;
-		}
-		if (g_keys['q'])
-		{
-			g_zoom /= 1.01f;
-		}
-
-		keystick += KEYBOARD_RATE_MS;
-	}
-
-	return 0;
-}
