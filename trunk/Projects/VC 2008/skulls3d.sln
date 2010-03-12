@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skulls3d", "skulls3d.vcproj
 		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0} = {08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "swegl", "..\..\..\swegl\Projects\swegl vc2008\swegl.vcproj", "{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "swegl", "..\..\..\swegl\Projects\VC 2008\swegl.vcproj", "{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sweglTest", "..\..\..\swegl\swegltest vc2008\swegltest.vcproj", "{75537C12-41B7-426E-94CC-992B5D1551F8}"
 EndProject

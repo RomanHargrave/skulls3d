@@ -22,6 +22,7 @@
 #include "Cube.h"
 #include "Tore.h"
 #include "RectangleTriangle.h"
+#include "minimap.h"
 
 // From display.cpp
 extern unsigned int g_scr_w;
@@ -91,8 +92,11 @@ void PlayLevel(doom::LevelLump * level)
 	while (1)
 	{
 		VideoWorks();
-		if (int a=KeyboardWorks() < 0)
+		int a=KeyboardWorks();
+		if (a < 0)
 			return;
+		else if (a == 1)
+			ShowMinimap(level);
 	}
 	return;
 }
@@ -180,6 +184,8 @@ int KeyboardWorks()
 				break;
 
 			case SDL_KEYDOWN:
+				if (event.key.keysym.sym == SDLK_TAB)
+					return 1;
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return -10;
 				else if (event.key.keysym.sym == SDLK_d)
@@ -232,9 +238,7 @@ int KeyboardWorks()
 				scene->m_worldmatrix->RotateZ(3.14159f / -180.0f);
 				*/
 
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return -2;
-				else if (event.key.keysym.sym == SDLK_d)
+				if (event.key.keysym.sym == SDLK_d)
 					keys['d'] = 0;
 				else if (event.key.keysym.sym == SDLK_a)
 					keys['a'] = 0;
