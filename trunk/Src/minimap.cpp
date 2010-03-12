@@ -18,8 +18,6 @@
 
 #include <windows.h>
 
-#define KEYBOARD_RATE_MS 5
-
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 extern SDL_Surface * g_screen;

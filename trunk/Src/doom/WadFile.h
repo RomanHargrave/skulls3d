@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "../File.h"
+#include "lumps/PatchLump.h"
 
 namespace doom
 {

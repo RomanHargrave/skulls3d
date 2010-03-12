@@ -8,11 +8,15 @@
 #endif
 
 char g_keys[256];
+float g_mouse_x;
+float g_mouse_y;
 
 void InitKeyboardInput()
 {
 	for (int i=0 ; i<256 ; i++)
 		g_keys[i] = 0;
+	g_mouse_x = 0;
+	g_mouse_y = 0;
 }
 
 int RefreshKeybState()
@@ -25,6 +29,8 @@ int RefreshKeybState()
 		switch (event.type) 
 		{
 			case SDL_MOUSEMOTION:
+				g_mouse_x += event.motion.xrel;
+				g_mouse_y += event.motion.yrel;
 				break;
 
 			case SDL_KEYDOWN:
