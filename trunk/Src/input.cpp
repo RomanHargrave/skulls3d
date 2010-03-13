@@ -71,9 +71,7 @@ int RefreshKeybState()
 				
 			case SDL_KEYUP:
 				// If escape is pressed, return (and thus, quit)
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-					return -2;
-				else if (event.key.keysym.sym == SDLK_d)
+				if (event.key.keysym.sym == SDLK_d)
 					g_keys['d'] = 0;
 				else if (event.key.keysym.sym == SDLK_a)
 					g_keys['a'] = 0;
