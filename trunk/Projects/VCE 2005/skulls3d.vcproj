@@ -359,6 +359,14 @@
 			RelativePath="..\..\Src\mainmenu.h"
 			>
 		</File>
+		<File
+			RelativePath="..\..\Src\minimap.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\minimap.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

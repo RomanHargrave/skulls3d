@@ -16,6 +16,7 @@
 
 	}ThingDef;
 	ThingDef thingdefs[] = {
+		{ 1, "PADD", NULL, false, false, false, false},
 		{16, "PLAY", NULL, false, false, false, false},
 		{16, "PLAY", NULL, false, false, false, false},
 		{16, "PLAY", NULL, false, false, false, false},
@@ -186,14 +187,18 @@ namespace doom
 
 		if (thingdefs[type].sprite != NULL)
 		{
+			if (strcmp(thingdefs[type].sprite, "CYBR") == 0)
+			{
+				int a=0;
+			}
 			if (thingdefs[type].sequence != NULL)
 			{
 				char spriteName[9];
-				sprintf(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+				sprintf_s(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
 				sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
 				if (sprite == NULL)
 				{
-					sprintf(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+					sprintf_s(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
 					sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
 				}
 			}

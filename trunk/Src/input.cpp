@@ -37,6 +37,8 @@ int RefreshKeybState()
 				// If escape is pressed, return (and thus, quit)
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return -10;
+				if (event.key.keysym.sym == SDLK_TAB)
+					return SDLK_TAB;
 				else if (event.key.keysym.sym == SDLK_d)
 					g_keys['d'] = 1;
 				else if (event.key.keysym.sym == SDLK_a)
