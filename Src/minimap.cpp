@@ -69,7 +69,7 @@ void ShowMinimap(doom::LevelLump * level)
 				int _x1 = level->m_linedefs->Get(j)->m_end_vtx->m_x;
 				int _y1 = level->m_linedefs->Get(j)->m_end_vtx->m_y;
 				
-				DrawLine(g_screen,_x0,_y0,_x1,_y1,0x00FF0000);
+				DrawMapLine(g_screen,_x0,_y0,_x1,_y1,0x00FF0000);
 			}
 		}		
 
