@@ -9,7 +9,7 @@ namespace doom
 		:Lump(lump)
 	{
 	}
-	Vertex* VertexesLump::operator[](int index) const
+	Vertex* VertexesLump::Get(int index)
 	{
 		return m_vertexes[index];
 	}

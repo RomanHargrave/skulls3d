@@ -15,7 +15,7 @@ namespace doom
 	public:
 		VertexesLump(Lump * lump);
 
-		Vertex * operator[](int index) const;
+		Vertex * Get(int index);
 
 		virtual int Load();
 		virtual void UnLoad();
