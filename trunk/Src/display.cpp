@@ -114,6 +114,9 @@ void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
 
 void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 {	
+	if ( (_x0 < 0) && (_x1 < 0) )
+		return;	
+	
 	bool steep = false;
 
 	if ( ( fabs( float (_y1 - _y0) ) ) > ( fabs( float (_x1 - _x0) ) ) )
@@ -148,13 +151,17 @@ void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 		ystep = 1;
 	else 
 		ystep = -1;
-
+	
+	if (_x0 < 0)
+		_x0 = 0;
 	for (int x =_x0 ; x<=_x1 ; x++)
 	{
-		if (steep)
+		if ( (steep) && (x <= g_scr_h) && (y<= g_scr_w) )
 			PutPixel(screen,y,x,color);					
+		else if ( (!steep) && (x <= g_scr_w) && (y<= g_scr_h) )
+			PutPixel(screen,x,y,color);	
 		else
-			PutPixel(screen,x,y,color);					
+			break;
 		error -= dY;
 		if (error < 0)
 		{
