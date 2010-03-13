@@ -30,7 +30,7 @@ namespace doom
 		int count = m_size/14;
 		m_linedefs.resize(count);
 
-		printf("%d LineDefs\n", count);
+		//printf("%d LineDefs\n", count);
 
 		for (int i=0 ; i<count ; i++)
 		{

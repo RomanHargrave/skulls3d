@@ -75,7 +75,7 @@ namespace doom
 			patch->Load();
 			m_wadfile->MoveTo(file_pos);
 
-			printf("\t%s\n", patch->m_name);
+			//printf("\t%s\n", patch->m_name);
 
 			MergePatchIntoTexture(patch, orig_x, orig_y);
 		}
