@@ -1,6 +1,6 @@
 
 
-
+#include <math.h>
 #include "minimap.h"
 #include "input.h"
 #include "display.h"
@@ -17,7 +17,6 @@
 #endif
 
 #include <windows.h>
-
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 extern SDL_Surface * g_screen;
@@ -62,9 +61,89 @@ void ShowMinimap(doom::LevelLump * level)
 				doom::Thing * thing = level->m_things->m_things[i];
 				PutMapPixel(g_screen, thing->m_x, thing->m_y, 0x00FFFFFF); // white at x,y
 			}
-		}
+			//Plotting vertexes
+			/*
+			 function line(x0, x1, y0, y1)
+				 boolean steep := abs(y1 - y0) > abs(x1 - x0)
+				 if steep then
+					 swap(x0, y0)
+					 swap(x1, y1)
+				 if x0 > x1 then
+					 swap(x0, x1)
+					 swap(y0, y1)
+				 int deltax := x1 - x0
+				 int deltay := abs(y1 - y0)
+				 int error := deltax / 2
+				 int ystep
+				 int y := y0
+				 if y0 < y1 then ystep := 1 else ystep := -1
+				 for x from x0 to x1
+					 if steep then plot(y,x) else plot(x,y)
+					 error := error - deltay
+					 if error < 0 then
+						 y := y + ystep
+						 error := error + deltax
 
-		
+			*/
+			for (int j=0; j< level->m_vertexes->size;j++)
+			{
+				int _x1 = level->m_vertexes->Get(j)->m_x;
+				int _y1 = level->m_vertexes->Get(j)->m_y;
+				if ((j+1) == level->m_vertexes->size)
+					break;
+				int _x2 = level->m_vertexes->Get(j+1)->m_x;
+				int _y2 = level->m_vertexes->Get(j+1)->m_y;				
+				
+				bool steep = false;
+
+				if ( ( fabs( float (_y2 - _y1) ) ) > ( fabs( float (_x2 - _x1) ) ) )
+				{
+					int change = _x1;
+					_x1 = _y1;
+					_y1 = change;
+
+					change = _x2;
+					_x2 = _y2;
+					_y2 = change;
+
+					steep = true;
+				}
+
+				if (_x2 < _x1){
+					int change = _x1;
+					_x1 = _x2;
+					_x2 = change;
+
+					change = _y1;
+					_y1 = _y2;
+					_y2 = change;
+				}
+				int dX = _x2 - _x1;
+				int dY = fabs(float(_y2 - _y1));
+				int error = dX / 2;
+				int ystep;
+				int y = _y1;
+
+				if (_y1 < _y2)
+					ystep = 1;
+				else 
+					ystep = -1;
+
+				for (int x =_x1 ; x<=_x2 ; x++)
+				{
+					if (steep)
+						PutMapPixel(g_screen,y,x,200);					
+					else
+						PutMapPixel(g_screen,x,y,200);					
+					error -= dY;
+					if (error < 0)
+					{
+						y += ystep;
+						error += dX;
+					}
+				}								
+			}
+		}		
 
 		// Painting the palette
 		/*

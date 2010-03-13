@@ -13,10 +13,10 @@ namespace doom
 		std::vector<Vertex*> m_vertexes;
 
 	public:
+		short size;
+
 		VertexesLump(Lump * lump);
-
-		Vertex * Get(int index);
-
+		Vertex * Get(int index);		
 		virtual int Load();
 		virtual void UnLoad();
 	};
