@@ -9,7 +9,7 @@ namespace doom
 		:Lump(lump)
 	{
 	}
-	Vertex* VertexesLump::Get(int index)
+	const Vertex& VertexesLump::Get(int index) const
 	{
 		return m_vertexes[index];
 	}
@@ -19,17 +19,17 @@ namespace doom
 		if (m_vertexes.size() != 0)
 			return 0; //Already loaded
 
+		m_wadfile->MoveTo(m_position);
+
 		// Each Vertex has 4 bytes of data
 		int count = m_size/4;
 		m_vertexes.resize(count);
 
-		//printf("%d Vertexes\n", count);
-
 		for (int i=0 ; i<count ; i++)
 		{
-			m_vertexes[i] = new Vertex(m_wadfile, m_position+4*i);
+			m_wadfile->ReadInt2(&m_vertexes[i].m_x);
+			m_wadfile->ReadInt2(&m_vertexes[i].m_y);
 		}
-		size = count;
 		return 0;
 	}
 	void VertexesLump::UnLoad()

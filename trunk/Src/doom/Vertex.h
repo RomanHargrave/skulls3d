@@ -9,9 +9,10 @@ namespace doom
 	{
 	public:
 		short m_x;
-		short m_y;		
-	public:
-		Vertex(WadFile * wadFile, int offset);
+		short m_y;	
+
+		Vertex();
+		Vertex(short x, short y);
 	};
 };
 

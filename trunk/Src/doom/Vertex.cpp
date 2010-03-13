@@ -5,10 +5,12 @@
 
 namespace doom
 {
-	Vertex::Vertex(WadFile * wadFile, int offset)
+	Vertex::Vertex()
 	{
-		wadFile->MoveTo(offset);
-		wadFile->ReadInt2(&m_x);
-		wadFile->ReadInt2(&m_y);		
+	}
+	Vertex::Vertex(short x, short y)
+	{
+		m_x = x;
+		m_y = y;
 	}
 };
