@@ -242,14 +242,18 @@ int HandleInput()
 	
 	while ( (SDL_GetTicks())-keystick > KEYBOARD_RATE_MS ) // Limit the keyrate
 	{
+		int shift = (int)(1/g_zoom);
+		if (shift == 0)
+			shift = 1;
+
 		if (g_keys['d'])
-			g_x -= (int) (1/g_zoom);
+			g_x -= shift;
 		if (g_keys['a'])
-			g_x += (int) (1/g_zoom);
+			g_x += shift;
 		if (g_keys['w'])
-			g_y += (int) (1/g_zoom);
+			g_y += shift;
 		if (g_keys['s'])
-			g_y -= (int) (1/g_zoom);
+			g_y -= shift;
 		if (g_keys['e'])
 		{
 			g_zoom *= 1.01f;
