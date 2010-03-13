@@ -4,6 +4,7 @@
 
 #include "doom/WadFile.h"
 #include "doom/lumps/LevelLump.h"
+#include "display.h"
 
 void PlayLevel(doom::LevelLump * level);
 
