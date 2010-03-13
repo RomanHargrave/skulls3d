@@ -1,6 +1,5 @@
 
 
-#include <math.h>
 #include "minimap.h"
 #include "input.h"
 #include "display.h"
@@ -65,59 +64,12 @@ void ShowMinimap(doom::LevelLump * level)
 			
 			for (int j=0; j< level->m_linedefs->size;j++)
 			{
-				int _x1 = level->m_linedefs->Get(j)->m_start_vtx->m_x;				
-				int _y1 = level->m_linedefs->Get(j)->m_start_vtx->m_y;				
-				int _x2 = level->m_linedefs->Get(j)->m_end_vtx->m_x;
-				int _y2 = level->m_linedefs->Get(j)->m_end_vtx->m_y;
+				int _x0 = level->m_linedefs->Get(j)->m_start_vtx->m_x;				
+				int _y0 = level->m_linedefs->Get(j)->m_start_vtx->m_y;				
+				int _x1 = level->m_linedefs->Get(j)->m_end_vtx->m_x;
+				int _y1 = level->m_linedefs->Get(j)->m_end_vtx->m_y;
 				
-				bool steep = false;
-
-				if ( ( fabs( float (_y2 - _y1) ) ) > ( fabs( float (_x2 - _x1) ) ) )
-				{
-					int change = _x1;
-					_x1 = _y1;
-					_y1 = change;
-
-					change = _x2;
-					_x2 = _y2;
-					_y2 = change;
-
-					steep = true;
-				}
-
-				if (_x2 < _x1){
-					int change = _x1;
-					_x1 = _x2;
-					_x2 = change;
-
-					change = _y1;
-					_y1 = _y2;
-					_y2 = change;
-				}
-				int dX = _x2 - _x1;
-				int dY = fabs(float(_y2 - _y1));
-				int error = dX / 2;
-				int ystep;
-				int y = _y1;
-
-				if (_y1 < _y2)
-					ystep = 1;
-				else 
-					ystep = -1;
-
-				for (int x =_x1 ; x<=_x2 ; x++)
-				{
-					if (steep)
-						PutMapPixel(g_screen,y,x,200);					
-					else
-						PutMapPixel(g_screen,x,y,200);					
-					error -= dY;
-					if (error < 0)
-					{
-						y += ystep;
-						error += dX;
-					}
-				}								
+				DrawLine(g_screen,_x0,_y0,_x1,_y1,0x00FF0000);
 			}
 		}		
 
