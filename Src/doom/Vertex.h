@@ -7,7 +7,7 @@ namespace doom
 {
 	class Vertex
 	{
-	protected:
+	public:
 		short m_x;
 		short m_y;		
 	public:
