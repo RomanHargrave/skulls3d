@@ -101,8 +101,13 @@ void Draw_320x200(SDL_Surface *screen,
 	// Tell SDL to update the whole screen
 	SDL_UpdateRect(screen, 0, 0, g_scr_w, g_scr_h); 
 }
-void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
-{
+void DrawLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
+{	
+	int _x0, _y0, _x1, _y1;
+
+	MapToScreenCoords(x0,y0,&_x0,&_y0);
+	MapToScreenCoords(x1,y1,&_x1,&_y1);
+
 	bool steep = false;
 
 	if ( ( fabs( float (_y1 - _y0) ) ) > ( fabs( float (_x1 - _x0) ) ) )
@@ -141,9 +146,9 @@ void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 	for (int x =_x0 ; x<=_x1 ; x++)
 	{
 		if (steep)
-			PutMapPixel(screen,y,x,color);					
+			PutPixel(screen,y,x,color);					
 		else
-			PutMapPixel(screen,x,y,color);					
+			PutPixel(screen,x,y,color);					
 		error -= dY;
 		if (error < 0)
 		{
