@@ -19,7 +19,7 @@ extern int g_x;
 extern int g_y;
 extern float g_zoom;
 
-void MapToScreenCoords(int map_x, int map_y, int & screen_x, int & screen_y);
+void MapToScreenCoords(int map_x, int map_y, int * screen_x, int * screen_y);
 void PutMapPixel(SDL_Surface *screen, int x, int y, int color);
 void PutPixel(SDL_Surface *screen, int x, int y, int color);
 void Put4Pixels(SDL_Surface *screen, int x, int y, int color);
