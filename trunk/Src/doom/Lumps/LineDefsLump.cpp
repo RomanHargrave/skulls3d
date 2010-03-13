@@ -14,7 +14,7 @@ namespace doom
 	{
 	}
 
-	LineDef* LineDefsLump::operator[](int index) const
+	LineDef* LineDefsLump::Get(int index)
 	{
 		return m_linedefs[index];
 	}
@@ -36,7 +36,7 @@ namespace doom
 		{
 			m_linedefs[i] = new LineDef(m_wadfile, (VertexesLump*) m_level->m_vertexes, (m_position+14*i) );
 		}
-
+		size = count;
 		return 0;
 	}
 	void LineDefsLump::UnLoad()

@@ -10,15 +10,15 @@ namespace doom
 {
 	class LineDefsLump : public Lump
 	{
-	public:
-		LevelLump* m_level;
-
+	protected:
 		std::vector<LineDef*> m_linedefs;
-		
+	public:
+		LevelLump* m_level;		
+		int size;
 		LineDefsLump(Lump * Lump);
 		~LineDefsLump();
 
-		LineDef * operator[](int index) const;
+		LineDef * Get(int index);
 
 		virtual int Load(LevelLump * levelLump);
 		virtual void UnLoad();
