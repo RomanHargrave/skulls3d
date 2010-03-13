@@ -29,7 +29,7 @@ namespace doom
 		{
 			m_vertexes[i] = new Vertex(m_wadfile, m_position+4*i);
 		}
-
+		size = count;
 		return 0;
 	}
 	void VertexesLump::UnLoad()
