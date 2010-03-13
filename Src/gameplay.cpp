@@ -62,7 +62,7 @@ void PlayLevel(doom::LevelLump * level)
 		int a = RefreshKeybState();
 		if (a < 0)
 			return;
-		else if (a == 1)
+		else if (a == SDLK_TAB)
 			ShowMinimap(level);
 		HandleGameplayInput();
 	}
