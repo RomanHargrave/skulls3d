@@ -13,9 +13,9 @@ namespace doom
 
 		short pos;
 		wadFile->ReadInt2(&pos);
-		m_start_vtx = (Vertex*) (*m_vertexes)[pos];
+		m_start_vtx = (Vertex*) m_vertexes->Get(pos);
 		wadFile->ReadInt2(&pos);
-		m_end_vtx = (Vertex*) (*m_vertexes)[pos];
+		m_end_vtx = (Vertex*)  m_vertexes->Get(pos);
 
 		short flags;
 		wadFile->ReadInt2(&flags);
