@@ -66,11 +66,9 @@ void ShowMinimap(doom::LevelLump * level)
 			for (int j=0; j< level->m_linedefs->size;j++)
 			{
 				int _x1 = level->m_linedefs->Get(j)->m_start_vtx->m_x;				
-				int _y1 = level->m_linedefs->Get(j)->m_start_vtx->m_y;
-				if ((j+1) == level->m_linedefs->size)
-					break;
-				int _x2 = level->m_linedefs->Get(j+1)->m_end_vtx->m_x;
-				int _y2 = level->m_linedefs->Get(j+1)->m_end_vtx->m_y;
+				int _y1 = level->m_linedefs->Get(j)->m_start_vtx->m_y;				
+				int _x2 = level->m_linedefs->Get(j)->m_end_vtx->m_x;
+				int _y2 = level->m_linedefs->Get(j)->m_end_vtx->m_y;
 				
 				bool steep = false;
 
