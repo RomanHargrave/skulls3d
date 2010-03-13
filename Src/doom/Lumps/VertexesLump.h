@@ -10,13 +10,11 @@ namespace doom
 	class VertexesLump : public Lump
 	{
 	protected:
-		std::vector<Vertex*> m_vertexes;
+		std::vector<Vertex> m_vertexes;
 
 	public:
-		short size;
-
 		VertexesLump(Lump * lump);
-		Vertex * Get(int index);		
+		const Vertex& Get(int index) const;
 		virtual int Load();
 		virtual void UnLoad();
 	};

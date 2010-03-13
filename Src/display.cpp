@@ -114,12 +114,18 @@ void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
 
 void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 {	
-	if ( (_x0 < 0) && (_x1 < 0) )
-		return;	
+	if (   (_x0 < 0 && _x1 < 0) 
+		|| (_y0 < 0 && _y1 < 0)
+		|| (_x0 >= (int)g_scr_w && _x1 > (int)g_scr_w)
+		|| (_y0 >= (int)g_scr_h && _y1 > (int)g_scr_h) )
+	{
+		// Clipped
+		return;
+	}
 	
 	bool steep = false;
 
-	if ( ( fabs( float (_y1 - _y0) ) ) > ( fabs( float (_x1 - _x0) ) ) )
+	if ( abs((_y1-_y0)) > abs(_x1-_x0) )
 	{
 		int change = _x0;
 		_x0 = _y0;
@@ -142,7 +148,7 @@ void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 		_y1 = change;
 	}
 	int dX = _x1 - _x0;
-	int dY = fabs(float(_y1 - _y0));
+	int dY = abs(_y1 - _y0);
 	int error = dX / 2;
 	int ystep;
 	int y = _y0;
@@ -151,17 +157,32 @@ void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 		ystep = 1;
 	else 
 		ystep = -1;
-	
+
+	// Skip pixels before the beginning of the screen
 	if (_x0 < 0)
-		_x0 = 0;
-	for (int x =_x0 ; x<=_x1 ; x++)
 	{
-		if ( (steep) && (x <= g_scr_h) && (y<= g_scr_w) )
+		error -= (-_x0) * dY;
+		if (error < 0)
+		{
+			int nb = 1+(-error/dX);
+			y += nb * ystep;
+			error += nb * dX;
+		}
+		_x0 = 0;
+	}
+
+	// Skip pixels after the end of the screen
+	if (steep && _x1 >= (int)g_scr_h)
+		_x1 = (int)g_scr_h-1;
+	else if ((!steep) && _x1 >= (int)g_scr_w)
+		_x1 = (int)g_scr_w-1;
+
+	for (int x=_x0 ; x<=_x1 ; x++)
+	{
+		if (steep)
 			PutPixel(screen,y,x,color);					
-		else if ( (!steep) && (x <= g_scr_w) && (y<= g_scr_h) )
-			PutPixel(screen,x,y,color);	
 		else
-			break;
+			PutPixel(screen,x,y,color);	
 		error -= dY;
 		if (error < 0)
 		{

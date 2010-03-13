@@ -14,8 +14,8 @@ namespace doom
 	public:
 		VertexesLump* m_vertexes;
 
-		Vertex* m_start_vtx;
-		Vertex* m_end_vtx;		
+		Vertex m_start_vtx;
+		Vertex m_end_vtx;		
 		//Flags - Start
 		bool m_block_p_m;
 		bool m_block_m;

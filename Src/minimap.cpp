@@ -64,10 +64,10 @@ void ShowMinimap(doom::LevelLump * level)
 			
 			for (int j=0; j< level->m_linedefs->size;j++)
 			{
-				int _x0 = level->m_linedefs->Get(j)->m_start_vtx->m_x;				
-				int _y0 = level->m_linedefs->Get(j)->m_start_vtx->m_y;				
-				int _x1 = level->m_linedefs->Get(j)->m_end_vtx->m_x;
-				int _y1 = level->m_linedefs->Get(j)->m_end_vtx->m_y;
+				int _x0 = level->m_linedefs->Get(j)->m_start_vtx.m_x;				
+				int _y0 = level->m_linedefs->Get(j)->m_start_vtx.m_y;				
+				int _x1 = level->m_linedefs->Get(j)->m_end_vtx.m_x;
+				int _y1 = level->m_linedefs->Get(j)->m_end_vtx.m_y;
 				
 				DrawMapLine(g_screen,_x0,_y0,_x1,_y1,0x00FF0000);
 			}
