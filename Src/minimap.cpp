@@ -1,21 +1,29 @@
 
-
-#include "minimap.h"
-#include "input.h"
-#include "display.h"
-#include "doom/lumps/PlayPalLump.h"
-#include "doom/lumps/PatchLump.h"
-#include "doom/lumps/FlatLump.h"
-#include "doom/Texture.h"
-
+#include <windows.h>
 #include <stdlib.h>
+
 #if defined(_MSC_VER)
 #include "SDL.h"
 #else
 #include "SDL/SDL.h"
 #endif
 
-#include <windows.h>
+#include "minimap.h"
+#include "input.h"
+#include "display.h"
+#include "gameplay.h"
+#include "doom/Thing.h"
+#include "doom/Vertex.h"
+#include "doom/LineDef.h"
+#include "doom/SideDef.h"
+#include "doom/Texture.h"
+#include "doom/lumps/PlayPalLump.h"
+#include "doom/lumps/FlatLump.h"
+#include "doom/lumps/PatchLump.h"
+
+#include "Camera.h"
+#include "Vec3f.h"
+
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 extern SDL_Surface * g_screen;
@@ -24,6 +32,13 @@ extern SDL_Surface * g_screen;
 extern unsigned int g_scr_w;
 extern unsigned int g_scr_h;
 
+// map display
+extern Camera *camera; // from gameplay.cpp
+float g_zoom = 0.2f;
+
+void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y);
+void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color);
+void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1,int color);
 int HandleInput();
 
 void ShowMinimap(doom::LevelLump * level)
@@ -31,9 +46,9 @@ void ShowMinimap(doom::LevelLump * level)
 	while(1)
 	{
 		Sleep(1);
-		if (RefreshKeybState() < 0)
-			return;
-		HandleInput();
+		if (RefreshKeybState() == SDLK_TAB)
+			break;
+		HandleGameplayInput();
 
 		/* fps stuff
 		static int fpsticks = SDL_GetTicks();
@@ -55,21 +70,21 @@ void ShowMinimap(doom::LevelLump * level)
 		if (level != NULL)
 		{
 			level->Load();
-			for (unsigned int i=0 ; i<level->m_things->m_things.size() ; i++)
+			for (unsigned int i=0 ; i<level->m_things.size() ; i++)
 			{
-				doom::Thing * thing = level->m_things->m_things[i];
-				PutMapPixel(g_screen, thing->m_x, thing->m_y, 0x00FFFFFF); // white at x,y
+				doom::Thing * thing = level->m_things[i];
+				PutMapPixel(g_screen, thing->m_x, thing->m_z, 0x00FFFFFF); // white at x,y
 			}
 			//Plotting vertexes
 			
-			for (int j=0; j< level->m_linedefs->size;j++)
+			for (unsigned int j=0 ; j<level->m_lineDefs.size() ; j++)
 			{
-				int _x0 = level->m_linedefs->Get(j)->m_start_vtx.m_x;				
-				int _y0 = level->m_linedefs->Get(j)->m_start_vtx.m_y;				
-				int _x1 = level->m_linedefs->Get(j)->m_end_vtx.m_x;
-				int _y1 = level->m_linedefs->Get(j)->m_end_vtx.m_y;
+				int _x0 = level->m_lineDefs[j]->m_start_vtx->m_x;				
+				int _z0 = level->m_lineDefs[j]->m_start_vtx->m_z;				
+				int _x1 = level->m_lineDefs[j]->m_end_vtx->m_x;
+				int _z1 = level->m_lineDefs[j]->m_end_vtx->m_z;
 				
-				DrawMapLine(g_screen,_x0,_y0,_x1,_y1,0x00FF0000);
+				DrawMapLine(g_screen,_x0,_z0,_x1,_z1,0x00FF0000);
 			}
 		}		
 
@@ -87,7 +102,7 @@ void ShowMinimap(doom::LevelLump * level)
 		}
 		*/
 
-		// Painting an arbitrary Patch
+		// Painting an arbitrary PatchLump
 		/*
 		int ticks = (SDL_GetTicks()>>8) % 4;
 		char name[9];
@@ -162,37 +177,28 @@ void ShowMinimap(doom::LevelLump * level)
 	}
 }
 
-
-
-int HandleInput()
+void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y)
 {
-	static int keystick = SDL_GetTicks();
-	
-	while ( (SDL_GetTicks())-keystick > KEYBOARD_RATE_MS ) // Limit the keyrate
-	{
-		int shift = (int)(1/g_zoom);
-		if (shift == 0)
-			shift = 1;
+	float l_x = (g_camera->m_viewmatrix.m_data[3] + map_x) * g_zoom;
+	*screen_x = (int) (g_scr_w/2.0f + l_x);
 
-		if (g_keys['d'])
-			g_x -= shift;
-		if (g_keys['a'])
-			g_x += shift;
-		if (g_keys['w'])
-			g_y += shift;
-		if (g_keys['s'])
-			g_y -= shift;
-		if (g_keys['e'])
-		{
-			g_zoom *= 1.01f;
-		}
-		if (g_keys['q'])
-		{
-			g_zoom /= 1.01f;
-		}
+	float l_y = (g_camera->m_viewmatrix.m_data[11] + map_y) * g_zoom;
+	*screen_y = (int) (g_scr_h/2.0f - l_y);
+}
 
-		keystick += KEYBOARD_RATE_MS;
-	}
+void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
+{
+	int screen_x, screen_y;
+	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
+	PutPixel(screen, screen_x, screen_y, color);
+}
 
-	return 0;
+void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
+{	
+	int _x0, _y0, _x1, _y1;
+
+	MapToScreenCoords(x0,y0,&_x0,&_y0);
+	MapToScreenCoords(x1,y1,&_x1,&_y1);
+
+	DrawLine(screen,_x0,  _y0,  _x1,  _y1,  color);						
 }

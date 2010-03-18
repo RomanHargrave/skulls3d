@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "../File.h"
 #include "WadFile.h"
-#include "Lumps/Lump.h"
-#include "Lumps/LevelLump.h"
-#include "Lumps/PatchesLump.h"
-#include "Lumps/PlayPalLump.h"
 #include "Texture.h"
+#include "Lumps/Lump.h"
+#include "lumps/PatchLump.h"
+#include "Lumps/LevelLump.h"
+#include "Lumps/PlayPalLump.h"
 
 namespace doom
 {
@@ -17,7 +17,7 @@ namespace doom
 		m_lumps.resize(0);
 		m_textures.resize(0);
 		m_palettes = NULL;
-		m_patches = NULL;
+		m_patches.resize(0);
 	}
 	WadFile::~WadFile()
 	{
@@ -33,7 +33,7 @@ namespace doom
 		unsigned int size = (unsigned int) m_lumps.size();
 		for (unsigned int i=0 ; i<size ; i++)
 		{
-			if (strncmp(name, m_lumps[i]->m_name, 8) == 0)
+			if (_strnicmp(name, m_lumps[i]->m_name, 8) == 0)
 				return m_lumps[i];
 		}
 		return NULL;
@@ -80,11 +80,27 @@ namespace doom
 		m_palettes = GetLump((PlayPalLump*)Get("PLAYPAL"));
 		m_palettes->Load();
 
-		// Load the patches dictionary (sprites & texture pieces)
-		m_patches = GetLump((PatchesLump*)Get("PNAMES"));
-		m_patches->Load();
+		// Load the PatchLumpes dictionary (sprites & texture pieces)
+		Lump *l = Get("PNAMES");
+		MoveTo(l->m_position);
+		unsigned int count;
+		ReadInt4((int*)&count);
+		m_patches.resize(count);
+		for (unsigned int j=0 ; j<count ; j++)
+		{
+			char PatchLumpName[9];
+			memset(PatchLumpName, 0, 9);
+			ReadString(PatchLumpName, 8);
+			int pos = GetPos();
+			l = Get(PatchLumpName);
+			MoveTo(l->m_position);
+			m_patches[j] = GetLump((PatchLump*)Get(PatchLumpName));
+			MoveTo(pos);
+		}
+
 
 		// Load the texture dictionary
+		m_textures.resize(0);
 		if (LoadTextures("TEXTURE1") != 0)
 			return 4;
 		if (LoadTextures("TEXTURE2") != 0)
@@ -107,11 +123,7 @@ namespace doom
 			delete m_palettes;
 			m_palettes = NULL;
 		}
-		if (m_patches != NULL)
-		{
-			delete m_patches;
-			m_patches = NULL;
-		}
+		m_patches.clear();
 	}
 
 	int WadFile::LoadLumpDictionary()
@@ -151,11 +163,7 @@ namespace doom
 				current_level = GetLump((LevelLump*)m_lumps[i]);
 				if (current_level == NULL)
 					continue;
-				if (0 == current_level->Load())
-				{
-					// Load successful
-					m_levels.push_back(i);
-				}
+				m_levels.push_back(i);
 			}
 		}
 		return 0;
@@ -169,9 +177,10 @@ namespace doom
 
 		MoveTo(l->m_position);
 
+		int oldSize = m_textures.size();
 		int numTex;
 		ReadInt4(&numTex);
-		m_textures.resize(numTex);
+		m_textures.resize(numTex+oldSize);
 
 		// Read texture maps
 		for (int i=0 ; i<numTex ; i++)
@@ -182,10 +191,10 @@ namespace doom
 			// From the position of the lump in the file we have
 			// to skip the number of textures (4 bytes) and the
 			// offset table (4 bytes per texture)
-			offset += l->m_position + 4 + 4*numTex;
+			offset += l->m_position/* + 4 + 4*numTex*/;
 
 			Texture * tex = new Texture(this, offset);
-			m_textures[i] = tex;
+			m_textures[i+oldSize] = tex;
 			//tex->Load();
 		}
 
@@ -210,6 +219,16 @@ namespace doom
 			Texture * tex = m_textures[i];
 			if (strcmp(tex->m_name, name) == 0)
 				return tex;
+		}
+		return NULL;
+	}
+	PatchLump * WadFile::GetPatch(char *name)
+	{
+		for (unsigned int i=0 ; i<m_patches.size() ; i++)
+		{
+			PatchLump * PatchLump = m_patches[i];
+			if (strcmp(PatchLump->m_name, name) == 0)
+				return PatchLump;
 		}
 		return NULL;
 	}

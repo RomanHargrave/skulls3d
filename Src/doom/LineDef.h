@@ -2,20 +2,19 @@
 #ifndef SK_LINEDEF
 #define SK_LINEDEF
 
-#include "Vertex.h"
-#include "lumps\VertexesLump.h"
-
 namespace doom
 {
 	class WadFile;
+	class Vertex;
+	class SideDef;
+	class Sector;
+	class LevelLump;
 
 	class LineDef
 	{
 	public:
-		VertexesLump* m_vertexes;
-
-		Vertex m_start_vtx;
-		Vertex m_end_vtx;		
+		Vertex *m_start_vtx;
+		Vertex *m_end_vtx;		
 		//Flags - Start
 		bool m_block_p_m;
 		bool m_block_m;
@@ -27,12 +26,12 @@ namespace doom
 		bool m_never_automap;
         bool m_always_automap;
 		//Flag - End
-		//ToDo - Special Type, Sector Tag, Right Sidedef and Left Sidedef
+		unsigned short m_type;
+		Sector *m_tagSector;
+		SideDef *m_rightSideDef;
+		SideDef *m_leftSideDef;
 
-		LineDef(WadFile * wadFile, VertexesLump* vertexLump , int offset);
-
-		virtual int Load();
-		virtual void UnLoad();
+		LineDef(WadFile * wadFile, LevelLump *level);
 	};
 };
 

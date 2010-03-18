@@ -1,18 +1,21 @@
 #ifndef SK_VERTEX
 #define SK_VERTEX
 
-#include "WadFile.h"
+#include <list>
 
 namespace doom
 {
+	class WadFile;
+	class LineDef;
+
 	class Vertex
 	{
 	public:
 		short m_x;
-		short m_y;	
+		short m_z;	
+		std::list<LineDef*> m_lineDefs;
 
-		Vertex();
-		Vertex(short x, short y);
+		Vertex(short x, short z);
 	};
 };
 

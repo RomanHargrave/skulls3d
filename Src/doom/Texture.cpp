@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "Texture.h"
 #include "WadFile.h"
-#include "lumps/PatchesLump.h"
 #include "lumps/PatchLump.h"
 
 namespace doom
@@ -21,6 +20,7 @@ namespace doom
 		memset(buffer, 0, 9);
 		m_wadfile->ReadString(buffer, 8);
 		m_name = _strdup(buffer);
+		printf("Texture %s\n", m_name);
 		wadfile->MoveTo(pos);
 	}
 
@@ -43,41 +43,43 @@ namespace doom
 		//Skipping columndirectory
 		m_wadfile->Skip(4);
 
-		short patch_count;
-		m_wadfile->ReadInt2(&patch_count);
+		short PatchLump_count;
+		m_wadfile->ReadInt2(&PatchLump_count);
 
 		m_bitmap = new unsigned int[m_w*m_h];
 
-		// Read all patches and merge them into m_bitmap
-		for (int i=0 ; i<patch_count ; i++)
+		// Read all PatchLumpes and merge them into m_bitmap
+		for (int i=0 ; i<PatchLump_count ; i++)
 		{
 			short orig_x, orig_y;
 			m_wadfile->ReadInt2(&orig_x);
 			m_wadfile->ReadInt2(&orig_y);
 			
-			short patch_index;
-			m_wadfile->ReadInt2(&patch_index);
+			short PatchLump_index;
+			m_wadfile->ReadInt2(&PatchLump_index);
 
 			short stepdir, colormap;
 			m_wadfile->ReadInt2(&stepdir);
 			m_wadfile->ReadInt2(&colormap);
 
-			// TODO: We can save memory when there is only one patch
+			// TODO: We can save memory when there is only one PatchLump
 			// and its orig_x and orig_y are 0. In this case this texture
-			// is exactly the same as the patch, so m_bitmap may point
-			// directly at the patch's bitmap
-			// But beware of the UnLoad, a texture shall not free a patch's bitmap
+			// is exactly the same as the PatchLump, so m_bitmap may point
+			// directly at the PatchLump's bitmap
+			// But beware of the UnLoad, a texture shall not free a PatchLump's bitmap
+
+			if (PatchLump_index < 0 || PatchLump_index > m_wadfile->m_patches.size())
+				continue;
 
 			int file_pos = m_wadfile->GetPos();
-			PatchLump * patch = (*m_wadfile->m_patches)[patch_index];
-			if (patch == NULL)
+			PatchLump * lump = m_wadfile->m_patches[PatchLump_index];
+			if (lump == NULL)
 				continue;
-			patch->Load();
 			m_wadfile->MoveTo(file_pos);
 
-			//printf("\t%s\n", patch->m_name);
+			//printf("\t%s\n", PatchLump->m_name);
 
-			MergePatchIntoTexture(patch, orig_x, orig_y);
+			MergePatchLumpIntoTexture(lump, orig_x, orig_y);
 		}
 		return 0;
 	}
@@ -92,13 +94,14 @@ namespace doom
 		}
 	}
 	
-	void Texture::MergePatchIntoTexture(PatchLump * patch, short orig_x, short orig_y)
+	void Texture::MergePatchLumpIntoTexture(PatchLump * PatchLump, short orig_x, short orig_y)
 	{
-		for (int j=0 ; j<patch->m_h ; j++)
+		PatchLump->Load();
+		for (int j=0 ; j<PatchLump->m_h ; j++)
 		{
-			for (int i=0 ; i<patch->m_w ; i++)
+			for (int i=0 ; i<PatchLump->m_w ; i++)
 			{
-				int color = patch->m_bitmap[j*patch->m_w + i];
+				int color = PatchLump->m_bitmap[j*PatchLump->m_w + i];
 				short new_x = orig_x + i;
 				short new_y = orig_y + j;
 				if (new_x < 0  ||  new_x >= this->m_w

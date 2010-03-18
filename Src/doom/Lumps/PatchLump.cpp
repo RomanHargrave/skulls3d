@@ -2,32 +2,25 @@
 #include <stdio.h>
 #include <memory.h>
 #include "PatchLump.h"
-#include "PlayPalLump.h"
 #include "../WadFile.h"
+#include "Lump.h"
+#include "PlayPalLump.h"
 
 namespace doom
 {
-	PatchLump::PatchLump(Lump * lump)
-		:Lump(lump)
+	PatchLump::PatchLump(Lump *other)
+		:Lump(other)
 	{
 		m_bitmap = NULL;
-
-		// Debug
-		//printf("%s is a Patch Lump\n", m_name);
 	}
-	PatchLump::~PatchLump()
-	{
-		if (m_bitmap != NULL)
-			delete m_bitmap;
-	}
-	
 
 	int PatchLump::Load()
 	{
 		if (m_bitmap != NULL)
-			return 0; //Already loaded
+			return 0; // Already loaded
 
 		m_wadfile->MoveTo(m_position);
+
 		m_wadfile->ReadInt2((short*)&m_w);
 		m_wadfile->ReadInt2((short*)&m_h);
 		m_wadfile->Skip(4); // Remaining of the header
@@ -59,7 +52,7 @@ namespace doom
 					if ((row+pix) >= m_h)
 					{
 						delete col_offset;
-						return 1;
+						goto end;
 					}
 					unsigned char color;
 					m_wadfile->ReadInt1((char*)&color);
@@ -68,18 +61,22 @@ namespace doom
 				m_wadfile->Skip(1);
 			}while(1);
 		}
-
+		end:
 		delete col_offset;
 		return 0;
 	}
+
 	void PatchLump::UnLoad()
 	{
-		Lump::UnLoad();
-
 		if (m_bitmap != NULL)
 		{
 			delete m_bitmap;
 			m_bitmap = NULL;
 		}
+	}
+
+	PatchLump::~PatchLump()
+	{
+		UnLoad();
 	}
 };

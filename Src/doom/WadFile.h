@@ -4,20 +4,19 @@
 
 #include <vector>
 #include "../File.h"
-#include "lumps/PatchLump.h"
 
 namespace doom
 {
 	class Lump;
 	class LevelLump;
-	class PatchesLump;
+	class PatchLump;
 	class PlayPalLump;
 	class Texture;
 
 	class WadFile : public File
 	{
 	private:
-		bool m_internal; // true: IWAD (Internal wad), false: PWAD (Patch wad)
+		bool m_internal; // true: IWAD (Internal wad), false: PWAD (PatchLump wad)
 		int m_directory_potision; // offset in the file
 		std::vector<Lump*> m_lumps;
 		std::vector<int> m_levels;
@@ -32,7 +31,7 @@ namespace doom
 
 	public:
 		PlayPalLump * m_palettes;
-		PatchesLump * m_patches;
+		std::vector<PatchLump*> m_patches;
 
 		WadFile(const char * filename);
 		virtual ~WadFile();
@@ -51,6 +50,7 @@ namespace doom
 
 		LevelLump * GetLevel(unsigned int level_number);
 		Texture * GetTexture(char * name);
+		doom::PatchLump * GetPatch(char * name);
 
 		Lump* Get(int index);
 		Lump* Get(char * name);

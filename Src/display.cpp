@@ -8,43 +8,23 @@
 #endif
 
 #include "doom/WadFile.h"
-#include "doom/lumps/LevelLump.h"
-#include "doom/lumps/PatchLump.h"
-#include "doom/lumps/PlayPalLump.h"
-#include "doom/lumps/FlatLump.h"
 #include "doom/Thing.h"
 #include "doom/Texture.h"
+#include "doom/lumps/LevelLump.h"
+#include "doom/lumps/PlayPalLump.h"
+#include "doom/lumps/FlatLump.h"
+#include "doom/lumps/PatchLump.h"
 
 // [New vs Original] screen sizes
 unsigned int g_scr_w = 800;
 unsigned int g_scr_h = 600;
 float g_strech_w = g_scr_w / (float)320;
 float g_strech_h = g_scr_h / (float)200;
-
-// map display
-int g_x = 1000;
-int g_y = -3000;
-float g_zoom = 0.2f;
 	
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 
 
-void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y)
-{
-	float l_x = (g_x - map_x) * g_zoom;
-	*screen_x = (int) (g_scr_w/2.0f - l_x);
-
-	float l_y = (g_y - map_y) * g_zoom;
-	*screen_y = (int) (g_scr_h/2.0f - l_y);
-}
-
-void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
-{
-	int screen_x, screen_y;
-	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
-	PutPixel(screen, screen_x, screen_y, color);
-}
 
 void PutPixel(SDL_Surface *screen, int x, int y, int color)
 {
@@ -102,15 +82,6 @@ void Draw_320x200(SDL_Surface *screen,
 	SDL_UpdateRect(screen, 0, 0, g_scr_w, g_scr_h); 
 }
 
-void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
-{	
-	int _x0, _y0, _x1, _y1;
-
-	MapToScreenCoords(x0,y0,&_x0,&_y0);
-	MapToScreenCoords(x1,y1,&_x1,&_y1);
-
-	DrawLine(screen,_x0,  _y0,  _x1,  _y1,  color);						
-}
 
 void DrawLine(SDL_Surface *screen,int _x0, int _y0, int _x1, int _y1, int color)
 {	

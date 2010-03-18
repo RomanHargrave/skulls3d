@@ -1,59 +1,84 @@
 
+#include <vector>
 #include <stdlib.h>
 #include <stdio.h>
 #include "LevelLump.h"
-#include "ThingsLump.h"
-#include "..\WadFile.h"
+#include "../Vertex.h"
+#include "../SideDef.h"
+#include "../LineDef.h"
+#include "../Thing.h"
+#include "../Sector.h"
+#include "../WadFile.h"
 
 namespace doom
 {
 	LevelLump::LevelLump(Lump * lump)
 		:Lump(lump)
 	{
-		m_things = NULL;
+		m_things.resize(0);
+		m_sectors.resize(0);
 	}
 
 	int LevelLump::Load()
 	{
-		if (m_things != NULL)
+		if (m_things.size() != 0)
 			return 0; // Already loaded
 
 		int i = m_dictionary_position;
 
 		// THINGS
-		i++;
-		//SetThingsLump(ThingsLump::Get(m_wadfile->GetLump[i]));
-		m_things = m_wadfile->GetLump((ThingsLump*)m_wadfile->Get(i));
-		if (m_things == NULL)
-			return 1;
-		if (m_things->Load() != 0)
-			return 2;
+		Lump *l = m_wadfile->Get(i+1);
+		int count = l->m_size / 10;
+		m_things.resize(count);
+		for (int j=0 ; j<count ; j++)
+		{
+			m_wadfile->MoveTo(l->m_position + 10*j);
+			m_things[j] = new Thing(m_wadfile);
+		}
 
-		//*
-		// LINEDEFS
-		i++;
-		short linedefsIndex = i;
-		//SetLineDefsLump(LineDefsLump::Get(m_wadfile->m_lumps[i]));
-		// SIDEDEFS
-		i++;
-		//SetSideDefsLump(SideDefsLump::Get(m_wadfile->m_lumps[i]));
 		// VERTEXES
-		i++;
-		//SetVertexesLump(VertexesLump::Get(m_wadfile->m_lumps[i]));
-		m_vertexes = m_wadfile->GetLump((VertexesLump*)m_wadfile->Get(i));
-		if (m_vertexes == NULL)
-			return 1;
-		if (m_vertexes->Load() != 0)
-			return 2;
+		*l = m_wadfile->Get(i+4);
+		count = l->m_size / 4;
+		m_vertexes.resize(count);
+		m_wadfile->MoveTo(l->m_position);
+		for (int j=0 ; j<count ; j++)
+		{
+			short x,y;
+			m_wadfile->ReadInt2(&x);
+			m_wadfile->ReadInt2(&y);
+			m_vertexes[j] = new Vertex(x, y);
+		}
 		
-		//*
+		// SECTORS
+		*l = m_wadfile->Get(i+8);
+		count = l->m_size / 26;
+		m_sectors.resize(count);
+		for (int j=0 ; j<count ; j++)
+		{
+			m_wadfile->MoveTo(l->m_position + 26*j);
+			m_sectors[j] = new Sector(m_wadfile);
+		}
+		
+		// SIDEDEFS
+		l = m_wadfile->Get(i+3);
+		count = l->m_size / 30;
+		m_sideDefs.resize(count);
+		for (int j=0 ; j<count ; j++)
+		{
+			m_wadfile->MoveTo(l->m_position + 30*j);
+			m_sideDefs[j] = new SideDef(m_wadfile, this);
+		}
+
 		// LINEDEFS
-		m_linedefs = m_wadfile->GetLump((LineDefsLump*)m_wadfile->Get(linedefsIndex));
-		if (m_linedefs == NULL)
-			return 1;
-		if (m_linedefs->Load(this) != 0)
-			return 2;		
-		
+		l = m_wadfile->Get(i+2);
+		count = l->m_size / 14;
+		m_lineDefs.resize(count);
+		for (int j=0 ; j<count ; j++)
+		{
+			m_wadfile->MoveTo(l->m_position + 14*j);
+			m_lineDefs[j] = new LineDef(m_wadfile, this);
+		}
+
 		// SEGS
 		/*
 		i++;
@@ -79,16 +104,15 @@ namespace doom
 	void LevelLump::UnLoad()
 	{
 		Lump::UnLoad();
+	}
 
-		if (m_things != NULL)
+	Sector* LevelLump::GetSectorByTag(unsigned short tag)
+	{
+		for (std::vector<Sector*>::iterator it=m_sectors.begin() ; it!=m_sectors.end() ; ++it)
 		{
-			delete m_things;
-			m_things = NULL;
+			if (((Sector*)*it)->m_tag == tag)
+				return (Sector*)*it;
 		}
-		if (m_vertexes != NULL)
-		{
-			delete m_vertexes;
-			m_vertexes = NULL;
-		}
+		return NULL;
 	}
 };

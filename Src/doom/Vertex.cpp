@@ -1,16 +1,14 @@
 
 #include <stdlib.h>
 #include "Vertex.h"
+#include "SideDef.h"
 #include "WadFile.h"
 
 namespace doom
 {
-	Vertex::Vertex()
-	{
-	}
-	Vertex::Vertex(short x, short y)
+	Vertex::Vertex(short x, short z)
 	{
 		m_x = x;
-		m_y = y;
+		m_z = z;
 	}
 };

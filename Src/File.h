@@ -1,7 +1,8 @@
-#include <stdio.h>
 
 #ifndef SK_FILE
 #define SK_FILE
+
+#include <stdio.h>
 
 class File
 {

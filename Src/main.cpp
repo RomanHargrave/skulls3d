@@ -1,3 +1,4 @@
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -11,6 +12,7 @@
 #include "display.h"
 #include "input.h"
 #include "mainmenu.h"
+#include "gameplay.h"
 #include "minimap.h"
 #include "doom/WadFile.h"
 
@@ -39,7 +41,9 @@ int main(int argc, char *argv[])
 	if (g_doomwad->Load() != 0)
 		return -1;
 
-	ShowMainMenu();
+	//ShowMainMenu();
+	doom::LevelLump *level = g_doomwad->GetLevel(0);
+	PlayLevel(level);
 	
 	/*
 	while (1)
