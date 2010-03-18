@@ -109,14 +109,6 @@ void ShowMainMenu()
 	}
 
 mainMenuEnd:
-	if (gs_skull1 != NULL) gs_skull1->UnLoad();
-	if (gs_skull2 != NULL) gs_skull2->UnLoad();
-	if (gs_titleBackg != NULL) gs_titleBackg->UnLoad();
-	if (gs_logo != NULL) gs_logo->UnLoad();
-	if (gs_newGame != NULL) gs_newGame->UnLoad();
-	if (gs_options != NULL) gs_options->UnLoad();
-	if (gs_readThis != NULL) gs_readThis->UnLoad();
-	if (gs_quitGame != NULL) gs_quitGame->UnLoad();
 	if (gs_menuEnter != NULL) gs_menuEnter->UnLoad();
 	if (gs_menuExit != NULL) gs_menuExit->UnLoad();
 	if (gs_menuMove != NULL) gs_menuMove->UnLoad();

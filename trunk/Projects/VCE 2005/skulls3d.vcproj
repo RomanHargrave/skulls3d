@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="skulls3d"
 	ProjectGUID="{01F847D4-C93A-45E7-9191-CF155A004326}"
 	RootNamespace="skulls3d"
@@ -191,6 +191,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\Sector.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Sector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\SideDef.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\SideDef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Texture.cpp"
 				>
 			</File>
@@ -242,27 +258,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\LineDefsLump.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Src\doom\Lumps\Lump.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\Src\doom\Lumps\Lump.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\PatchesLump.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\PatchesLump.h"
 					>
 				</File>
 				<File
@@ -287,22 +287,6 @@
 				</File>
 				<File
 					RelativePath="..\..\Src\doom\Lumps\SoundLump.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\ThingsLump.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\ThingsLump.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\VertexesLump.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\doom\Lumps\VertexesLump.h"
 					>
 				</File>
 			</Filter>

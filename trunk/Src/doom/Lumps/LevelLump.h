@@ -3,22 +3,30 @@
 #define SK_LEVELLUMP
 
 #include "Lump.h"
-#include "ThingsLump.h"
-#include "VertexesLump.h"
-#include "LineDefsLump.h"
 
 namespace doom
 {
+	class Thing;
+	class Vertex;
+	class Sector;
+	class SideDef;
+	class LineDef;
+
 	class LevelLump : public Lump
 	{
 	public:
-		ThingsLump * m_things;
-		VertexesLump* m_vertexes;
-		LineDefsLump* m_linedefs;
+		std::vector<Thing*> m_things;
+		std::vector<Vertex*> m_vertexes;
+		std::vector<LineDef*> m_lineDefs;
+		std::vector<SideDef*> m_sideDefs;
+		std::vector<Sector*> m_sectors;
+
 		LevelLump(Lump * lump);
 
 		virtual int Load();
 		virtual void UnLoad();
+
+		Sector* GetSectorByTag(unsigned short tag);
 	};
 };
 

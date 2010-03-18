@@ -10,7 +10,7 @@ namespace doom
 	class Texture
 	{
 	private:
-		void MergePatchIntoTexture(PatchLump * patch, short orig_x, short orig_y);
+		void MergePatchLumpIntoTexture(PatchLump * PatchLump, short orig_x, short orig_y);
 
 	public:
 		char * m_name;

@@ -63,10 +63,14 @@ int RefreshKeybState()
 					g_keys['o'] = 1;
 				else if (event.key.keysym.sym == SDLK_u)
 					g_keys['u'] = 1;
-				else if (event.key.keysym.sym == SDLK_PLUS)
-					g_keys['+'] = 1;
-				else if (event.key.keysym.sym == SDLK_MINUS)
-					g_keys['-'] = 1;
+				else if (event.key.keysym.sym == SDLK_t)
+					g_keys['t'] = 1;
+				else if (event.key.keysym.sym == SDLK_g)
+					g_keys['g'] = 1;
+				else if (event.key.keysym.sym == SDLK_r)
+					g_keys['r'] = 1;
+				else if (event.key.keysym.sym == SDLK_f)
+					g_keys['f'] = 1;
 				break;
 				
 			case SDL_KEYUP:
@@ -95,11 +99,15 @@ int RefreshKeybState()
 					g_keys['o'] = 0;
 				else if (event.key.keysym.sym == SDLK_u)
 					g_keys['u'] = 0;
-				else if (event.key.keysym.sym == SDLK_PLUS)
-					g_keys['+'] = 0;
-				else if (event.key.keysym.sym == SDLK_MINUS)
-					g_keys['_'] = 0;
-					break;
+				else if (event.key.keysym.sym == SDLK_t)
+					g_keys['t'] = 0;
+				else if (event.key.keysym.sym == SDLK_g)
+					g_keys['g'] = 0;
+				else if (event.key.keysym.sym == SDLK_r)
+					g_keys['r'] = 0;
+				else if (event.key.keysym.sym == SDLK_f)
+					g_keys['f'] = 0;
+				break;
 			case SDL_QUIT:
 				return -3;
 		}

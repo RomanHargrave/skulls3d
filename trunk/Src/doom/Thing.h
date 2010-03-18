@@ -12,9 +12,8 @@ namespace doom
 	class Thing
 	{
 	public:
-		WadFile * m_wadfile;
 		short m_x;
-		short m_y;
+		short m_z;
 		short m_angle;
 		unsigned short m_type;
 		bool m_is_on_skill_1_2;
@@ -25,11 +24,7 @@ namespace doom
 
 		std::vector<PatchLump*> m_sprites;
 
-		Thing(WadFile * wadFile, int offset);
-		virtual ~Thing();
-
-		virtual int Load();
-		virtual void UnLoad();
+		Thing(WadFile * wadFile);
 	};
 };
 

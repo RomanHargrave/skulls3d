@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Thing.h"
 #include "WadFile.h"
+#include "lumps/PatchLump.h"
 
 	typedef struct
 	{
@@ -145,13 +146,11 @@
 namespace doom
 {
 
-	Thing::Thing(WadFile * wadFile, int offset)
+	Thing::Thing(WadFile * wadFile)
 	{
-		m_wadfile = wadFile;
 		m_sprites.resize(0);
-		wadFile->MoveTo(offset);
 		wadFile->ReadInt2(&m_x);
-		wadFile->ReadInt2(&m_y);
+		wadFile->ReadInt2(&m_z);
 		wadFile->ReadInt2(&m_angle);
 		wadFile->ReadInt2((short*)&m_type);
 		short flags;
@@ -166,17 +165,7 @@ namespace doom
 		else           m_deaf = false;
 		if (flags & 16) m_not_in_single_player = true;
 		else            m_not_in_single_player = false;
-	}
-	Thing::~Thing()
-	{
-		UnLoad();
-	}
-	
-	int Thing::Load()
-	{
-		if (m_sprites.size() != 0)
-			return 0; // Already loaded
-
+		
 		int type = 0;
 		int i;
 		for (i=0 ; i < sizeof(thingdefs)/sizeof(ThingDef) ; i++)
@@ -188,51 +177,40 @@ namespace doom
 			}
 		}
 		if (i == sizeof(thingdefs)/sizeof(ThingDef))
-		{
 			printf("Thing type %d not found\n", m_type);
-		}
-
-		PatchLump * sprite;
-
-		if (thingdefs[type].sprite != NULL)
-		{
-			if (strcmp(thingdefs[type].sprite, "CYBR") == 0)
-			{
-				int a=0;
-			}
-			if (thingdefs[type].sequence != NULL)
-			{
-				char spriteName[9];
-				sprintf_s(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
-				sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
-				if (sprite == NULL)
-				{
-					sprintf_s(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
-					sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(spriteName));
-				}
-			}
-			else
-			{
-				sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get(thingdefs[type].sprite));
-			}
-		}
 		else
 		{
-			sprite = m_wadfile->GetLump((PatchLump*)m_wadfile->Get("PLAYA1"));
+			PatchLump * sprite = NULL;
+
+			if (thingdefs[type].sprite != NULL)
+			{
+				if (thingdefs[type].sequence != NULL)
+				{
+					char spriteName[9];
+					sprintf_s(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+					sprite = wadFile->GetLump((PatchLump*)wadFile->Get(spriteName));
+					if (sprite == NULL)
+					{
+						sprintf_s(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
+						sprite = wadFile->GetLump((PatchLump*)wadFile->Get(spriteName));
+					}
+				}
+				else
+				{
+					sprite = wadFile->GetLump((PatchLump*)wadFile->Get(thingdefs[type].sprite));
+				}
+			}
+			if (sprite == NULL)
+			{
+				sprite = wadFile->GetLump((PatchLump*)wadFile->Get("PLAYA1"));
+			}
+
+			if (sprite != NULL)
+			{
+				sprite->Load();
+				m_sprites.resize(1);
+				m_sprites[0] = sprite;
+			}
 		}
-		if (sprite == 0)
-			return -1;
-		if (sprite->Load() != 0)
-			return -2;
-
-		m_sprites.push_back(sprite);
-		return 0;
 	}
-	void Thing::UnLoad()
-	{
-		if (m_sprites.size() != 0)
-			m_sprites.clear();
-	}
-
-	
 };
