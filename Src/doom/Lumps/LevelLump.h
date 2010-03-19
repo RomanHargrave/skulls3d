@@ -2,6 +2,7 @@
 #ifndef SK_LEVELLUMP
 #define SK_LEVELLUMP
 
+#include <vector>
 #include "Lump.h"
 
 namespace doom
