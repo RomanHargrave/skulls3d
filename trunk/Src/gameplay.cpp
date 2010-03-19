@@ -36,6 +36,8 @@ extern unsigned int g_scr_h;
 
 // From main.cpp
 extern SDL_Surface *g_screen;
+LARGE_INTEGER g_renderingTime;
+unsigned int g_frameCount = 0;
 
 // From minimap.cpp
 extern float g_zoom;
@@ -83,8 +85,10 @@ void PlayLevel(doom::LevelLump * level)
 Scene* BuildScene(doom::LevelLump * level)
 {
 	Scene *s = new Scene();
+	unsigned int count;
 
-	unsigned int count = (unsigned int) level->m_things.size();
+	/*
+	count = (unsigned int) level->m_things.size();
 	for (unsigned int i=0 ; i<count ; i++)
 	{
 		doom::Thing * thingLump = level->m_things[i];
@@ -97,6 +101,7 @@ Scene* BuildScene(doom::LevelLump * level)
 		c->m_worldmatrix.Translate(thingLump->m_x, 0.0f, thingLump->m_z);
 		s->AddMesh(c);
 	}
+	*/
 
 	Texture *texture = new Texture(0x00FFFFFF);
 	count = (unsigned int) level->m_sideDefs.size();
@@ -139,11 +144,14 @@ Scene* BuildScene(doom::LevelLump * level)
 			mesh->SetVertexBuffer(vecs, 4);
 			Texture *tex = new Texture(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h);
 			mesh->SetTexture(tex);
-			Vec2f *texBuf = new Vec2f[4];
-			texBuf[0].x=0;                             texBuf[0].y=sideDef->m_middleTexture->m_h;
-			texBuf[1].x=sideDef->m_middleTexture->m_w; texBuf[1].y=sideDef->m_middleTexture->m_h;
-			texBuf[2].x=0;                             texBuf[2].y=0;
-			texBuf[3].x=sideDef->m_middleTexture->m_w; texBuf[3].y=0;
+			Vec2f t0, t1, t2, t3;
+			t0.x=0;                             t0.y=sideDef->m_middleTexture->m_h;
+			t1.x=sideDef->m_middleTexture->m_w; t1.y=sideDef->m_middleTexture->m_h;
+			t2.x=0;                             t2.y=0;
+			t3.x=sideDef->m_middleTexture->m_w; t3.y=0;
+			Vec2f *texBuf = new Vec2f[6];
+			texBuf[0]=t0; texBuf[1]=t1; texBuf[2]=t3;
+			texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t2; 
 			unsigned int *indexBuf = new unsigned int[4];
 			indexBuf[0]=0; indexBuf[1]=1; indexBuf[2]=3; indexBuf[3]=2;
 			mesh->AddFan(indexBuf, texBuf, 4);
@@ -200,17 +208,54 @@ Scene* BuildScene(doom::LevelLump * level)
 		}
 	}
 
+	/*
+	count = level->m_sectors.size();
+	for (unsigned int i=0 ; i<count ; i++)
+	{
+		doom::Sector *sector = level->m_sectors[i];
+		
+		// Build the list of vertices of the sector
+		std::list<doom::Vertex*> vertexes;
+		for (std::list<doom::SideDef*>::iterator it=sector->m_sideDefs.begin() ; it!=sector->m_sideDefs.end() ; ++it)
+		{
+			vertexes.push_back(((doom::SideDef*)(*it))->m_lineDef->m_start_vtx);
+			vertexes.push_back(((doom::SideDef*)(*it))->m_lineDef->m_end_vtx);
+		}
+		vertexes.unique(); // Remove vertices that were added twice
+
+		// Sectors may be composed of more than one unconnected closed polygons
+		// We need to tesselate each polygon one by one separately
+		std::list<std::list<doom::Vertex*>> polygons;
+		while (!vertexes.empty())
+		{
+			std::list<doom::Vertex*> polygon;
+			doom::Vertex *firstVertex = vertexes.front();
+			vertexes.pop_front();
+
+			doom::Vertex *nextVertex = NULL;
+			do {
+				// Find which is the next vertex
+			}while (nextVertex != firstVertex);
+			
+			polygons.push_back(polygon);
+		}
+	}*/
+
 	return s;
 }
 
 void VideoWorks()
 {
-	static int fpsticks = SDL_GetTicks();
+	LARGE_INTEGER microseconds1;
 
 	// Lock surface if needed
 	if (SDL_MUSTLOCK(g_screen)) 
 		if (SDL_LockSurface(g_screen) < 0) 
 			return;
+
+	if ((g_frameCount % 100) == 0) {
+		QueryPerformanceCounter(&microseconds1);
+	}
 
 	g_camera->RotateY(g_camerayrotation);
 	g_camera->RotateX(g_cameraxrotation);
@@ -218,6 +263,22 @@ void VideoWorks()
 	g_camera->RotateX(-g_cameraxrotation);
 	g_camera->RotateY(-g_camerayrotation);
 	
+	if ((g_frameCount % 100) == 0) {
+		LARGE_INTEGER microseconds2;
+		QueryPerformanceCounter(&microseconds2);
+		g_renderingTime.QuadPart = microseconds2.QuadPart - microseconds1.QuadPart;
+		
+		LARGE_INTEGER freq;			
+		QueryPerformanceFrequency(&freq);
+		double seconds = g_renderingTime.QuadPart / (1.0f*freq.QuadPart);
+		char tmp[256];
+		sprintf_s(tmp, "Time per frame is %e s\n", seconds);
+		TCHAR tmp2[512];
+		wsprintf(tmp2, L"%S", tmp);
+		OutputDebugString(tmp2);
+	}
+	g_frameCount++;
+
 	// Unlock if needed
 	if (SDL_MUSTLOCK(g_screen)) 
 		SDL_UnlockSurface(g_screen);

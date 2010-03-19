@@ -55,8 +55,8 @@ namespace doom
 			m_wadfile->ReadInt2(&orig_x);
 			m_wadfile->ReadInt2(&orig_y);
 			
-			short PatchLump_index;
-			m_wadfile->ReadInt2(&PatchLump_index);
+			unsigned short PatchLump_index;
+			m_wadfile->ReadInt2((short*)&PatchLump_index);
 
 			short stepdir, colormap;
 			m_wadfile->ReadInt2(&stepdir);
