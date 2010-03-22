@@ -7,6 +7,7 @@
 #include "../SideDef.h"
 #include "../LineDef.h"
 #include "../Thing.h"
+#include "../Seg.h"
 #include "../Sector.h"
 #include "../WadFile.h"
 
@@ -47,6 +48,7 @@ namespace doom
 			m_wadfile->ReadInt2(&x);
 			m_wadfile->ReadInt2(&y);
 			m_vertexes[j] = new Vertex(x, y);
+			printf("Vertex %d at %d, %d\n", j, x, y);
 		}
 		
 		// SECTORS
@@ -77,9 +79,42 @@ namespace doom
 		{
 			m_wadfile->MoveTo(l->m_position + 14*j);
 			m_lineDefs[j] = new LineDef(m_wadfile, this);
+			printf("linedef %d is vertex (%d,%d) and (%d,%d)\n", j,
+				m_lineDefs[j]->m_start_vtx->m_x, m_lineDefs[j]->m_start_vtx->m_z,
+				m_lineDefs[j]->m_end_vtx->m_x,   m_lineDefs[j]->m_end_vtx->m_z);
 		}
 
 		// SEGS
+		l = m_wadfile->Get(i+5);
+		count = l->m_size / 12;
+		m_segs.resize(count);
+		m_wadfile->MoveTo(l->m_position);
+		for (int j=0 ; j<count ; j++)
+		{
+			unsigned short dummy1, dummy2, dummy3, dummy4, dummy5, dummy6;
+			m_wadfile->ReadInt2((short*)&dummy1);
+			m_wadfile->ReadInt2((short*)&dummy2);
+			m_wadfile->ReadInt2((short*)&dummy3);
+			m_wadfile->ReadInt2((short*)&dummy4);
+			m_wadfile->ReadInt2((short*)&dummy5);
+			m_wadfile->ReadInt2((short*)&dummy6);
+			printf("Seg %d is v %d and %d, angle %X, linedef %d, dir %d, offset %d\n",
+				j, dummy1, dummy2, dummy3, dummy4, dummy5, dummy6);
+			m_segs[j] = new Seg(m_vertexes[dummy1], m_vertexes[dummy2], dummy5==1);
+		}
+
+		// SSECTORS
+		l = m_wadfile->Get(i+6);
+		count = l->m_size / 4;
+		m_wadfile->MoveTo(l->m_position);
+		for (int j=0 ; j<count ; j++)
+		{
+			unsigned short first, size;
+			m_wadfile->ReadInt2((short*)&size);
+			m_wadfile->ReadInt2((short*)&first);
+			printf("Ssector %d is segs %d to %d\n", j, first, first+size-1);
+		}
+
 		/*
 		i++;
 		SetSegsLump(SegsLump::Get(m_wadfile->m_lumps[i]));

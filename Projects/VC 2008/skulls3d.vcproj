@@ -208,6 +208,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\Seg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Seg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\SideDef.cpp"
 				>
 			</File>

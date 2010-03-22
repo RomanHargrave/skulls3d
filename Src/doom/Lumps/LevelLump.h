@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "Lump.h"
+#include "../Seg.h"
 
 namespace doom
 {
@@ -12,6 +13,7 @@ namespace doom
 	class Sector;
 	class SideDef;
 	class LineDef;
+	class Seg;
 
 	class LevelLump : public Lump
 	{
@@ -21,6 +23,7 @@ namespace doom
 		std::vector<LineDef*> m_lineDefs;
 		std::vector<SideDef*> m_sideDefs;
 		std::vector<Sector*> m_sectors;
+		std::vector<Seg*> m_segs;
 
 		LevelLump(Lump * lump);
 
