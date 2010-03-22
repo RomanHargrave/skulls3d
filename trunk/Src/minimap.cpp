@@ -17,6 +17,7 @@
 #include "doom/LineDef.h"
 #include "doom/SideDef.h"
 #include "doom/Texture.h"
+#include "doom/Seg.h"
 #include "doom/lumps/PlayPalLump.h"
 #include "doom/lumps/FlatLump.h"
 #include "doom/lumps/PatchLump.h"
@@ -38,6 +39,7 @@ float g_zoom = 0.2f;
 
 void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y);
 void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color);
+void Put4MapPixels(SDL_Surface *screen, int map_x, int map_y, int color);
 void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1,int color);
 int HandleInput();
 
@@ -70,23 +72,47 @@ void ShowMinimap(doom::LevelLump * level)
 		if (level != NULL)
 		{
 			level->Load();
+
+			// Plot things
 			for (unsigned int i=0 ; i<level->m_things.size() ; i++)
 			{
 				doom::Thing * thing = level->m_things[i];
 				PutMapPixel(g_screen, thing->m_x, thing->m_z, 0x00FFFFFF); // white at x,y
 			}
-			//Plotting vertexes
 			
-			for (unsigned int j=0 ; j<level->m_lineDefs.size() ; j++)
+
+			if (g_keys['z'])
 			{
-				int _x0 = level->m_lineDefs[j]->m_start_vtx->m_x;				
-				int _z0 = level->m_lineDefs[j]->m_start_vtx->m_z;				
-				int _x1 = level->m_lineDefs[j]->m_end_vtx->m_x;
-				int _z1 = level->m_lineDefs[j]->m_end_vtx->m_z;
-				
-				DrawMapLine(g_screen,_x0,_z0,_x1,_z1,0x00FF0000);
+				// Draw segs
+				for (unsigned int j=0 ; j<level->m_segs.size() ; j++)
+				{
+					doom::Vertex *v1 = level->m_segs[j]->v1;
+					doom::Vertex *v2 = level->m_segs[j]->v2;
+					DrawMapLine(g_screen, v1->m_x, v1->m_z, v2->m_x, v2->m_z, 0x000000FF);
+					Put4MapPixels(g_screen, v1->m_x, v1->m_z, 0x00FFFF00);
+					Put4MapPixels(g_screen, v2->m_x, v2->m_z, 0x00FFFF00);
+				}
 			}
-		}		
+			else
+			{
+				// Draw linedefs
+				for (unsigned int j=0 ; j<level->m_lineDefs.size() ; j++)
+				{
+					int _x0 = level->m_lineDefs[j]->m_start_vtx->m_x;				
+					int _z0 = level->m_lineDefs[j]->m_start_vtx->m_z;				
+					int _x1 = level->m_lineDefs[j]->m_end_vtx->m_x;
+					int _z1 = level->m_lineDefs[j]->m_end_vtx->m_z;
+					
+					DrawMapLine(g_screen,_x0,_z0,_x1,_z1,0x00FF0000);
+					Put4MapPixels(g_screen, _x0, _z0, 0x0000FF00);
+					Put4MapPixels(g_screen, _x1, _z1, 0x0000FF00);
+
+				}
+			}
+		}
+
+		DrawLine(g_screen, g_scr_w/2-5, g_scr_h/2, g_scr_w/2+5, g_scr_h/2, 0x00FFFFFF);
+		DrawLine(g_screen, g_scr_w/2, g_scr_h/2-5, g_scr_w/2, g_scr_h/2+5, 0x00FFFFFF);
 
 		// Painting the palette
 		/*
@@ -192,6 +218,12 @@ void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
 	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
 	PutPixel(screen, screen_x, screen_y, color);
 }
+void Put4MapPixels(SDL_Surface *screen, int map_x, int map_y, int color)
+{
+	int screen_x, screen_y;
+	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
+	Put4Pixels(screen, screen_x, screen_y, color);
+}
 
 void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
 {	
@@ -200,5 +232,5 @@ void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
 	MapToScreenCoords(x0,y0,&_x0,&_y0);
 	MapToScreenCoords(x1,y1,&_x1,&_y1);
 
-	DrawLine(screen,_x0,  _y0,  _x1,  _y1,  color);						
+	DrawLine(screen,_x0,  _y0,  _x1,  _y1,  color);
 }

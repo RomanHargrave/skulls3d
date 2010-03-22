@@ -71,6 +71,8 @@ int RefreshKeybState()
 					g_keys['r'] = 1;
 				else if (event.key.keysym.sym == SDLK_f)
 					g_keys['f'] = 1;
+				else if (event.key.keysym.sym == SDLK_z)
+					g_keys['z'] = 1;
 				break;
 				
 			case SDL_KEYUP:
@@ -107,6 +109,8 @@ int RefreshKeybState()
 					g_keys['r'] = 0;
 				else if (event.key.keysym.sym == SDLK_f)
 					g_keys['f'] = 0;
+				else if (event.key.keysym.sym == SDLK_z)
+					g_keys['z'] = 0;
 				break;
 			case SDL_QUIT:
 				return -3;

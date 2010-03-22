@@ -336,6 +336,8 @@ int HandleGameplayInput()
 				g_camera->Translate(0.0f, KEYBOARD_RATE_MS * -0.4f, 0.0f);
 
 			g_camera->RotateY(-g_camerayrotation);
+
+			printf("Camera coords = %f, %f\n", g_camera->m_viewmatrix.m_data[3], g_camera->m_viewmatrix.m_data[11]);
 		}
 
 		if (g_keys['t'])
