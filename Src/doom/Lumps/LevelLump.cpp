@@ -9,6 +9,7 @@
 #include "../Thing.h"
 #include "../Seg.h"
 #include "../Sector.h"
+#include "../SSector.h"
 #include "../WadFile.h"
 
 namespace doom
@@ -106,13 +107,52 @@ namespace doom
 		// SSECTORS
 		l = m_wadfile->Get(i+6);
 		count = l->m_size / 4;
+		m_ssectors.resize(count);
+		m_addssectors.resize(count);
 		m_wadfile->MoveTo(l->m_position);
 		for (int j=0 ; j<count ; j++)
 		{
 			unsigned short first, size;
 			m_wadfile->ReadInt2((short*)&size);
 			m_wadfile->ReadInt2((short*)&first);
-			printf("Ssector %d is segs %d to %d\n", j, first, first+size-1);
+			m_ssectors[j] = new SSector();
+			m_addssectors[j] = new SSector();
+			for (unsigned short k=first ; k<first+size ; k++)
+				m_ssectors[j]->m_segs.push_back(m_segs[k]);
+		}
+		
+		// NODES
+		l = m_wadfile->Get(i+7);
+		count = l->m_size / 28;
+		m_wadfile->MoveTo(l->m_position);
+
+		for (int j=0 ; j<count ; j++)
+		{
+			short x1, z1, x2, z2;
+			unsigned short rightChild, leftChild;
+			m_wadfile->ReadInt2(&x1);
+			m_wadfile->ReadInt2(&z1);
+			m_wadfile->ReadInt2(&x2);
+			m_wadfile->ReadInt2(&z2);
+			x2 += x1;
+			z2 += z1;
+			m_wadfile->Skip(16);
+			m_wadfile->ReadInt2((short*)&rightChild);
+			m_wadfile->ReadInt2((short*)&leftChild);
+			if (rightChild & 0x8000)
+			{
+				doom::Seg * seg = new Seg(new Vertex(x1, z1), new Vertex(x2, z2), false);
+				m_addssectors[rightChild&0x7FFF]->m_segs.push_back(seg);
+			}
+			if (leftChild & 0x8000)
+			{
+				doom::Seg * seg = new Seg(new Vertex(x2, z2), new Vertex(x1, z1), false);
+				m_addssectors[leftChild&0x7FFF]->m_segs.push_back(seg);
+			}
+			if ( (!(rightChild & 0x8000)) && (!(leftChild & 0x8000)) )
+			{
+				m_dividers.push_back(new Seg(new Vertex(x1, z1), new Vertex(x2, z2), false));
+			}
 		}
 
 		/*
