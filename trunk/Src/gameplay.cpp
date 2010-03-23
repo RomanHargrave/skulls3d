@@ -69,6 +69,9 @@ void PlayLevel(doom::LevelLump * level)
 	renderer1 = new Renderer(scene, g_camera, viewport1);
 	g_camera->Translate(level->m_things[0]->m_x, 0.0f, level->m_things[0]->m_z);
 
+	ShowMinimap(level);
+
+	/*
 	while (1)
 	{
 		VideoWorks();
@@ -79,6 +82,7 @@ void PlayLevel(doom::LevelLump * level)
 			ShowMinimap(level);
 		HandleGameplayInput();
 	}
+	*/
 	return;
 }
 

@@ -2,6 +2,7 @@
 #ifndef SK_LEVELLUMP
 #define SK_LEVELLUMP
 
+#include <list>
 #include <vector>
 #include "Lump.h"
 #include "../Seg.h"
@@ -14,6 +15,7 @@ namespace doom
 	class SideDef;
 	class LineDef;
 	class Seg;
+	class SSector;
 
 	class LevelLump : public Lump
 	{
@@ -24,6 +26,9 @@ namespace doom
 		std::vector<SideDef*> m_sideDefs;
 		std::vector<Sector*> m_sectors;
 		std::vector<Seg*> m_segs;
+		std::vector<SSector*> m_ssectors;
+		std::vector<SSector*> m_addssectors;
+		std::list<Seg*> m_dividers;
 
 		LevelLump(Lump * lump);
 

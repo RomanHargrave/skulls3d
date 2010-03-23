@@ -39,10 +39,12 @@ int RefreshKeybState()
 					return -10;
 				if (event.key.keysym.sym == SDLK_TAB)
 					return SDLK_TAB;
-				else if (event.key.keysym.sym == SDLK_d)
-					g_keys['d'] = 1;
 				else if (event.key.keysym.sym == SDLK_a)
 					g_keys['a'] = 1;
+				else if (event.key.keysym.sym == SDLK_c)
+					g_keys['c'] = 1;
+				else if (event.key.keysym.sym == SDLK_d)
+					g_keys['d'] = 1;
 				else if (event.key.keysym.sym == SDLK_w)
 					g_keys['w'] = 1;
 				else if (event.key.keysym.sym == SDLK_s)
@@ -71,6 +73,8 @@ int RefreshKeybState()
 					g_keys['r'] = 1;
 				else if (event.key.keysym.sym == SDLK_f)
 					g_keys['f'] = 1;
+				else if (event.key.keysym.sym == SDLK_x)
+					g_keys['x'] = 1;
 				else if (event.key.keysym.sym == SDLK_z)
 					g_keys['z'] = 1;
 				break;
@@ -81,6 +85,8 @@ int RefreshKeybState()
 					g_keys['d'] = 0;
 				else if (event.key.keysym.sym == SDLK_a)
 					g_keys['a'] = 0;
+				else if (event.key.keysym.sym == SDLK_c)
+					g_keys['c'] = 0;
 				else if (event.key.keysym.sym == SDLK_w)
 					g_keys['w'] = 0;
 				else if (event.key.keysym.sym == SDLK_s)
@@ -109,6 +115,8 @@ int RefreshKeybState()
 					g_keys['r'] = 0;
 				else if (event.key.keysym.sym == SDLK_f)
 					g_keys['f'] = 0;
+				else if (event.key.keysym.sym == SDLK_x)
+					g_keys['x'] = 0;
 				else if (event.key.keysym.sym == SDLK_z)
 					g_keys['z'] = 0;
 				break;

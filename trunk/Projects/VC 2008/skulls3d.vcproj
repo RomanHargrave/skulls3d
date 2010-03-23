@@ -224,6 +224,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\SSector.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Texture.cpp"
 				>
 			</File>
