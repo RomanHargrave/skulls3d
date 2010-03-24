@@ -11,6 +11,7 @@
 #include "../Sector.h"
 #include "../SSector.h"
 #include "../WadFile.h"
+#include "../Node.h"
 
 namespace doom
 {
@@ -107,8 +108,9 @@ namespace doom
 		// SSECTORS
 		l = m_wadfile->Get(i+6);
 		count = l->m_size / 4;
+		printf("%d SSectors\n", count);
 		m_ssectors.resize(count);
-		m_addssectors.resize(count);
+		//m_addssectors.resize(count);
 		m_wadfile->MoveTo(l->m_position);
 		for (int j=0 ; j<count ; j++)
 		{
@@ -116,16 +118,19 @@ namespace doom
 			m_wadfile->ReadInt2((short*)&size);
 			m_wadfile->ReadInt2((short*)&first);
 			m_ssectors[j] = new SSector();
-			m_addssectors[j] = new SSector();
+			//m_addssectors[j] = new SSector();
 			for (unsigned short k=first ; k<first+size ; k++)
 				m_ssectors[j]->m_segs.push_back(m_segs[k]);
 		}
 		
 		// NODES
 		l = m_wadfile->Get(i+7);
+		count = l->m_size/28;
+		m_bspTree = new Node(this, l->m_position, count-1, NULL);
+		count = m_bspTree->Count();
+		/*
 		count = l->m_size / 28;
 		m_wadfile->MoveTo(l->m_position);
-
 		for (int j=0 ; j<count ; j++)
 		{
 			short x1, z1, x2, z2;
@@ -154,6 +159,7 @@ namespace doom
 				m_dividers.push_back(new Seg(new Vertex(x1, z1), new Vertex(x2, z2), false));
 			}
 		}
+		*/
 
 		/*
 		i++;

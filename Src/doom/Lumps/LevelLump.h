@@ -16,6 +16,7 @@ namespace doom
 	class LineDef;
 	class Seg;
 	class SSector;
+	class Node;
 
 	class LevelLump : public Lump
 	{
@@ -27,8 +28,9 @@ namespace doom
 		std::vector<Sector*> m_sectors;
 		std::vector<Seg*> m_segs;
 		std::vector<SSector*> m_ssectors;
-		std::vector<SSector*> m_addssectors;
+		//std::vector<SSector*> m_addssectors;
 		std::list<Seg*> m_dividers;
+		doom::Node *m_bspTree;
 
 		LevelLump(Lump * lump);
 

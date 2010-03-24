@@ -200,6 +200,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\Node.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Sector.cpp"
 				>
 			</File>

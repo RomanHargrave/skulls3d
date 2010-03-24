@@ -20,6 +20,7 @@
 #include "doom/Texture.h"
 #include "doom/Seg.h"
 #include "doom/SSector.h"
+#include "doom/Node.h"
 #include "doom/lumps/PlayPalLump.h"
 #include "doom/lumps/FlatLump.h"
 #include "doom/lumps/PatchLump.h"
@@ -39,9 +40,9 @@ extern unsigned int g_scr_h;
 extern Camera *camera; // from gameplay.cpp
 float g_zoom = 0.2f;
 
-void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y);
-void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color);
-void Put4MapPixels(SDL_Surface *screen, int map_x, int map_y, int color);
+void MapToScreenCoords(int map_x, int map_z, int *screen_x, int *screen_y);
+void PutMapPixel(SDL_Surface *screen, int map_x, int map_z, int color);
+void Put4MapPixels(SDL_Surface *screen, int map_x, int map_z, int color);
 void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1,int color);
 void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color);
 int HandleInput();
@@ -104,20 +105,22 @@ void ShowMinimap(doom::LevelLump * level)
 			}
 			else if (g_keys['c'])
 			{
-				srand(12345678);
-				for (unsigned int j=0 ; j<level->m_ssectors.size()-1 ; j++)
-				{
-					unsigned int color = 0;
-					while (color==0)
-						color = (!(rand()%3)?0:((56+rand()%200)<<16)) | (!(rand()%3)?0:((56+rand()%200)<<8)) | (!(rand()%3)?0:((56+rand()%200)));
-					doom::SSector *ssector = level->m_addssectors[j];
+				// Draw SSector dividers from BSP Tree
+				float cam_x = -g_camera->m_viewmatrix.m_data[3];
+				float cam_z = -g_camera->m_viewmatrix.m_data[11];
 
-					// Draw additional segs
-					for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)
-					{
-						doom::Seg *seg = *it;
-						DrawSeg(seg->v1, seg->v2, color);
-					}
+				doom::SSector *ssector = level->m_bspTree->GetSSByPosition(cam_x, cam_z);				
+
+				// Draw ssector segs
+				for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)
+				{
+					doom::Seg *seg = *it;
+					DrawSeg(seg->v1, seg->v2, 0x000000FF);
+				}
+
+				for (doom::Node *n = ssector->m_parentNode ; n != NULL ; n = n->m_parent)
+				{
+					DrawSeg(n->m_startVertex, n->m_endVertex, 0x0000FF00);
 				}
 			}
 			else if (g_keys['x'])
@@ -240,25 +243,25 @@ void ShowMinimap(doom::LevelLump * level)
 	}
 }
 
-void MapToScreenCoords(int map_x, int map_y, int *screen_x, int *screen_y)
+void MapToScreenCoords(int map_x, int map_z, int *screen_x, int *screen_y)
 {
 	float l_x = (g_camera->m_viewmatrix.m_data[3] + map_x) * g_zoom;
 	*screen_x = (int) (g_scr_w/2.0f + l_x);
 
-	float l_y = (g_camera->m_viewmatrix.m_data[11] + map_y) * g_zoom;
+	float l_y = (g_camera->m_viewmatrix.m_data[11] + map_z) * g_zoom;
 	*screen_y = (int) (g_scr_h/2.0f - l_y);
 }
 
-void PutMapPixel(SDL_Surface *screen, int map_x, int map_y, int color)
+void PutMapPixel(SDL_Surface *screen, int map_x, int map_z, int color)
 {
 	int screen_x, screen_y;
-	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
+	MapToScreenCoords(map_x, map_z, &screen_x, &screen_y);
 	PutPixel(screen, screen_x, screen_y, color);
 }
-void Put4MapPixels(SDL_Surface *screen, int map_x, int map_y, int color)
+void Put4MapPixels(SDL_Surface *screen, int map_x, int map_z, int color)
 {
 	int screen_x, screen_y;
-	MapToScreenCoords(map_x, map_y, &screen_x, &screen_y);
+	MapToScreenCoords(map_x, map_z, &screen_x, &screen_y);
 	Put4Pixels(screen, screen_x, screen_y, color);
 }
 
