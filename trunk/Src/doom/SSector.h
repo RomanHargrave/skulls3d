@@ -12,6 +12,7 @@ namespace doom
 	{
 	public:
 		std::list<doom::Seg*> m_segs;
+		Node *m_parentNode;
 
 		SSector() {};
 	};
