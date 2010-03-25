@@ -102,7 +102,10 @@ namespace doom
 			m_wadfile->ReadInt2((short*)&dummy6);
 			printf("Seg %d is v %d and %d, angle %X, linedef %d, dir %d, offset %d\n",
 				j, dummy1, dummy2, dummy3, dummy4, dummy5, dummy6);
-			m_segs[j] = new Seg(m_vertexes[dummy1], m_vertexes[dummy2], dummy5==1);
+			if (dummy5 == 0) // right
+				m_segs[j] = new Seg(m_vertexes[dummy1], m_vertexes[dummy2]);
+			else // left
+				m_segs[j] = new Seg(m_vertexes[dummy2], m_vertexes[dummy1]);
 		}
 
 		// SSECTORS
