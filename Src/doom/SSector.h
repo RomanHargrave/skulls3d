@@ -7,14 +7,16 @@
 namespace doom
 {
 	class Seg;
+	class Node;
 
 	class SSector
 	{
 	public:
-		std::list<doom::Seg*> m_segs;
+		std::list<Seg*> m_segs;
 		Node *m_parentNode;
 
-		SSector() {};
+		SSector();
+		void BuildMissingSegs();
 	};
 };
 

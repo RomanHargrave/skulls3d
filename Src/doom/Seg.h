@@ -10,9 +10,8 @@ namespace doom
 	{
 	public:
 		Vertex *v1, *v2;
-		bool direction;
 
-		Seg(Vertex *vert1, Vertex *vert2, bool dir);
+		Seg(Vertex *vert1, Vertex *vert2);
 	};
 };
 
