@@ -49,6 +49,7 @@ int HandleInput();
 
 void ShowMinimap(doom::LevelLump * level)
 {
+	int ssectorId = 0;
 	while(1)
 	{
 		Sleep(1);
@@ -109,7 +110,12 @@ void ShowMinimap(doom::LevelLump * level)
 				float cam_x = -g_camera->m_viewmatrix.m_data[3];
 				float cam_z = -g_camera->m_viewmatrix.m_data[11];
 
-				doom::SSector *ssector = level->m_bspTree->GetSSByPosition(cam_x, cam_z);				
+				doom::SSector *ssector = level->m_bspTree->GetSSByPosition(cam_x, cam_z);
+				if (ssector->id != ssectorId)
+				{
+					ssectorId = ssector->id;
+					printf("SSector %d\n", ssectorId);
+				}
 
 				// Draw ssector segs
 				for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)

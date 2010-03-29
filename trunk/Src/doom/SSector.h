@@ -1,4 +1,4 @@
-
+	
 #ifndef SK_SSECTOR
 #define SK_SSECTOR
 
@@ -14,8 +14,9 @@ namespace doom
 	public:
 		std::list<Seg*> m_segs;
 		Node *m_parentNode;
+		short id;
 
-		SSector();
+		SSector(short id);
 		void BuildMissingSegs();
 	};
 };
