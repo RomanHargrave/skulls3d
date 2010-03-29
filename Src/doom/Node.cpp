@@ -37,6 +37,7 @@ namespace doom
 			m_isRightSSector = true;
 			m_rightSSector = level->m_ssectors[right&0x7FFF];
 			m_rightSSector->m_parentNode = this;
+			m_rightSSector->BuildMissingSegs();
 		} else {
 			m_isRightSSector = false;
 			m_rightNode = new Node(level, lumpPosition, right&0x7FFF, this);
@@ -45,6 +46,7 @@ namespace doom
 			m_isLeftSSector = true;
 			m_leftSSector = level->m_ssectors[left&0x7FFF];
 			m_leftSSector->m_parentNode = this;
+			m_leftSSector->BuildMissingSegs();
 		} else {
 			m_isLeftSSector = false;
 			m_leftNode = new Node(level, lumpPosition, left&0x7FFF, this);

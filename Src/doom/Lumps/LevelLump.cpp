@@ -102,10 +102,12 @@ namespace doom
 			m_wadfile->ReadInt2((short*)&dummy6);
 			printf("Seg %d is v %d and %d, angle %X, linedef %d, dir %d, offset %d\n",
 				j, dummy1, dummy2, dummy3, dummy4, dummy5, dummy6);
-			if (dummy5 == 0) // right
+			//int aligned = (m_vertexes[dummy2]->m_x-m_vertexes[dummy1]->m_x) * (m_lineDefs[dummy4]->m_end_vtx->m_x-m_lineDefs[dummy4]->m_start_vtx->m_x)
+            //            + (m_vertexes[dummy2]->m_z-m_vertexes[dummy1]->m_z) * (m_lineDefs[dummy4]->m_end_vtx->m_z-m_lineDefs[dummy4]->m_start_vtx->m_z);
+			//if ((dummy5 == 0 && aligned) || (dummy5 == 1 && !aligned)) // right
 				m_segs[j] = new Seg(m_vertexes[dummy1], m_vertexes[dummy2]);
-			else // left
-				m_segs[j] = new Seg(m_vertexes[dummy2], m_vertexes[dummy1]);
+			//else // left
+			//	m_segs[j] = new Seg(m_vertexes[dummy2], m_vertexes[dummy1]);
 		}
 
 		// SSECTORS
@@ -120,7 +122,7 @@ namespace doom
 			unsigned short first, size;
 			m_wadfile->ReadInt2((short*)&size);
 			m_wadfile->ReadInt2((short*)&first);
-			m_ssectors[j] = new SSector();
+			m_ssectors[j] = new SSector(j);
 			//m_addssectors[j] = new SSector();
 			for (unsigned short k=first ; k<first+size ; k++)
 				m_ssectors[j]->m_segs.push_back(m_segs[k]);

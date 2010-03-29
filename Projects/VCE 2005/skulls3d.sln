@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C++ Express 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skulls3d", "skulls3d.vcproj", "{01F847D4-C93A-45E7-9191-CF155A004326}"
 	ProjectSection(ProjectDependencies) = postProject
 		{08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0} = {08D3DA40-D069-4F8F-A3C2-C5BA781EC7B0}
