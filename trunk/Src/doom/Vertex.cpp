@@ -6,7 +6,7 @@
 
 namespace doom
 {
-	Vertex::Vertex(short x, short z)
+	Vertex::Vertex(int x, int z)
 	{
 		m_x = x;
 		m_z = z;

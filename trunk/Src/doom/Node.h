@@ -33,7 +33,9 @@ namespace doom
 		Rect m_rightBoundingBox, m_leftBoundingBox;
 
 		Node(LevelLump *level, unsigned int lumpPosition, unsigned int nodeIndex, Node *parent);
+		bool IsOnRight(const float x, const float z) const;
 		SSector* GetSSByPosition(float x, float z);
+		void BuildMissingSegs();
 		int Count();
 	};
 };

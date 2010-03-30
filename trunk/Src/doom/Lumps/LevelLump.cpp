@@ -125,13 +125,18 @@ namespace doom
 			m_ssectors[j] = new SSector(j);
 			//m_addssectors[j] = new SSector();
 			for (unsigned short k=first ; k<first+size ; k++)
+			{
+				if (k==390)
+					k=390;
 				m_ssectors[j]->m_segs.push_back(m_segs[k]);
+			}
 		}
 		
 		// NODES
 		l = m_wadfile->Get(i+7);
 		count = l->m_size/28;
 		m_bspTree = new Node(this, l->m_position, count-1, NULL);
+		m_bspTree->BuildMissingSegs();
 		count = m_bspTree->Count();
 		/*
 		count = l->m_size / 28;

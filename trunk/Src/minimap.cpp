@@ -44,7 +44,7 @@ void MapToScreenCoords(int map_x, int map_z, int *screen_x, int *screen_y);
 void PutMapPixel(SDL_Surface *screen, int map_x, int map_z, int color);
 void Put4MapPixels(SDL_Surface *screen, int map_x, int map_z, int color);
 void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1,int color);
-void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color);
+void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color, bool plotV1=true, bool plotV2=true);
 int HandleInput();
 
 void ShowMinimap(doom::LevelLump * level)
@@ -100,13 +100,29 @@ void ShowMinimap(doom::LevelLump * level)
 					for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)
 					{
 						doom::Seg *seg = *it;
-						DrawSeg(seg->v1, seg->v2, color);
+						if (seg->m_valid == false)
+							continue;
+						DrawSeg(seg->m_v1, seg->m_v2, color);
 					}
+				}
+			}
+			else if (g_keys['b'])
+			{
+				// Draw SSector dividers from BSP Tree
+				float cam_x = -g_camera->m_viewmatrix.m_data[3];
+				float cam_z = -g_camera->m_viewmatrix.m_data[11];
+				doom::SSector *ssector = level->m_bspTree->GetSSByPosition(cam_x, cam_z);
+				for (doom::Node *n = ssector->m_parentNode ; n != NULL ; n = n->m_parent)
+				{
+					if (n->IsOnRight(cam_x, cam_z))
+						DrawSeg(n->m_startVertex, n->m_endVertex, 0x0000FF00, false, false);
+					else
+						DrawSeg(n->m_endVertex, n->m_startVertex, 0x0000FF00, false, false);
 				}
 			}
 			else if (g_keys['c'])
 			{
-				// Draw SSector dividers from BSP Tree
+				// Draw ssector segs
 				float cam_x = -g_camera->m_viewmatrix.m_data[3];
 				float cam_z = -g_camera->m_viewmatrix.m_data[11];
 
@@ -117,16 +133,27 @@ void ShowMinimap(doom::LevelLump * level)
 					printf("SSector %d\n", ssectorId);
 				}
 
-				// Draw ssector segs
 				for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)
 				{
 					doom::Seg *seg = *it;
-					DrawSeg(seg->v1, seg->v2, 0x000000FF);
+					if (seg->m_valid == false)
+						continue;
+					DrawSeg(seg->m_v1, seg->m_v2, 0x000000FF, !seg->m_backOpen, !seg->m_frontOpen);
 				}
-
-				for (doom::Node *n = ssector->m_parentNode ; n != NULL ; n = n->m_parent)
+			}
+			else if (g_keys['v'])
+			{
+				// Draw all ssectors
+				for (std::vector<doom::SSector*>::iterator itss=level->m_ssectors.begin(); itss!=level->m_ssectors.end() ; ++itss)
 				{
-					DrawSeg(n->m_startVertex, n->m_endVertex, 0x0000FF00);
+					doom::SSector *ssector = *itss;
+					for (std::list<doom::Seg*>::iterator it=ssector->m_segs.begin() ; it!=ssector->m_segs.end(); ++it)
+					{
+						doom::Seg *seg = *it;
+						if (seg->m_valid == false)
+							continue;
+						DrawSeg(seg->m_v1, seg->m_v2, 0x000000FF, !seg->m_backOpen, !seg->m_frontOpen);
+					}
 				}
 			}
 			else if (g_keys['x'])
@@ -137,7 +164,9 @@ void ShowMinimap(doom::LevelLump * level)
 				for (std::list<doom::Seg*>::iterator it=level->m_dividers.begin() ; it!=level->m_dividers.end(); ++it)
 				{
 					doom::Seg *seg = *it;
-					DrawSeg(seg->v1, seg->v2, color);
+					if (seg->m_valid == false)
+						continue;
+					DrawSeg(seg->m_v1, seg->m_v2, color);
 				}
 			}
 			else
@@ -281,12 +310,14 @@ void DrawMapLine(SDL_Surface *screen,int x0, int y0, int x1, int y1, int color)
 	DrawLine(screen,_x0,  _y0,  _x1,  _y1,  color);
 }
 
-void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color)
+void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color, bool plotV1, bool plotV2)
 {
 	unsigned int dot_color = 0x00FFFFFF - color;
 	DrawMapLine(g_screen, v1->m_x, v1->m_z, v2->m_x, v2->m_z, color);
-	Put4MapPixels(g_screen, v1->m_x, v1->m_z, dot_color);
-	Put4MapPixels(g_screen, v2->m_x, v2->m_z, dot_color);
+	if (plotV1)
+		Put4MapPixels(g_screen, v1->m_x, v1->m_z, dot_color);
+	if (plotV2)
+		Put4MapPixels(g_screen, v2->m_x, v2->m_z, dot_color);
 
 	// Drawing right side mark
 	unsigned int xMid = (v1->m_x + v2->m_x)/2;
