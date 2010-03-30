@@ -13,10 +13,15 @@ namespace doom
 		m_startVertex = new Vertex(0,0);
 		m_endVertex = new Vertex(0,0);
 		level->m_wadfile->MoveTo(lumpPosition + nodeIndex*28);
-		level->m_wadfile->ReadInt2(&m_startVertex->m_x);
-		level->m_wadfile->ReadInt2(&m_startVertex->m_z);
-		level->m_wadfile->ReadInt2(&m_endVertex->m_x);
-		level->m_wadfile->ReadInt2(&m_endVertex->m_z);
+		short dummy;
+		level->m_wadfile->ReadInt2(&dummy);
+		m_startVertex->m_x = (int)dummy;
+		level->m_wadfile->ReadInt2(&dummy);
+		m_startVertex->m_z = (int)dummy;
+		level->m_wadfile->ReadInt2(&dummy);
+		m_endVertex->m_x = (int) dummy;
+		level->m_wadfile->ReadInt2(&dummy);
+		m_endVertex->m_z = (int) dummy;
 		m_endVertex->m_x += m_startVertex->m_x;
 		m_endVertex->m_z += m_startVertex->m_z;
 
@@ -37,7 +42,6 @@ namespace doom
 			m_isRightSSector = true;
 			m_rightSSector = level->m_ssectors[right&0x7FFF];
 			m_rightSSector->m_parentNode = this;
-			m_rightSSector->BuildMissingSegs();
 		} else {
 			m_isRightSSector = false;
 			m_rightNode = new Node(level, lumpPosition, right&0x7FFF, this);
@@ -46,22 +50,25 @@ namespace doom
 			m_isLeftSSector = true;
 			m_leftSSector = level->m_ssectors[left&0x7FFF];
 			m_leftSSector->m_parentNode = this;
-			m_leftSSector->BuildMissingSegs();
 		} else {
 			m_isLeftSSector = false;
 			m_leftNode = new Node(level, lumpPosition, left&0x7FFF, this);
 		}
 	}
 
-	SSector* Node::GetSSByPosition(float x, float z)
+	bool Node::IsOnRight(const float x, const float z) const
 	{
 		float xRightVec = (float)  m_endVertex->m_z - m_startVertex->m_z;
 		float zRightVec = (float)-(m_endVertex->m_x - m_startVertex->m_x);
 		float xPosVec = x - m_startVertex->m_x;
 		float zPosVec = z - m_startVertex->m_z;
 		float dotProduct = xRightVec*xPosVec + zRightVec*zPosVec;
+		return (dotProduct >= 0);
+	}
 
-		if (dotProduct >= 0)
+	SSector* Node::GetSSByPosition(float x, float z)
+	{
+		if (IsOnRight(x, z))
 		{
 			// vectors aligned, point on the right
 			if (m_isRightSSector == true)
@@ -77,6 +84,19 @@ namespace doom
 			else
 				return m_leftNode->GetSSByPosition(x,z);
 		}
+	}
+
+	void Node::BuildMissingSegs()
+	{
+		if (m_isLeftSSector)
+			m_leftSSector->BuildMissingSegs();
+		else 
+			m_leftNode->BuildMissingSegs();
+
+		if (m_isRightSSector)
+			m_rightSSector->BuildMissingSegs();
+		else
+			m_rightNode->BuildMissingSegs();
 	}
 
 	int Node::Count()

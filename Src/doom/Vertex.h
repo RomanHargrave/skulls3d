@@ -11,11 +11,11 @@ namespace doom
 	class Vertex
 	{
 	public:
-		short m_x;
-		short m_z;	
+		int m_x;
+		int m_z;	
 		std::list<LineDef*> m_lineDefs;
 
-		Vertex(short x, short z);
+		Vertex(int x, int z);
 	};
 };
 
