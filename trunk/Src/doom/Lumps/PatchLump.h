@@ -15,10 +15,10 @@ namespace doom
 		unsigned short m_w, m_h;
 		unsigned int * m_bitmap;
 
-		PatchLump(doom::Lump *other);
+		PatchLump(void *referencer, doom::Lump *other);
 		virtual ~PatchLump();
 		
-		virtual int Load();
+		virtual bool Load();
 		virtual void UnLoad();
 	};
 };

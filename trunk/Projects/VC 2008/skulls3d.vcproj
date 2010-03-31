@@ -208,6 +208,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\doom\ReferencedObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\doom\ReferencedObject.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\doom\Sector.cpp"
 				>
 			</File>

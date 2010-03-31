@@ -1,11 +1,13 @@
 
 #include <stdlib.h>
 #include "Lump.h"
+#include "../ReferencedObject.h"
 #include "../WadFile.h"
 
 namespace doom
 {
-	Lump::Lump(WadFile * wadfile, int dictionary_position, char * name, int pos, int size)
+	Lump::Lump(void *referencer, WadFile * wadfile, int dictionary_position, char * name, int pos, int size)
+		:ReferencedObject(referencer)
 	{
 		this->m_wadfile = wadfile;
 		this->m_dictionary_position = dictionary_position;
@@ -14,7 +16,8 @@ namespace doom
 		this->m_size = size;
 	}
 
-	Lump::Lump(Lump * other)
+	Lump::Lump(void *referencer, Lump * other)
+		:ReferencedObject(referencer)
 	{
 		this->m_wadfile = other->m_wadfile;
 		this->m_dictionary_position = other->m_dictionary_position;
@@ -28,9 +31,9 @@ namespace doom
 		UnLoad();
 	}
 
-	int Lump::Load()
+	bool Lump::Load()
 	{
-		return 0;
+		return true;
 	}
 	void Lump::UnLoad()
 	{

@@ -1,5 +1,6 @@
 
 #include <list>
+#include <stack>
 #include "SSector.h"
 #include "Seg.h"
 #include "Node.h"
@@ -15,6 +16,7 @@ namespace doom
 
 	void SSector::BuildMissingSegs()
 	{
+		/*
 		if (id==35)
 			id=35;
 		// Removing redundant aligned segments
@@ -72,6 +74,84 @@ namespace doom
 			}
 		}
 
+		// Cutting bsp tree segments between themselves
+		std::stack<Node*> nodeStack;
+		for (Node *node = m_parentNode ; node != NULL ; node=node->m_parent)
+			nodeStack.push(node);
+		std::list<Seg*> newSegs;
+		while (nodeStack.size() > 0)
+		{
+			Node *node = nodeStack.top();
+			Seg *newSeg;
+			nodeStack.pop();
+			if (nodeStack.size() > 0) {
+				Node *nextNode = nodeStack.top();
+				if (node->m_isRightSSector==false && node->m_rightNode==nextNode) {
+					newSeg = new Seg(new Vertex(this, node->m_startVertex->m_x, node->m_startVertex->m_z),
+					                 new Vertex(this, node->m_endVertex->m_x, node->m_endVertex->m_z));
+				} else {
+					newSeg = new Seg(new Vertex(this, node->m_endVertex->m_x, node->m_endVertex->m_z),
+					                 new Vertex(this, node->m_startVertex->m_x, node->m_startVertex->m_z));
+				}
+			}
+			else
+			{
+				if (node->m_isRightSSector && node->m_rightSSector==this) {
+					newSeg = new Seg(new Vertex(this, node->m_startVertex->m_x, node->m_startVertex->m_z),
+					                 new Vertex(this, node->m_endVertex->m_x, node->m_endVertex->m_z));
+				} else {
+					newSeg = new Seg(new Vertex(this, node->m_endVertex->m_x, node->m_endVertex->m_z),
+					                 new Vertex(this, node->m_startVertex->m_x, node->m_startVertex->m_z));
+				}
+			}
+			for (std::list<Seg*>::iterator it=newSegs.begin() ; it!=newSegs.end() ; ++it)
+			{
+				Seg *s = *it;
+				if (s->m_valid == false)
+					continue;
+				s->CutEachOther(newSeg);
+				if (newSeg->m_valid == false)
+					break;
+			}
+			if (newSeg->m_valid == false)
+			{
+				delete newSeg;
+				continue;
+			}
+			newSegs.push_back(newSeg);
+		}
+
+		// Cutting newly created bsp segments with known segments
+		for (std::list<Seg*>::iterator itnew=newSegs.begin() ; itnew!=newSegs.end() ; ++itnew)
+		{
+			Seg *newSeg = *itnew;
+			if (newSeg->m_valid == false)
+				continue;
+			for (std::list<Seg*>::iterator itknown=m_segs.begin() ; itknown!=m_segs.end() ; ++itknown)
+			{
+				Seg *knownSeg = *itknown;
+				if (knownSeg->m_valid == false)
+					continue;
+				if (knownSeg->Parallel(newSeg)) {
+					if (      knownSeg->IsOnRight(newSeg->m_v1->m_x, newSeg->m_v1->m_z) == false
+						   || knownSeg->Aligned(newSeg) ) {
+						newSeg->m_valid = false;
+						break;
+					} else if (newSeg->IsOnRight(knownSeg->m_v1->m_x, knownSeg->m_v1->m_z) == false) {
+						knownSeg->m_valid = false;
+						continue;
+					}
+				}
+				newSeg->CutEachOther(knownSeg);
+				if (newSeg->m_valid == false)
+					break;
+			}
+			if (newSeg->m_valid)
+				m_segs.push_back(newSeg);
+		}
+		*/
+
+		/*
 		// Cutting open segs between themselves
 		for (std::list<Seg*>::iterator it=m_segs.begin() ; it!=m_segs.end() ; ++it)
 		{
@@ -131,5 +211,6 @@ namespace doom
 				delete newSeg;
 			oldNode = node;
 		}
+		*/
 	}
 };

@@ -5,17 +5,17 @@
 
 namespace doom
 {
-	SoundLump::SoundLump(Lump *other)
-		:Lump(other)
+	SoundLump::SoundLump(void *referencer, Lump *other)
+		:Lump(referencer, other)
 	{
 		m_soundData = NULL;
 		m_len = 0;
 	}
 
-	int SoundLump::Load()
+	bool SoundLump::Load()
 	{
 		if (m_soundData != NULL)
-			return 0; // Already loaded
+			return true; // Already loaded
 
 		m_wadfile->MoveTo(m_position);
 		m_wadfile->Skip(4);
@@ -24,7 +24,7 @@ namespace doom
 		m_soundData = new unsigned char[m_len];
 		m_wadfile->ReadString((char*)m_soundData, m_len);
 
-		return 0;
+		return true;
 	}
 	void SoundLump::UnLoad()
 	{

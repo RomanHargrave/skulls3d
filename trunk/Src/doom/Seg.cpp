@@ -83,7 +83,7 @@ namespace doom
 		int otherDirZ = (int)other->m_v2->m_z - (int)other->m_v1->m_z;
 		int dotProduct = (int)otherRightX*(int)thisDirX + (int)otherRightZ*(int)thisDirZ;
 
-		Vertex * intersect = new Vertex(m_v1->m_x+(int)round(ua*thisDirX), m_v1->m_z+(int)round(ua*thisDirZ));
+		Vertex * intersect = new Vertex(this, m_v1->m_x+(int)round(ua*thisDirX), m_v1->m_z+(int)round(ua*thisDirZ));
 
 		if (dotProduct >= 0)
 		{
@@ -93,18 +93,18 @@ namespace doom
 					m_valid = false;
 				} else {
 					m_v1 = intersect;
-					m_v2 = new Vertex(m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
+					m_v2 = new Vertex(this, m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
 					m_backOpen = false;
 				}
 			} else if (ua<1 && m_backOpen) {
 				m_v1 = intersect;
 				if (m_frontOpen)
-					m_v2 = new Vertex(m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
+					m_v2 = new Vertex(this, m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
 				m_backOpen = false;
 			} else if (ua > 0) {
 				m_v1 = intersect;
 				if (m_frontOpen)
-					m_v2 = new Vertex(m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
+					m_v2 = new Vertex(this, m_v1->m_x+thisDirX, m_v1->m_z+thisDirZ);
 			}
 			
 			if (ub <= 0) {
@@ -112,18 +112,18 @@ namespace doom
 					other->m_valid = false;
 				} else {
 					other->m_v2 = intersect;
-					other->m_v1 = new Vertex(other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
+					other->m_v1 = new Vertex(this, other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
 					other->m_frontOpen = false;
 				}
 			} else if (ub>0 && other->m_frontOpen) {
 				other->m_v2 = intersect;
 				if (other->m_backOpen)
-					other->m_v1 = new Vertex(other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
+					other->m_v1 = new Vertex(this, other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
 				other->m_frontOpen = false;
 			} else if (ub < 1) {
 				other->m_v2 = intersect;
 				if (other->m_backOpen)
-					other->m_v1 = new Vertex(other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
+					other->m_v1 = new Vertex(this, other->m_v2->m_x-otherDirX, other->m_v2->m_z-otherDirZ);
 			}
 		}
 		else
@@ -133,18 +133,18 @@ namespace doom
 					m_valid = false;
 				} else {
 					m_v2 = intersect;
-					m_v1 = new Vertex(m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
+					m_v1 = new Vertex(this, m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
 					m_frontOpen = false;
 				}
 			} else if (ua>0 && m_frontOpen) {
 				m_v2 = intersect;
 				if (m_backOpen)
-					m_v1 = new Vertex(m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
+					m_v1 = new Vertex(this, m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
 				m_frontOpen = false;
 			} else if (ua < 1) {
 				m_v2 = intersect;
 				if (m_backOpen)
-					m_v1 = new Vertex(m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
+					m_v1 = new Vertex(this, m_v2->m_x-thisDirX, m_v2->m_z-thisDirZ);
 			}
 			
 			if (ub >= 1) {
@@ -152,18 +152,18 @@ namespace doom
 					other->m_valid = false;
 				} else {
 					other->m_v1 = intersect;
-					other->m_v2 = new Vertex(other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
+					other->m_v2 = new Vertex(this, other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
 					other->m_backOpen = false;
 				}
 			} else if (ub<1 && other->m_backOpen) {
 				other->m_v1 = intersect;
 				if (other->m_frontOpen)
-					other->m_v2 = new Vertex(other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
+					other->m_v2 = new Vertex(this, other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
 				other->m_backOpen = false;
 			} else if (ub > 0) {
 				other->m_v1 = intersect;
 				if (other->m_frontOpen)
-					other->m_v2 = new Vertex(other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
+					other->m_v2 = new Vertex(this, other->m_v1->m_x+otherDirX, other->m_v1->m_z+otherDirZ);
 			}
 		}
 		return;

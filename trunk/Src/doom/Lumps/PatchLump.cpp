@@ -8,16 +8,16 @@
 
 namespace doom
 {
-	PatchLump::PatchLump(Lump *other)
-		:Lump(other)
+	PatchLump::PatchLump(void *referencer, Lump *other)
+		:Lump(referencer, other)
 	{
 		m_bitmap = NULL;
 	}
 
-	int PatchLump::Load()
+	bool PatchLump::Load()
 	{
 		if (m_bitmap != NULL)
-			return 0; // Already loaded
+			return true; // Already loaded
 
 		m_wadfile->MoveTo(m_position);
 
@@ -63,7 +63,7 @@ namespace doom
 		}
 		end:
 		delete col_offset;
-		return 0;
+		return true;
 	}
 
 	void PatchLump::UnLoad()

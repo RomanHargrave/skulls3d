@@ -8,16 +8,16 @@
 
 namespace doom
 {
-	FlatLump::FlatLump(Lump * other)
-		:Lump(other)
+	FlatLump::FlatLump(void *referencer, Lump * other)
+		:Lump(referencer, other)
 	{
 		m_bitmap = NULL;
 	}
 
-	int FlatLump::Load()
+	bool FlatLump::Load()
 	{
 		if (m_bitmap != NULL)
-			return 0; //Already loaded
+			return true; //Already loaded
 		
 		m_wadfile->MoveTo(m_position);
 
@@ -30,7 +30,7 @@ namespace doom
 			m_wadfile->ReadInt1((char*)&color);
 			m_bitmap[pix] = m_wadfile->m_palettes->m_palette[color];
 		}
-		return 0;
+		return true;
 	}
 	
 	void FlatLump::UnLoad()

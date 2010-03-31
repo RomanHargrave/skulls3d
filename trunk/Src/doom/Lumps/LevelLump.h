@@ -32,9 +32,9 @@ namespace doom
 		std::list<Seg*> m_dividers;
 		doom::Node *m_bspTree;
 
-		LevelLump(Lump * lump);
+		LevelLump(void *referencer, Lump * lump);
 
-		virtual int Load();
+		virtual bool Load();
 		virtual void UnLoad();
 
 		Sector* GetSectorByTag(unsigned short tag);
