@@ -142,7 +142,7 @@ namespace doom
 			memset(lump_name, 0, 9);
 			if (8 != ReadString(lump_name, 8))
 				return 1;
-			Lump * lump = new Lump(this, i, lump_name, lump_pos, lump_size);
+			Lump * lump = new Lump(this, this, i, lump_name, lump_pos, lump_size);
 			m_lumps[i] = lump;
 			//printf("%08d + %08d %s\n", lump_pos, lump_size, lump_name);
 		}

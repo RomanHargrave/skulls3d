@@ -12,9 +12,9 @@ namespace doom
 		unsigned char *m_soundData;
 		unsigned short m_len;
 
-		SoundLump(Lump *other);
+		SoundLump(void *referencer, Lump *other);
 
-		virtual int Load();
+		virtual bool Load();
 		virtual void UnLoad();
 	};
 };

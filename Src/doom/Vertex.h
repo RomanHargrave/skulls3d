@@ -2,20 +2,24 @@
 #define SK_VERTEX
 
 #include <list>
+#include "ReferencedObject.h"
 
 namespace doom
 {
 	class WadFile;
 	class LineDef;
 
-	class Vertex
+	class Vertex : public ReferencedObject
 	{
 	public:
 		int m_x;
 		int m_z;	
 		std::list<LineDef*> m_lineDefs;
 
-		Vertex(int x, int z);
+		Vertex(void *referencer, int x, int z);
+
+		virtual bool Load();
+		virtual void UnLoad();
 	};
 };
 

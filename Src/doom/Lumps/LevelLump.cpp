@@ -15,17 +15,17 @@
 
 namespace doom
 {
-	LevelLump::LevelLump(Lump * lump)
-		:Lump(lump)
+	LevelLump::LevelLump(void *referencer, Lump * lump)
+		:Lump(referencer, lump)
 	{
 		m_things.resize(0);
 		m_sectors.resize(0);
 	}
 
-	int LevelLump::Load()
+	bool LevelLump::Load()
 	{
 		if (m_things.size() != 0)
-			return 0; // Already loaded
+			return true; // Already loaded
 
 		int i = m_dictionary_position;
 
@@ -40,7 +40,7 @@ namespace doom
 		}
 
 		// VERTEXES
-		*l = m_wadfile->Get(i+4);
+		l = m_wadfile->Get(i+4);
 		count = l->m_size / 4;
 		m_vertexes.resize(count);
 		m_wadfile->MoveTo(l->m_position);
@@ -49,12 +49,12 @@ namespace doom
 			short x,y;
 			m_wadfile->ReadInt2(&x);
 			m_wadfile->ReadInt2(&y);
-			m_vertexes[j] = new Vertex(x, y);
+			m_vertexes[j] = new Vertex(this, x, y);
 			printf("Vertex %d at %d, %d\n", j, x, y);
 		}
 		
 		// SECTORS
-		*l = m_wadfile->Get(i+8);
+		l = m_wadfile->Get(i+8);
 		count = l->m_size / 26;
 		m_sectors.resize(count);
 		for (int j=0 ; j<count ; j++)
@@ -125,11 +125,7 @@ namespace doom
 			m_ssectors[j] = new SSector(j);
 			//m_addssectors[j] = new SSector();
 			for (unsigned short k=first ; k<first+size ; k++)
-			{
-				if (k==390)
-					k=390;
 				m_ssectors[j]->m_segs.push_back(m_segs[k]);
-			}
 		}
 		
 		// NODES
@@ -137,7 +133,7 @@ namespace doom
 		count = l->m_size/28;
 		m_bspTree = new Node(this, l->m_position, count-1, NULL);
 		m_bspTree->BuildMissingSegs();
-		count = m_bspTree->Count();
+		//count = m_bspTree->Count();
 		/*
 		count = l->m_size / 28;
 		m_wadfile->MoveTo(l->m_position);
@@ -156,17 +152,17 @@ namespace doom
 			m_wadfile->ReadInt2((short*)&leftChild);
 			if (rightChild & 0x8000)
 			{
-				doom::Seg * seg = new Seg(new Vertex(x1, z1), new Vertex(x2, z2), false);
+				doom::Seg * seg = new Seg(new Vertex(this, x1, z1), new Vertex(this, x2, z2), false);
 				m_addssectors[rightChild&0x7FFF]->m_segs.push_back(seg);
 			}
 			if (leftChild & 0x8000)
 			{
-				doom::Seg * seg = new Seg(new Vertex(x2, z2), new Vertex(x1, z1), false);
+				doom::Seg * seg = new Seg(new Vertex(this, x2, z2), new Vertex(this, x1, z1), false);
 				m_addssectors[leftChild&0x7FFF]->m_segs.push_back(seg);
 			}
 			if ( (!(rightChild & 0x8000)) && (!(leftChild & 0x8000)) )
 			{
-				m_dividers.push_back(new Seg(new Vertex(x1, z1), new Vertex(x2, z2), false));
+				m_dividers.push_back(new Seg(new Vertex(this, x1, z1), new Vertex(this, x2, z2), false));
 			}
 		}
 		*/
@@ -190,7 +186,7 @@ namespace doom
 		i++;
 		SetBlockMapLump(BlockMapLump::Get(m_wadfile->m_lumps[i]));
 		*/
-		return 0;
+		return true;
 	}
 	void LevelLump::UnLoad()
 	{

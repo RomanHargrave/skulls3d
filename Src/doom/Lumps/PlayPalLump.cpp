@@ -5,16 +5,16 @@
 
 namespace doom
 {
-	PlayPalLump::PlayPalLump(Lump * other)
-		:Lump(other)
+	PlayPalLump::PlayPalLump(void *referencer, Lump * other)
+		:Lump(referencer, other)
 	{
 		m_palette = NULL;
 	}
 
-	int PlayPalLump::Load()
+	bool PlayPalLump::Load()
 	{
 		if (m_palette != NULL)
-			return 0; // Already loaded
+			return true; // Already loaded
 
 		m_wadfile->MoveTo(m_position);
 
@@ -28,7 +28,7 @@ namespace doom
 			m_palette[x] = (r<<16) | (g<<8) | b;
 		}
 
-		return 0;
+		return true;
 	}
 	void PlayPalLump::UnLoad()
 	{

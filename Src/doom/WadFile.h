@@ -4,10 +4,10 @@
 
 #include <vector>
 #include "../File.h"
+#include "lumps/Lump.h"
 
 namespace doom
 {
-	class Lump;
 	class LevelLump;
 	class PatchLump;
 	class PlayPalLump;
@@ -71,9 +71,10 @@ namespace doom
 		if (result == NULL)
 		{
 			// Lump has not been transformed yet, transform it now
-			result = new LUMPTYPE(lump);
+			result = new LUMPTYPE(this, lump);
 			// Update the dictionary reference and dispose of the old lump
 			result->m_wadfile->SetLump(result); // deletes the old one automatically
+			lump->ReleaseObjectBy(this);
 		}
 
 		return result;
