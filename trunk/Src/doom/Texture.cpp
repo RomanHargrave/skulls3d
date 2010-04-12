@@ -75,11 +75,11 @@ namespace doom
 			PatchLump * lump = m_wadfile->m_patches[PatchLump_index];
 			if (lump == NULL)
 				continue;
-			m_wadfile->MoveTo(file_pos);
 
 			//printf("\t%s\n", PatchLump->m_name);
 
 			MergePatchLumpIntoTexture(lump, orig_x, orig_y);
+			m_wadfile->MoveTo(file_pos);
 		}
 		return 0;
 	}

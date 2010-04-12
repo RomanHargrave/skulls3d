@@ -38,8 +38,9 @@ int main(int argc, char *argv[])
 		return -1;
 	if (g_doomwad->Open() != 0)
 		return -1;
-	if (g_doomwad->Load() != 0)
-		return -1;
+	//if (g_doomwad->Load() != true)
+	//	return -1;
+	g_doomwad->Load();
 
 	//ShowMainMenu();
 	doom::LevelLump *level = g_doomwad->GetLevel(0);

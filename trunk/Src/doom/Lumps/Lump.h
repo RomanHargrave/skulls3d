@@ -2,13 +2,11 @@
 #ifndef SK_LUMP
 #define SK_LUMP
 
-#include "../ReferencedObject.h"
-
 namespace doom
 {
 	class WadFile;
 
-	class Lump : public ReferencedObject
+	class Lump
 	{
 	public:
 		WadFile * m_wadfile;
@@ -18,8 +16,8 @@ namespace doom
 		int m_position;
 		int m_size;
 
-		Lump(void *referencer, WadFile * wadfile, int dictionary_position, char * name, int pos, int size);
-		Lump(void *referencer, Lump * lump);
+		Lump(WadFile * wadfile, int dictionary_position, char * name, int pos, int size);
+		Lump(Lump * lump);
 		virtual ~Lump();
 
 		virtual bool Load();

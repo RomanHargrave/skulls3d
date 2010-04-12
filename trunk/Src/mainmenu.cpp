@@ -58,47 +58,47 @@ void ShowMainMenu()
 
 	gs_titleBackg = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("TITLEPIC"));
 	if (gs_titleBackg == NULL) goto mainMenuEnd;
-	if (gs_titleBackg->Load() != 0) goto mainMenuEnd;
+	if (gs_titleBackg->Load() != true) goto mainMenuEnd;
 
 	gs_logo = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_DOOM"));
 	if (gs_logo == NULL) goto mainMenuEnd;
-	if (gs_logo->Load() != 0) goto mainMenuEnd;
+	if (gs_logo->Load() != true) goto mainMenuEnd;
 
 	gs_skull1 = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_SKULL1"));
 	if (gs_skull1 == NULL) goto mainMenuEnd;
-	if (gs_skull1->Load() != 0) goto mainMenuEnd;
+	if (gs_skull1->Load() != true) goto mainMenuEnd;
 
 	gs_skull2 = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_SKULL2"));
 	if (gs_skull2 == NULL) goto mainMenuEnd;
-	if (gs_skull2->Load() != 0) goto mainMenuEnd;
+	if (gs_skull2->Load() != true) goto mainMenuEnd;
 
 	gs_newGame = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_NGAME"));
 	if (gs_newGame == NULL) goto mainMenuEnd;
-	if (gs_newGame->Load() != 0) goto mainMenuEnd;
+	if (gs_newGame->Load() != true) goto mainMenuEnd;
 
 	gs_options = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_OPTION"));
 	if (gs_options == NULL) goto mainMenuEnd;
-	if (gs_options->Load() != 0) goto mainMenuEnd;
+	if (gs_options->Load() != true) goto mainMenuEnd;
 
 	gs_readThis = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_RDTHIS"));
 	if (gs_readThis == NULL) goto mainMenuEnd;
-	if (gs_readThis->Load() != 0) goto mainMenuEnd;
+	if (gs_readThis->Load() != true) goto mainMenuEnd;
 
 	gs_quitGame = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("M_QUITG"));
 	if (gs_quitGame == NULL) goto mainMenuEnd;
-	if (gs_quitGame->Load() != 0) goto mainMenuEnd;
+	if (gs_quitGame->Load() != true) goto mainMenuEnd;
 
 	gs_menuEnter = g_doomwad->GetLump((doom::SoundLump*)g_doomwad->Get("DSSWTCHN"));
 	if (gs_menuEnter == NULL) goto mainMenuEnd;
-	if (gs_menuEnter->Load() != 0) goto mainMenuEnd;
+	if (gs_menuEnter->Load() != true) goto mainMenuEnd;
 
 	gs_menuExit = g_doomwad->GetLump((doom::SoundLump*)g_doomwad->Get("DSSWTCHX"));
 	if (gs_menuExit == NULL) goto mainMenuEnd;
-	if (gs_menuExit->Load() != 0) goto mainMenuEnd;
+	if (gs_menuExit->Load() != true) goto mainMenuEnd;
 
 	gs_menuMove = g_doomwad->GetLump((doom::SoundLump*)g_doomwad->Get("DSSTNMOV"));
 	if (gs_menuMove == NULL) goto mainMenuEnd;
-	if (gs_menuMove->Load() != 0) goto mainMenuEnd;
+	if (gs_menuMove->Load() != true) goto mainMenuEnd;
 
 	DrawSplashScreen();
 

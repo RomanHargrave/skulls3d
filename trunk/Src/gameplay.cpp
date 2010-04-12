@@ -1,5 +1,6 @@
 
 #include <windows.h>
+#include <math.h>
 #include <stdlib.h>
 
 #if defined(_MSC_VER)
@@ -41,8 +42,10 @@ unsigned int g_frameCount = 0;
 
 // From minimap.cpp
 extern float g_zoom;
+extern int g_gridZoom;
 
 Scene* BuildScene(doom::LevelLump * level);
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex);
 void VideoWorks();
 int HandleGameplayInput();
 
@@ -54,12 +57,11 @@ static Renderer *renderer1 = NULL;
 static float g_cameraxrotation;
 static float g_camerayrotation;
 
-
 void PlayLevel(doom::LevelLump * level)
 {
 	if (level == NULL)
 		return;
-	if (level->Load() != 0)
+	if (level->Load() != true)
 		return;
 	
 	scene = BuildScene(level);
@@ -69,20 +71,24 @@ void PlayLevel(doom::LevelLump * level)
 	renderer1 = new Renderer(scene, g_camera, viewport1);
 	g_camera->Translate(level->m_things[0]->m_x, 0.0f, level->m_things[0]->m_z);
 
-	ShowMinimap(level);
-
-	/*
+	//ShowMinimap(level);
+	
 	while (1)
 	{
 		VideoWorks();
-		int a = RefreshKeybState();
-		if (a < 0)
-			return;
-		else if (a == SDLK_TAB)
-			ShowMinimap(level);
-		HandleGameplayInput();
+		SDL_Event event = RefreshKeybState();
+		if (event.type == SDL_QUIT)
+			exit(0);
+		else if (event.type==SDL_KEYDOWN)
+		{
+			if (event.key.keysym.sym == SDLK_TAB)
+				ShowMinimap(level);
+			else if (event.key.keysym.sym == SDLK_ESCAPE)
+				return;
+		}
+		HandleGameplayInput(event);
 	}
-	*/
+	
 	return;
 }
 
@@ -114,51 +120,29 @@ Scene* BuildScene(doom::LevelLump * level)
 		doom::SideDef *sideDef = level->m_sideDefs[i];
 		doom::Vertex *v0, *v1;
 		doom::Sector *sector, *otherSector;
+		sector = sideDef->m_sector;
+		otherSector = NULL;
 		if (sideDef == sideDef->m_lineDef->m_rightSideDef)
 		{
 			v0 = sideDef->m_lineDef->m_start_vtx;
 			v1 = sideDef->m_lineDef->m_end_vtx;
-			sector = sideDef->m_sector;
 			if (sideDef->m_lineDef->m_leftSideDef != NULL)
 				otherSector = sideDef->m_lineDef->m_leftSideDef->m_sector;
-			else
-				otherSector = NULL;
 		}
 		else
 		{
 			v1 = sideDef->m_lineDef->m_start_vtx;
 			v0 = sideDef->m_lineDef->m_end_vtx;
-			sector = sideDef->m_sector;
 			if (sideDef->m_lineDef->m_rightSideDef != NULL)
 				otherSector = sideDef->m_lineDef->m_rightSideDef->m_sector;
-			else
-				otherSector = NULL;
 		}
 		if (otherSector == NULL)
-		{
-			float floorHeight = sideDef->m_sector->m_floorHeight;
-			float ceilingHeight = sideDef->m_sector->m_ceilingHeight;
-
-			Mesh *mesh = new Mesh();
-			Vec3f *vecs = new Vec3f[4];
-			vecs[0].x = v0->m_x; vecs[0].y = floorHeight;   vecs[0].z = v0->m_z;
-			vecs[1].x = v1->m_x; vecs[1].y = floorHeight;   vecs[1].z = v1->m_z;
-			vecs[2].x = v0->m_x; vecs[2].y = ceilingHeight; vecs[2].z = v0->m_z;
-			vecs[3].x = v1->m_x; vecs[3].y = ceilingHeight; vecs[3].z = v1->m_z;
-			mesh->SetVertexBuffer(vecs, 4);
-			Texture *tex = new Texture(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h);
-			mesh->SetTexture(tex);
-			Vec2f t0, t1, t2, t3;
-			t0.x=0;                             t0.y=sideDef->m_middleTexture->m_h;
-			t1.x=sideDef->m_middleTexture->m_w; t1.y=sideDef->m_middleTexture->m_h;
-			t2.x=0;                             t2.y=0;
-			t3.x=sideDef->m_middleTexture->m_w; t3.y=0;
-			Vec2f *texBuf = new Vec2f[6];
-			texBuf[0]=t0; texBuf[1]=t1; texBuf[2]=t3;
-			texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t2; 
-			unsigned int *indexBuf = new unsigned int[4];
-			indexBuf[0]=0; indexBuf[1]=1; indexBuf[2]=3; indexBuf[3]=2;
-			mesh->AddFan(indexBuf, texBuf, 4);
+		{	
+			Mesh *mesh = CreateMesh(*v0, *v1,
+			                        sideDef->m_sector->m_floorHeight,
+			                        sideDef->m_sector->m_ceilingHeight,
+			                        new Texture(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h)
+			                       );
 			s->AddMesh(mesh);
 		}
 		else
@@ -170,10 +154,10 @@ Scene* BuildScene(doom::LevelLump * level)
 
 				Mesh *mesh = new Mesh();
 				Vec3f *vecs = new Vec3f[4];
-				vecs[0].x = v0->m_x; vecs[0].y = floorHeight;   vecs[0].z = v0->m_z;
-				vecs[1].x = v1->m_x; vecs[1].y = floorHeight;   vecs[1].z = v1->m_z;
-				vecs[2].x = v0->m_x; vecs[2].y = ceilingHeight; vecs[2].z = v0->m_z;
-				vecs[3].x = v1->m_x; vecs[3].y = ceilingHeight; vecs[3].z = v1->m_z;
+				vecs[0].x = (float)v0->m_x; vecs[0].y = floorHeight;   vecs[0].z = (float)v0->m_z;
+				vecs[1].x = (float)v1->m_x; vecs[1].y = floorHeight;   vecs[1].z = (float)v1->m_z;
+				vecs[2].x = (float)v0->m_x; vecs[2].y = ceilingHeight; vecs[2].z = (float)v0->m_z;
+				vecs[3].x = (float)v1->m_x; vecs[3].y = ceilingHeight; vecs[3].z = (float)v1->m_z;
 				mesh->SetVertexBuffer(vecs, 4);
 				mesh->SetTexture(texture);
 				Vec2f *texBuf = new Vec2f[4];
@@ -193,10 +177,10 @@ Scene* BuildScene(doom::LevelLump * level)
 
 				Mesh *mesh = new Mesh();
 				Vec3f *vecs = new Vec3f[4];
-				vecs[0].x = v0->m_x; vecs[0].y = floorHeight;   vecs[0].z = v0->m_z;
-				vecs[1].x = v1->m_x; vecs[1].y = floorHeight;   vecs[1].z = v1->m_z;
-				vecs[2].x = v0->m_x; vecs[2].y = ceilingHeight; vecs[2].z = v0->m_z;
-				vecs[3].x = v1->m_x; vecs[3].y = ceilingHeight; vecs[3].z = v1->m_z;
+				vecs[0].x = (float)v0->m_x; vecs[0].y = floorHeight;   vecs[0].z = (float)v0->m_z;
+				vecs[1].x = (float)v1->m_x; vecs[1].y = floorHeight;   vecs[1].z = (float)v1->m_z;
+				vecs[2].x = (float)v0->m_x; vecs[2].y = ceilingHeight; vecs[2].z = (float)v0->m_z;
+				vecs[3].x = (float)v1->m_x; vecs[3].y = ceilingHeight; vecs[3].z = (float)v1->m_z;
 				mesh->SetVertexBuffer(vecs, 4);
 				mesh->SetTexture(texture);
 				Vec2f *texBuf = new Vec2f[4];
@@ -248,6 +232,131 @@ Scene* BuildScene(doom::LevelLump * level)
 	return s;
 }
 
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex)
+{
+	float wallLength = sqrtf((float)(v1.m_x-v0.m_x)*(v1.m_x-v0.m_x)+(float)(v1.m_z-v0.m_z)*(v1.m_z-v0.m_z));
+	int wallHeight = high-low;
+	Mesh *mesh = new Mesh();
+	mesh->SetTexture(tex);
+
+	float nbTexX = (float) wallLength / tex->m_mipmaps[0].m_width; // Nb of times the tex repeats on X
+	float nbTexY = (float) wallHeight / tex->m_mipmaps[0].m_height;// Nb of times the tex repeats on Y
+	float texStepX = (v1.m_x-v0.m_x) / nbTexX; // Length of a texture in map X
+	float texStepZ = (v1.m_z-v0.m_z) / nbTexX; // Length of a texture in map Z
+
+	// Create Vertex buffer
+	int nbVertexX = 1+(int)ceilf(nbTexX);
+	int nbVertexY = 1+(int)ceilf(nbTexY);
+	Vec3f *vertexBuf = new Vec3f[nbVertexX*nbVertexY];
+
+	// Preset texture coords
+	Vec2f t0, t1, t2, t3, t1bis, t2bis, t3bis;
+	t0.x=0.0f;                              t0.y=(float) tex->m_mipmaps[0].m_height;
+	t1.x=(float) tex->m_mipmaps[0].m_width; t1.y=(float) tex->m_mipmaps[0].m_height;
+	t2.x=0.0f;                              t2.y=0.0f;
+	t3.x=(float) tex->m_mipmaps[0].m_width; t3.y=0.0f;
+	t1bis.x=(float) tex->m_mipmaps[0].m_width*(nbTexX-floorf(nbTexX)); t1bis.y=(float) tex->m_mipmaps[0].m_height;
+	t2bis.x=0.0f;                                                      t2bis.y=(float) wallHeight-wallHeight*(1-(nbTexY-floorf(nbTexY)));
+	t3bis.x=(float) tex->m_mipmaps[0].m_width*(nbTexX-floorf(nbTexX)); t3bis.y=(float) wallHeight-wallHeight*(1-(nbTexY-floorf(nbTexY)));
+
+
+	int v=0; // vertexBuffer index
+	for (float y=0 ; y<wallHeight ; y+=tex->m_mipmaps[0].m_height)
+	{
+		for (float x=0 ; x<nbTexX ; x+=1.0f)
+		{
+			// Create texture buffer
+			Vec2f *texBuf = new Vec2f[6];
+			texBuf[0]=t0; texBuf[1]=t1; texBuf[2]=t3;
+			texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t2;
+			if (x+1.0f>nbTexX && y+tex->m_mipmaps[0].m_height<wallHeight)
+			{
+				texBuf[1]=t1bis; texBuf[2]=t3bis;
+				texBuf[4]=t3bis; texBuf[5]=t2bis;
+			}
+			else if (x+1.0f>nbTexX)
+			{
+				texBuf[1]=t1bis; texBuf[2]=t3bis;
+				texBuf[4]=t3bis;
+			}
+			else if (y+tex->m_mipmaps[0].m_height>wallHeight)
+			{
+				texBuf[2]=t3bis;
+				texBuf[4]=t3bis; texBuf[5]=t2bis;
+			}
+
+			// Create Index buff
+			unsigned int *indexBuf = new unsigned int[4];
+			indexBuf[0]=v; indexBuf[1]=v+1; indexBuf[2]=v+1+nbVertexX; indexBuf[3]=v+nbVertexX;
+			mesh->AddFan(indexBuf, texBuf, 4);
+
+			// Set vertex
+			vertexBuf[v].x = v0.m_x + x*texStepX;
+			vertexBuf[v].y = y;
+			vertexBuf[v].z = v0.m_z + x*texStepZ;
+			v++;
+		}
+		// last vertex on row
+		vertexBuf[v].x = (float) v1.m_x;
+		vertexBuf[v].y = y;
+		vertexBuf[v].z = (float) v1.m_z;
+		v++; // next row
+	}
+	// last row
+	for (float x=0 ; x<nbTexX ; x+=1.0f)
+	{
+		vertexBuf[v].x = v0.m_x + x*texStepX;
+		vertexBuf[v].y = (float) high;
+		vertexBuf[v].z = v0.m_z + x*texStepZ;
+		v++;
+	}
+	// last vertex on row
+	vertexBuf[v].x = (float) v1.m_x;
+	vertexBuf[v].y = (float) high;
+	vertexBuf[v].z = (float) v1.m_z;
+
+
+	/*
+	int i=1;
+	while (nbReps > 1.0f)
+	{
+		Vec2f t0, t1, t2, t3;
+		t0.x=0;                         t0.y=tex->m_mipmaps[0].m_height;
+		t1.x=0;                         t1.y=0;
+		t2.x=tex->m_mipmaps[0].m_width; t2.y=tex->m_mipmaps[0].m_height;
+		t3.x=tex->m_mipmaps[0].m_width; t3.y=0;
+		Vec2f *texBuf = new Vec2f[6];
+		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
+		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
+		unsigned int *indexBuf = new unsigned int[4];
+		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
+		mesh->AddFan(indexBuf, texBuf, 4);
+
+		nbReps -= 1.0f;
+		i++;
+	}
+
+	if (nbReps > 0)
+	{
+		//last chunk
+		Vec2f t0, t1, t2, t3;
+		t0.x=0;          t0.y=tex->m_mipmaps[0].m_height;
+		t1.x=0;          t1.y=0;
+		t2.x=wallLength; t2.y=tex->m_mipmaps[0].m_height;
+		t3.x=wallLength; t3.y=0;
+		Vec2f *texBuf = new Vec2f[6];
+		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
+		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
+		unsigned int *indexBuf = new unsigned int[4];
+		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
+		mesh->AddFan(indexBuf, texBuf, 4);
+	}
+	*/
+
+	mesh->SetVertexBuffer(vertexBuf, nbVertexX*nbVertexY);
+	return mesh;
+}
+
 void VideoWorks()
 {
 	LARGE_INTEGER microseconds1;
@@ -291,7 +400,7 @@ void VideoWorks()
 	SDL_UpdateRect(g_screen, 0, 0, g_scr_w, g_scr_h); 
 }
 
-int HandleGameplayInput()
+int HandleGameplayInput(SDL_Event event)
 {
 	static int g_keystick = SDL_GetTicks();
 	
@@ -351,6 +460,18 @@ int HandleGameplayInput()
 
 		g_keystick += KEYBOARD_RATE_MS;
 	}
-
+	if (event.type == SDL_KEYDOWN)
+	{
+		if (event.key.keysym.sym == SDLK_h)
+		{
+			if (g_gridZoom < 0x40000000)
+				g_gridZoom *= 2;
+		}
+		else if (event.key.keysym.sym == SDLK_y)
+		{
+			if (g_gridZoom > 1)
+				g_gridZoom /= 2;
+		}
+	}
 	return 0;
 }

@@ -45,7 +45,7 @@ namespace doom
 		 * 2: Error reading dictionary
 		 * 3: Error reading levels
 		 */
-		virtual int Load();
+		virtual bool Load();
 		virtual void UnLoad();
 
 		LevelLump * GetLevel(unsigned int level_number);
@@ -71,10 +71,10 @@ namespace doom
 		if (result == NULL)
 		{
 			// Lump has not been transformed yet, transform it now
-			result = new LUMPTYPE(this, lump);
+			result = new LUMPTYPE(lump);
 			// Update the dictionary reference and dispose of the old lump
 			result->m_wadfile->SetLump(result); // deletes the old one automatically
-			lump->ReleaseObjectBy(this);
+			//lump->ReleaseObjectBy(this);
 		}
 
 		return result;

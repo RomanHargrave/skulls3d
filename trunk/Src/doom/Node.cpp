@@ -10,8 +10,8 @@ namespace doom
 	Node::Node(LevelLump *level, unsigned int lumpPosition, unsigned int nodeIndex, Node *parent)
 	{
 		m_parent = parent;
-		m_startVertex = new Vertex(this, 0,0);
-		m_endVertex = new Vertex(this, 0,0);
+		m_startVertex = new Vertex(0,0);
+		m_endVertex = new Vertex(0,0);
 		level->m_wadfile->MoveTo(lumpPosition + nodeIndex*28);
 		short dummy;
 		level->m_wadfile->ReadInt2(&dummy);

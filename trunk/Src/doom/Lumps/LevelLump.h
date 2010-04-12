@@ -32,7 +32,7 @@ namespace doom
 		std::list<Seg*> m_dividers;
 		doom::Node *m_bspTree;
 
-		LevelLump(void *referencer, Lump * lump);
+		LevelLump(Lump * lump);
 
 		virtual bool Load();
 		virtual void UnLoad();

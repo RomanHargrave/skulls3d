@@ -8,8 +8,8 @@
 
 namespace doom
 {
-	PatchLump::PatchLump(void *referencer, Lump *other)
-		:Lump(referencer, other)
+	PatchLump::PatchLump(Lump *other)
+		: Lump(other)
 	{
 		m_bitmap = NULL;
 	}
