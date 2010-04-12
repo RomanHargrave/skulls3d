@@ -11,7 +11,7 @@ namespace doom
 	public:
 		unsigned int * m_bitmap;
 
-		FlatLump(void *referencer, Lump * other);
+		FlatLump(Lump * other);
 		
 		virtual bool Load();
 		virtual void UnLoad();

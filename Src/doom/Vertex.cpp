@@ -3,12 +3,10 @@
 #include "Vertex.h"
 #include "SideDef.h"
 #include "WadFile.h"
-#include "ReferencedObject.h"
 
 namespace doom
 {
-	Vertex::Vertex(void *referencer, int x, int z)
-		:ReferencedObject(referencer)
+	Vertex::Vertex(int x, int z)
 	{
 		m_x = x;
 		m_z = z;

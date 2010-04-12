@@ -5,8 +5,8 @@
 
 namespace doom
 {
-	PlayPalLump::PlayPalLump(void *referencer, Lump * other)
-		:Lump(referencer, other)
+	PlayPalLump::PlayPalLump(Lump * other)
+		:Lump(other)
 	{
 		m_palette = NULL;
 	}

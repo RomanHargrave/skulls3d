@@ -5,8 +5,8 @@
 
 namespace doom
 {
-	SoundLump::SoundLump(void *referencer, Lump *other)
-		:Lump(referencer, other)
+	SoundLump::SoundLump(Lump *other)
+		:Lump(other)
 	{
 		m_soundData = NULL;
 		m_len = 0;

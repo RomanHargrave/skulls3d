@@ -15,8 +15,8 @@
 
 namespace doom
 {
-	LevelLump::LevelLump(void *referencer, Lump * lump)
-		:Lump(referencer, lump)
+	LevelLump::LevelLump(Lump * lump)
+		:Lump(lump)
 	{
 		m_things.resize(0);
 		m_sectors.resize(0);
@@ -49,7 +49,7 @@ namespace doom
 			short x,y;
 			m_wadfile->ReadInt2(&x);
 			m_wadfile->ReadInt2(&y);
-			m_vertexes[j] = new Vertex(this, x, y);
+			m_vertexes[j] = new Vertex(x, y);
 			printf("Vertex %d at %d, %d\n", j, x, y);
 		}
 		

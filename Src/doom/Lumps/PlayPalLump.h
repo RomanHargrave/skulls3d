@@ -11,7 +11,7 @@ namespace doom
 	public:
 		unsigned int * m_palette;
 
-		PlayPalLump(void *referencer, Lump * lump);
+		PlayPalLump(Lump * lump);
 
 		virtual bool Load();
 		virtual void UnLoad();

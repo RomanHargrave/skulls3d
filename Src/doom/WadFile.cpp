@@ -11,7 +11,7 @@
 namespace doom
 {
 	WadFile::WadFile(const char * filename)
-		:File(filename)
+		: File(filename)
 	{
 		m_levels.resize(0);
 		m_lumps.resize(0);
@@ -47,16 +47,16 @@ namespace doom
 		m_lumps[newLump->m_dictionary_position] = newLump;
 	}
 
-	int WadFile::Load()
+	bool WadFile::Load()
 	{
 		if (m_lumps.size() != 0)
-			return 0; //Already loaded
+			return true; //Already loaded
 
 		char buffer[10];
 
 		// Reading header
 		if (4 != ReadString(buffer, 4))
-			return 1;
+			return false;
 		if (_strnicmp(buffer, "IWAD", 4) == 0)
 			m_internal = true;
 		else
@@ -65,16 +65,16 @@ namespace doom
 		// Reading lump count
 		int lump_count;
 		if (4 != ReadInt4(&lump_count))
-			return 1;
+			return false;
 		m_lumps.resize(lump_count);
 
 		// Read directory position in file
 		if (4 != ReadInt4(&m_directory_potision))
-			return 1;
+			return false;
 
 		// Load the dictionary
 		if (LoadLumpDictionary() != 0)
-			return 2;
+			return false;
 
 		// Load the palettes
 		m_palettes = GetLump((PlayPalLump*)Get("PLAYPAL"));
@@ -102,15 +102,15 @@ namespace doom
 		// Load the texture dictionary
 		m_textures.resize(0);
 		if (LoadTextures("TEXTURE1") != 0)
-			return 4;
+			return false;
 		if (LoadTextures("TEXTURE2") != 0)
-			return 5;
+			return false;
 
 		// Fill the levels dictionary
 		if (LoadLevels() != 0)
-			return 3;
+			return false;
 
-		return 0;
+		return true;
 	}
 
 	void WadFile::UnLoad()
@@ -142,7 +142,7 @@ namespace doom
 			memset(lump_name, 0, 9);
 			if (8 != ReadString(lump_name, 8))
 				return 1;
-			Lump * lump = new Lump(this, this, i, lump_name, lump_pos, lump_size);
+			Lump * lump = new Lump(this, i, lump_name, lump_pos, lump_size);
 			m_lumps[i] = lump;
 			//printf("%08d + %08d %s\n", lump_pos, lump_size, lump_name);
 		}
