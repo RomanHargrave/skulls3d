@@ -14,7 +14,7 @@
 #include "doom/WadFile.h"
 #include "doom/lumps/PatchLump.h"
 #include "doom/lumps/SoundLump.h"
-
+#include "dxtest.cpp"
 // in main.cpp
 extern doom::WadFile *g_doomwad;
 extern SDL_Surface * g_screen;
@@ -176,6 +176,20 @@ int HandleMenuInput()
 								SKPlaySound(gs_menuEnter->m_soundData, gs_menuEnter->m_len);
 								DrawTopMenu();
 								DrawMenuCursor(gs_topMenuPos);
+							}
+							else if (gs_topMenuPos == 3)
+							{
+								return -1;
+							}
+						}
+					}
+					else if (event.key.keysym.sym == SDLK_BACKSPACE)
+					{
+						if (gs_whichMenu == TopMenu)
+						{
+							if (gs_topMenuPos == 0)
+							{
+								DxTest();								
 							}
 							else if (gs_topMenuPos == 3)
 							{
