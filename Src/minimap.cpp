@@ -25,8 +25,8 @@
 #include "doom/lumps/FlatLump.h"
 #include "doom/lumps/PatchLump.h"
 
-#include "Camera.h"
-#include "Vec3f.h"
+#include "ProjectionClasses/Camera.h"
+#include "ProjectionClasses/Vec3f.h"
 
 // in main.cpp
 extern doom::WadFile *g_doomwad;

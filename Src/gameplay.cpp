@@ -17,7 +17,7 @@
 #include "ViewPort.h"
 #include "Scene.h"
 #include "Renderer.h"
-#include "Texture.h"
+#include "Tex.h"
 #include "Vec3f.h"
 #include "RectangleTriangle.h"
 
@@ -29,7 +29,7 @@
 #include "doom/Texture.h"
 #include "doom/lumps/PatchLump.h"
 
-#include "Cube.h"
+#include "DataClasses/Cube.h"
 
 // From display.cpp
 extern unsigned int g_scr_w;
@@ -45,7 +45,7 @@ extern float g_zoom;
 extern int g_gridZoom;
 
 Scene* BuildScene(doom::LevelLump * level);
-Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex);
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex);
 void VideoWorks();
 int HandleGameplayInput();
 
@@ -56,6 +56,50 @@ static Renderer *renderer1 = NULL;
 	
 static float g_cameraxrotation;
 static float g_camerayrotation;
+
+void RenderGamePlay()
+{
+	// Clear the back buffer to a blue color
+	g_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,255), 1.0f, 0 );
+
+	// Begin the scene
+	g_pd3dDevice->BeginScene();
+
+	for (int i=0 ; i<scene->m_meshCount ; i++)
+	{
+		VOID* pVertices;
+		if( FAILED( g_pVB->Lock( 0, sizeof(CUSTOMVERTEX)*scene->m_meshes[i]->m_vertexcount, (void**)&pVertices, 0 ) ) )
+			return;
+		memcpy( pVertices, scene->m_meshes[i]->m_vb, sizeof(CUSTOMVERTEX)*scene->m_meshes[i]->m_vertexcount );
+		g_pVB->Unlock();
+		g_pd3dDevice->SetStreamSource( 0, g_pVB, 0, sizeof(CUSTOMVERTEX) );
+		g_pd3dDevice->SetFVF( D3DFVF_CUSTOMVERTEX );
+		g_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
+	}
+
+	// End the scene
+	g_pd3dDevice->EndScene();
+
+	g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+}
+
+LRESULT WINAPI GamePlayProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
+{
+    switch( msg )
+    {
+        case WM_DESTROY:
+            PostQuitMessage( 0 );
+            return 0;
+
+        case WM_PAINT:
+            RenderGamePlay();
+            ValidateRect( hWnd, NULL );
+            return 0;
+    }
+
+    return DefWindowProc( hWnd, msg, wParam, lParam );
+}
+
 
 void PlayLevel(doom::LevelLump * level)
 {
@@ -71,8 +115,17 @@ void PlayLevel(doom::LevelLump * level)
 	renderer1 = new Renderer(scene, g_camera, viewport1);
 	g_camera->Translate(level->m_things[0]->m_x, 0.0f, level->m_things[0]->m_z);
 
+	SetWindowLongW(hWnd, GWL_WNDPROC, (LONG)GamePlayProc);
+
+	MSG msg; 
+	while( GetMessage( &msg, NULL, 0, 0 ) )
+	{
+		TranslateMessage( &msg );
+		DispatchMessage( &msg );
+	}
+
 	//ShowMinimap(level);
-	
+	/*
 	while (1)
 	{
 		VideoWorks();
@@ -88,6 +141,7 @@ void PlayLevel(doom::LevelLump * level)
 		}
 		HandleGameplayInput(event);
 	}
+	*/
 	
 	return;
 }
@@ -113,7 +167,7 @@ Scene* BuildScene(doom::LevelLump * level)
 	}
 	*/
 
-	Texture *texture = new Texture(0x00FFFFFF);
+	Tex *texture = new Tex(0x00FFFFFF);
 	count = (unsigned int) level->m_sideDefs.size();
 	for (unsigned int i=0 ; i<count ; i++)
 	{
@@ -141,7 +195,7 @@ Scene* BuildScene(doom::LevelLump * level)
 			Mesh *mesh = CreateMesh(*v0, *v1,
 			                        sideDef->m_sector->m_floorHeight,
 			                        sideDef->m_sector->m_ceilingHeight,
-			                        new Texture(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h)
+			                        new Tex(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h)
 			                       );
 			s->AddMesh(mesh);
 		}
@@ -232,7 +286,7 @@ Scene* BuildScene(doom::LevelLump * level)
 	return s;
 }
 
-Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex)
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex)
 {
 	float wallLength = sqrtf((float)(v1.m_x-v0.m_x)*(v1.m_x-v0.m_x)+(float)(v1.m_z-v0.m_z)*(v1.m_z-v0.m_z));
 	int wallHeight = high-low;
