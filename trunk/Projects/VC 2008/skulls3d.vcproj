@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\src\DataClasses;..\..\src\ProjectionClasses;..\..\src\RenderClasses;..\..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib sdl.lib"
+				AdditionalDependencies="SDLmain.lib sdl.lib d3d9.lib"
 				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\src\DataClasses;..\..\src\ProjectionClasses;..\..\src\RenderClasses;..\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				ExceptionHandling="1"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/verbose:lib "
-				AdditionalDependencies="SDLmain.lib sdl.lib"
+				AdditionalDependencies="SDLmain.lib sdl.lib d3d9.lib"
 				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
@@ -324,6 +324,198 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Engine"
+			>
+			<Filter
+				Name="DataClasses"
+				>
+				<File
+					RelativePath="..\..\Src\DataClasses\Cube.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Cube.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\mesh.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\RectangleTriangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\RectangleTriangle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Scene.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\scene.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Tex.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Tex.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Tore.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\DataClasses\Tore.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ProjectionClasses"
+				>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Camera.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Camera.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Matrix4x4.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Matrix4x4.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\MatrixStack.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\MatrixStack.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Vec2f.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Vec2f.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Vec3f.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\ProjectionClasses\Vec3f.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="RenderClasses"
+				>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F001CustomNoArtefact.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F001CustomNoArtefact.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F002Bilinear.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F002Bilinear.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F003FakeBump.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F003FakeBump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F004Antialiasing.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\F004Antialiasing.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\Filler.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\Filler.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R000Virtual.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R000Virtual.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R007Bilinear.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R007Bilinear.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R008NoTexelArtefact.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\R008NoTexelArtefact.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\Renderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\renderer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\ViewPort.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\viewport.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\ZInterpolator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Src\RenderClasses\ZInterpolator.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="..\..\Src\audio.cpp"
 			>
@@ -366,6 +558,10 @@
 		</File>
 		<File
 			RelativePath="..\..\Src\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\main.h"
 			>
 		</File>
 		<File

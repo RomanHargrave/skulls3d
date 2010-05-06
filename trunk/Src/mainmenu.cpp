@@ -189,7 +189,7 @@ int HandleMenuInput()
 						{
 							if (gs_topMenuPos == 0)
 							{
-								DxTest();								
+								//DxTest();								
 							}
 							else if (gs_topMenuPos == 3)
 							{

@@ -3,7 +3,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-
+/*
 #define VERTEXFORMAT (D3DFVF_XYZ | D3DFVF_DIFFUSE)
 
 IDirect3DVertexBuffer9 *vBuffer;
@@ -102,3 +102,4 @@ void DxTest(){
 	if (dObj != NULL)
 		dObj->Release();	
 }
+*/
