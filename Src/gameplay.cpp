@@ -31,12 +31,8 @@
 
 #include "DataClasses/Cube.h"
 
-// From display.cpp
-extern unsigned int g_scr_w;
-extern unsigned int g_scr_h;
-
 // From main.cpp
-extern SDL_Surface *g_screen;
+//extern SDL_Surface *g_screen;
 LARGE_INTEGER g_renderingTime;
 unsigned int g_frameCount = 0;
 
@@ -51,100 +47,9 @@ int HandleGameplayInput();
 
 static Scene *scene;
 Camera *g_camera;
-static ViewPort *viewport1;
-static Renderer *renderer1 = NULL;
 	
 static float g_cameraxrotation;
 static float g_camerayrotation;
-
-void RenderGamePlay()
-{
-	// Clear the back buffer to a blue color
-	g_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,255), 1.0f, 0 );
-
-	// Begin the scene
-	g_pd3dDevice->BeginScene();
-
-	for (int i=0 ; i<scene->m_meshCount ; i++)
-	{
-		VOID* pVertices;
-		if( FAILED( g_pVB->Lock( 0, sizeof(CUSTOMVERTEX)*scene->m_meshes[i]->m_vertexcount, (void**)&pVertices, 0 ) ) )
-			return;
-		memcpy( pVertices, scene->m_meshes[i]->m_vb, sizeof(CUSTOMVERTEX)*scene->m_meshes[i]->m_vertexcount );
-		g_pVB->Unlock();
-		g_pd3dDevice->SetStreamSource( 0, g_pVB, 0, sizeof(CUSTOMVERTEX) );
-		g_pd3dDevice->SetFVF( D3DFVF_CUSTOMVERTEX );
-		g_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
-	}
-
-	// End the scene
-	g_pd3dDevice->EndScene();
-
-	g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
-}
-
-LRESULT WINAPI GamePlayProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
-{
-    switch( msg )
-    {
-        case WM_DESTROY:
-            PostQuitMessage( 0 );
-            return 0;
-
-        case WM_PAINT:
-            RenderGamePlay();
-            ValidateRect( hWnd, NULL );
-            return 0;
-    }
-
-    return DefWindowProc( hWnd, msg, wParam, lParam );
-}
-
-
-void PlayLevel(doom::LevelLump * level)
-{
-	if (level == NULL)
-		return;
-	if (level->Load() != true)
-		return;
-	
-	scene = BuildScene(level);
-
-	g_camera = new Camera(g_scr_w/(1.0f*g_scr_h));
-	viewport1 = new ViewPort(0, 0, g_scr_w, g_scr_h, g_screen);
-	renderer1 = new Renderer(scene, g_camera, viewport1);
-	g_camera->Translate(level->m_things[0]->m_x, 0.0f, level->m_things[0]->m_z);
-
-	SetWindowLongW(hWnd, GWL_WNDPROC, (LONG)GamePlayProc);
-
-	MSG msg; 
-	while( GetMessage( &msg, NULL, 0, 0 ) )
-	{
-		TranslateMessage( &msg );
-		DispatchMessage( &msg );
-	}
-
-	//ShowMinimap(level);
-	/*
-	while (1)
-	{
-		VideoWorks();
-		SDL_Event event = RefreshKeybState();
-		if (event.type == SDL_QUIT)
-			exit(0);
-		else if (event.type==SDL_KEYDOWN)
-		{
-			if (event.key.keysym.sym == SDLK_TAB)
-				ShowMinimap(level);
-			else if (event.key.keysym.sym == SDLK_ESCAPE)
-				return;
-		}
-		HandleGameplayInput(event);
-	}
-	*/
-	
-	return;
-}
 
 Scene* BuildScene(doom::LevelLump * level)
 {
@@ -411,6 +316,7 @@ Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex)
 	return mesh;
 }
 
+/*
 void VideoWorks()
 {
 	LARGE_INTEGER microseconds1;
@@ -453,7 +359,7 @@ void VideoWorks()
 	// Tell SDL to update the whole screen
 	SDL_UpdateRect(g_screen, 0, 0, g_scr_w, g_scr_h); 
 }
-
+*/
 int HandleGameplayInput(SDL_Event event)
 {
 	static int g_keystick = SDL_GetTicks();

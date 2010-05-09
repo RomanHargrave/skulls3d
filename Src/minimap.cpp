@@ -30,7 +30,7 @@
 
 // in main.cpp
 extern doom::WadFile *g_doomwad;
-extern SDL_Surface * g_screen;
+//extern SDL_Surface * g_screen;
 
 // From display.cpp
 extern unsigned int g_scr_w;
@@ -65,14 +65,14 @@ void ShowMinimap(doom::LevelLump * level)
 		*/
 
 		// Lock surface if needed
-		if (SDL_MUSTLOCK(g_screen)) 
-			if (SDL_LockSurface(g_screen) < 0) 
-				return;
+		//if (SDL_MUSTLOCK(g_screen)) 
+		//	if (SDL_LockSurface(g_screen) < 0) 
+		//		return;
 
 		// Cleaning
-		for (unsigned int j=0 ; j<g_scr_h ; j++)
-			for (unsigned int i=0 ; i<g_scr_w ; i++)
-				PutPixel(g_screen, i, j, 0);
+		//for (unsigned int j=0 ; j<g_scr_h ; j++)
+		//	for (unsigned int i=0 ; i<g_scr_w ; i++)
+		//		PutPixel(g_screen, i, j, 0);
 
 		// Drawing grid
 		float xMin, xMax, zMin, zMax;
@@ -80,10 +80,10 @@ void ShowMinimap(doom::LevelLump * level)
 		ScreenToMapCoords(g_scr_w, g_scr_h, &xMax, &zMax);
 		xMax -= g_gridZoom + ((int)xMax % g_gridZoom);
 		zMax -= g_gridZoom + ((int)zMax % g_gridZoom);
-		for (int i=(int)xMax ; i<=(int)xMin ; i+=g_gridZoom)
-			DrawMapLine(g_screen, i, (int)zMin, i, (int)zMax, 0x00303030);
-		for (int i=(int)zMax ; i<=(int)zMin ; i+=g_gridZoom)
-			DrawMapLine(g_screen, (int)xMin, i, (int)xMax, i, 0x00303030);
+		//for (int i=(int)xMax ; i<=(int)xMin ; i+=g_gridZoom)
+		//	DrawMapLine(g_screen, i, (int)zMin, i, (int)zMax, 0x00303030);
+		//for (int i=(int)zMax ; i<=(int)zMin ; i+=g_gridZoom)
+		//	DrawMapLine(g_screen, (int)xMin, i, (int)xMax, i, 0x00303030);
 
 		// Plotting things
 		doom::LevelLump * level = g_doomwad->GetLevel(0);
@@ -95,7 +95,7 @@ void ShowMinimap(doom::LevelLump * level)
 			for (unsigned int i=0 ; i<level->m_things.size() ; i++)
 			{
 				doom::Thing * thing = level->m_things[i];
-				PutMapPixel(g_screen, thing->m_x, thing->m_z, 0x00FFFFFF); // white at x,y
+				//PutMapPixel(g_screen, thing->m_x, thing->m_z, 0x00FFFFFF); // white at x,y
 			}
 			
 			if (g_keys['z'])
@@ -192,15 +192,15 @@ void ShowMinimap(doom::LevelLump * level)
 					int _x1 = level->m_lineDefs[j]->m_end_vtx->m_x;
 					int _z1 = level->m_lineDefs[j]->m_end_vtx->m_z;
 					
-					DrawMapLine(g_screen,_x0,_z0,_x1,_z1,0x00FF0000);
-					Put4MapPixels(g_screen, _x0, _z0, 0x0000FF00);
-					Put4MapPixels(g_screen, _x1, _z1, 0x0000FF00);
+					//DrawMapLine(g_screen,_x0,_z0,_x1,_z1,0x00FF0000);
+					//Put4MapPixels(g_screen, _x0, _z0, 0x0000FF00);
+					//Put4MapPixels(g_screen, _x1, _z1, 0x0000FF00);
 				}
 			}
 		}
 
-		DrawLine(g_screen, g_scr_w/2-5, g_scr_h/2, g_scr_w/2+5, g_scr_h/2, 0x00FFFFFF);
-		DrawLine(g_screen, g_scr_w/2, g_scr_h/2-5, g_scr_w/2, g_scr_h/2+5, 0x00FFFFFF);
+		//DrawLine(g_screen, g_scr_w/2-5, g_scr_h/2, g_scr_w/2+5, g_scr_h/2, 0x00FFFFFF);
+		//DrawLine(g_screen, g_scr_w/2, g_scr_h/2-5, g_scr_w/2, g_scr_h/2+5, 0x00FFFFFF);
 
 		// Painting the palette
 		/*
@@ -283,11 +283,11 @@ void ShowMinimap(doom::LevelLump * level)
 		*/
 
 		// Unlock if needed
-		if (SDL_MUSTLOCK(g_screen)) 
-			SDL_UnlockSurface(g_screen);
+		//if (SDL_MUSTLOCK(g_screen)) 
+		//	SDL_UnlockSurface(g_screen);
 
 		// Tell SDL to update the whole screen
-		SDL_UpdateRect(g_screen, 0, 0, g_scr_w, g_scr_h); 
+		//SDL_UpdateRect(g_screen, 0, 0, g_scr_w, g_scr_h); 
 	}
 }
 
@@ -335,11 +335,11 @@ void DrawMapLine(SDL_Surface *screen,int x0, int z0, int x1, int z1, int color)
 void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color, bool plotV1, bool plotV2)
 {
 	unsigned int dot_color = 0x00FFFFFF - color;
-	DrawMapLine(g_screen, v1->m_x, v1->m_z, v2->m_x, v2->m_z, color);
-	if (plotV1)
-		Put4MapPixels(g_screen, v1->m_x, v1->m_z, dot_color);
-	if (plotV2)
-		Put4MapPixels(g_screen, v2->m_x, v2->m_z, dot_color);
+	//DrawMapLine(g_screen, v1->m_x, v1->m_z, v2->m_x, v2->m_z, color);
+	//if (plotV1)
+	//	Put4MapPixels(g_screen, v1->m_x, v1->m_z, dot_color);
+	//if (plotV2)
+	//	Put4MapPixels(g_screen, v2->m_x, v2->m_z, dot_color);
 
 	// Drawing right side mark
 	unsigned int xMid = (v1->m_x + v2->m_x)/2;
@@ -347,5 +347,5 @@ void DrawSeg(doom::Vertex *v1, doom::Vertex *v2, unsigned int color, bool plotV1
 	unsigned int xDep = (v2->m_z - v1->m_z)/10;
 	unsigned int zDep = -(v2->m_x - v1->m_x)/10;
 
-	DrawMapLine(g_screen, xMid, zMid, xMid+xDep, zMid+zDep, color);
+	//DrawMapLine(g_screen, xMid, zMid, xMid+xDep, zMid+zDep, color);
 }

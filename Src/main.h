@@ -5,15 +5,17 @@
 #include <windows.h>
 #include <d3d9.h>
 
-extern IDirect3D9 *g_pD3D;
-extern IDirect3DDevice9 *g_pd3dDevice;
-extern IDirect3DVertexBuffer9 *g_pVB;
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+extern LPDIRECT3D9 g_d3d;
+extern LPDIRECT3DDEVICE9 g_d3ddev;
 extern HWND hWnd;
 typedef struct 
 {
-    FLOAT x, y, z, rhw; // The transformed position for the vertex.
-    DWORD color;        // The vertex color.
+	FLOAT x, y, z;
+	FLOAT u, v;
 }CUSTOMVERTEX;
-#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE)
+#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_TEX0)
 
 #endif // SK_MAIN
