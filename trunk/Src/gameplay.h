@@ -13,7 +13,7 @@
 #include "display.h"
 #include "ProjectionClasses/Camera.h"
 
-void PlayLevel(doom::LevelLump * level);
+//void PlayLevel(doom::LevelLump * level);
 int HandleGameplayInput(SDL_Event event);
 
 extern Camera *g_camera;
