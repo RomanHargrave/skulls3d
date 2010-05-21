@@ -18,10 +18,12 @@
 #include "gameplay.h"
 #include "minimap.h"
 #include "doom/WadFile.h"
+#include "doom/lumps/PatchLump.h"
 
 LPDIRECT3D9 g_d3d;
 LPDIRECT3DDEVICE9 g_d3ddev;
 HWND hWnd;
+LPDIRECT3DTEXTURE9 g_texture = NULL;
 
 static LPDIRECT3DVERTEXBUFFER9 g_vbuffer = NULL;    // the pointer to the vertex buffer
 static LPDIRECT3DINDEXBUFFER9 g_ibuffer = NULL;    // the pointer to the index buffer
@@ -35,6 +37,7 @@ doom::WadFile *g_doomwad = NULL;
 #define KEYBOARD_RATE_MS 5
 
 int HandleInput();
+void WINAPI FillFunc(D3DXVECTOR4* pOut, CONST D3DXVECTOR2* pTexCoord, CONST D3DXVECTOR2* pTexelSize, LPVOID pData);
 
 void Render()
 {
@@ -42,6 +45,8 @@ void Render()
     g_d3ddev->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
     g_d3ddev->BeginScene();
+
+    g_d3ddev->SetTexture( 0, g_texture );
 
     g_d3ddev->SetFVF(D3DFVF_CUSTOMVERTEX);
 
@@ -193,10 +198,10 @@ void init_graphics(void)
     // create the vertices using the CUSTOMVERTEX
     CUSTOMVERTEX vertices[] =
     {
-        { -3.0f, -3.0f, 0.0f, 0.0f, 200.0f },
-        {  3.0f, -3.0f, 0.0f, 300.0f, 200.0f },
+        { -3.0f, -3.0f, 0.0f, 0.0f, 1.0f },
+        {  3.0f, -3.0f, 0.0f, 1.0f, 1.0f },
         { -3.0f,  3.0f, 0.0f, 0.0f, 0.0f },
-        {  3.0f,  3.0f, 0.0f, 300.0f, 0.0f },
+        {  3.0f,  3.0f, 0.0f, 1.0f, 0.0f },
     };
 
     // create a vertex buffer interface called v_buffer
@@ -233,4 +238,23 @@ void init_graphics(void)
     g_ibuffer->Lock(0, 0, (void**)&pVoid, 0);
     memcpy(pVoid, indices, sizeof(indices));
     g_ibuffer->Unlock(); 
+
+	doom::PatchLump * gs_titleBackg = g_doomwad->GetLump((doom::PatchLump*)g_doomwad->Get("TITLEPIC"));
+	gs_titleBackg->Load();
+
+
+	D3DXCreateTexture(g_d3ddev, gs_titleBackg->m_w, gs_titleBackg->m_h,
+		1, D3DUSAGE_RENDERTARGET, D3DFMT_A8B8G8R8, D3DPOOL_DEFAULT, &g_texture);
+
+	D3DXFillTexture(g_texture, FillFunc, gs_titleBackg);
+}
+
+void WINAPI FillFunc(D3DXVECTOR4* pOut, CONST D3DXVECTOR2* pTexCoord, CONST D3DXVECTOR2* pTexelSize, LPVOID pData)
+{
+	doom::PatchLump * gs_titleBackg = (doom::PatchLump *) pData;
+	int coord = gs_titleBackg->m_w*((int)(pTexCoord->y*gs_titleBackg->m_h)) + ((int)(pTexCoord->x*gs_titleBackg->m_w));
+	pOut->w = ((gs_titleBackg->m_bitmap[coord] >> 24) & 0xFF) / 255.0f;
+	pOut->x = ((gs_titleBackg->m_bitmap[coord] >> 16) & 0xFF) / 255.0f;
+	pOut->y = ((gs_titleBackg->m_bitmap[coord] >>  8) & 0xFF) / 255.0f;
+	pOut->z = ((gs_titleBackg->m_bitmap[coord]      ) & 0xFF) / 255.0f;
 }
