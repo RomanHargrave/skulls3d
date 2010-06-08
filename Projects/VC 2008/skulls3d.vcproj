@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3d9.lib d3dx9.lib SDL.lib"
-				OutputFile="$(IntDir)\$(ProjectName).exe"
+				OutputFile="..\..\..\swegl\build\bin\Debug\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				IgnoreDefaultLibraryNames=""
@@ -516,6 +516,26 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="GameStates"
+			>
+			<File
+				RelativePath="..\..\Src\GameStates\GameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\GameStates\GameState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\GameStates\MainMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\GameStates\MainMenu.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Src\audio.cpp"
 			>
@@ -562,14 +582,6 @@
 		</File>
 		<File
 			RelativePath="..\..\Src\main.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Src\mainmenu.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Src\mainmenu.h"
 			>
 		</File>
 		<File

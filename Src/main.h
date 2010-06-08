@@ -4,6 +4,7 @@
 
 #include <windows.h>
 #include <d3d9.h>
+#include "doom/WadFile.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -17,5 +18,8 @@ typedef struct
 	FLOAT u, v;
 }CUSTOMVERTEX;
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_TEX1)
+
+extern doom::WadFile *g_doomwad;
+
 
 #endif // SK_MAIN
