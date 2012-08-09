@@ -5,8 +5,10 @@
 
 #include "main.h"
 #include "MainMenu.h"
+#include "InGame.h"
 #include "doom/WadFile.h"
 #include "doom/lumps/PatchLump.h"
+#include "doom/lumps/LevelLump.h"
 
 void WINAPI FillFunc(D3DXVECTOR4* pOut, CONST D3DXVECTOR2* pTexCoord, CONST D3DXVECTOR2* pTexelSize, LPVOID pData);
 
@@ -146,6 +148,17 @@ LRESULT WINAPI MainMenu::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 {
     switch( msg )
     {
+		case WM_KEYDOWN:
+            switch (wParam) 
+            { 
+				case VK_RETURN: 
+					doom::LevelLump *level = g_doomwad->GetLevel(0);
+					level->Load();
+					GameState::m_currentState = new InGame(g_doomwad->GetLevel(0));
+					break;
+			}
+			break;
+
         case WM_DESTROY:
             PostQuitMessage( 0 );
             return 0;

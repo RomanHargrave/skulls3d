@@ -2,14 +2,15 @@
 #ifndef SWE_SCENE
 #define SWE_SCENE
 
+#include <list>
+
 #include "Mesh.h"
 #include "Matrix4x4.h"
 
 class Scene
 {
 public:
-	Mesh *m_meshes[10000];
-	int m_meshCount;
+	std::list<Mesh*> m_meshes;
 
 	Scene();
 	void AddMesh(Mesh *m);
