@@ -48,6 +48,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
+	int x = 1;
+	++x = x++;
     Init();
 	
     MSG msg;

@@ -23,37 +23,14 @@ public:
 class Mesh
 {
 public:
-	CUSTOMVERTEX *m_vb;
-	unsigned int m_vertexcount;
-	Matrix4x4 m_worldmatrix;
-	Tex *m_texture;
-	Tex *m_bumpmap;
-
-	Strip **m_strips;          // array of index buffers (triangle strips)
-	unsigned int m_stripcount; // number of strips
-	Vec3f *m_stripnorms;          // 1 normal per triangle in strips
-	unsigned int m_striptricount; // number of triangles in strips
-
-	Strip **m_fans;            // array of index buffers (triangle strips)
-	unsigned int m_fancount;   // number of fans
-	Vec3f *m_fannorms;            // 1 normal per triangle in strips
-	unsigned int m_fantricount;   // number of triangles in fans
-
-	// 3 neighbours per triangle
-	// Indices are triangles in m_stripnorms and m_fannorms
-	// Indices consider m_stripnorms and m_fannorms as one array: if i>m_striptricount,
-	// i -= m_striptricount, effectively becoming an index in m_fantricount
-	unsigned int *m_stripneighbours;
-	unsigned int *m_fanneighbours;
+	LPDIRECT3DVERTEXBUFFER9 m_vbuffer;
+	LPDIRECT3DINDEXBUFFER9 m_ibuffer;
+	LPDIRECT3DTEXTURE9 m_texture;
 
 	Mesh();
-	void SetVertexBuffer(Vec3f *v, unsigned int count);
 	void SetTexture(Tex *t);
-	void AddStrip(unsigned int *indexbuffer, Vec2f *texturebuffer, unsigned int indexcount);
-	void AddFan(unsigned int *indexbuffer, Vec2f *texturebuffer, unsigned int indexcount);
-	void SetBumpMap(Tex *t);
-	void Prepare();
-	unsigned int FindNeighbour(unsigned int vindex1, unsigned int vindex2, unsigned int triangle);
+	void SetVertexBuffer(CUSTOMVERTEX *v, unsigned int count);
+	void SetIndexBuffer(int *i, unsigned int count);
 };
 
 #endif SWE_MESH

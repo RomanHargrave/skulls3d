@@ -273,45 +273,6 @@ Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex)
 	vertexBuf[v].x = (float) v1.m_x;
 	vertexBuf[v].y = (float) high;
 	vertexBuf[v].z = (float) v1.m_z;
-
-
-	/*
-	int i=1;
-	while (nbReps > 1.0f)
-	{
-		Vec2f t0, t1, t2, t3;
-		t0.x=0;                         t0.y=tex->m_mipmaps[0].m_height;
-		t1.x=0;                         t1.y=0;
-		t2.x=tex->m_mipmaps[0].m_width; t2.y=tex->m_mipmaps[0].m_height;
-		t3.x=tex->m_mipmaps[0].m_width; t3.y=0;
-		Vec2f *texBuf = new Vec2f[6];
-		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
-		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
-		unsigned int *indexBuf = new unsigned int[4];
-		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
-		mesh->AddFan(indexBuf, texBuf, 4);
-
-		nbReps -= 1.0f;
-		i++;
-	}
-
-	if (nbReps > 0)
-	{
-		//last chunk
-		Vec2f t0, t1, t2, t3;
-		t0.x=0;          t0.y=tex->m_mipmaps[0].m_height;
-		t1.x=0;          t1.y=0;
-		t2.x=wallLength; t2.y=tex->m_mipmaps[0].m_height;
-		t3.x=wallLength; t3.y=0;
-		Vec2f *texBuf = new Vec2f[6];
-		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
-		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
-		unsigned int *indexBuf = new unsigned int[4];
-		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
-		mesh->AddFan(indexBuf, texBuf, 4);
-	}
-	*/
-
 	mesh->SetVertexBuffer(vertexBuf, nbVertexX*nbVertexY);
 	return mesh;
 }
