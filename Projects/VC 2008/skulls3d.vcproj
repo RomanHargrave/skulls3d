@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\src\DataClasses;..\..\src\ProjectionClasses;..\..\src\RenderClasses;..\..\src"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,14 +61,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d9.lib d3dx9.lib SDL.lib"
-				OutputFile="..\..\..\swegl\build\bin\Debug\$(ProjectName).exe"
+				AdditionalDependencies="SDLmain.lib sdl.lib"
+				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)$(TargetName).pdb"
-				SubSystem="2"
+				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\src\DataClasses;..\..\src\ProjectionClasses;..\..\src\RenderClasses;..\..\src"
+				AdditionalIncludeDirectories="..\..\..\SDL\include;..\..\..\swegl\src\DataClasses;..\..\..\swegl\src\ProjectionClasses;..\..\..\swegl\src\RenderClasses"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				ExceptionHandling="1"
@@ -148,14 +148,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/verbose:lib "
-				AdditionalDependencies="d3d9.lib d3dx9.lib SDL.lib"
+				AdditionalDependencies="SDLmain.lib sdl.lib"
 				OutputFile="$(IntDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\SDL\lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)$(TargetName).pdb"
-				SubSystem="2"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				RandomizedBaseAddress="1"
@@ -324,110 +324,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="Engine"
-			>
-			<Filter
-				Name="DataClasses"
-				>
-				<File
-					RelativePath="..\..\Src\DataClasses\Mesh.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\DataClasses\mesh.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\DataClasses\Scene.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\DataClasses\scene.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\DataClasses\Tex.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\DataClasses\Tex.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ProjectionClasses"
-				>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Camera.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Camera.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Matrix4x4.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Matrix4x4.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\MatrixStack.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\MatrixStack.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Vec2f.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Vec2f.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Vec3f.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Src\ProjectionClasses\Vec3f.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="GameStates"
-			>
-			<File
-				RelativePath="..\..\Src\GameStates\GameState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\GameStates\GameState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\GameStates\InGame.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\GameStates\InGame.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\GameStates\MainMenu.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Src\GameStates\MainMenu.h"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\..\Src\audio.cpp"
 			>
@@ -453,6 +349,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\Src\gameplay.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\gameplay.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Src\input.cpp"
 			>
 		</File>
@@ -465,7 +369,19 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\Src\main.h"
+			RelativePath="..\..\Src\mainmenu.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\mainmenu.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\minimap.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Src\minimap.h"
 			>
 		</File>
 	</Files>

@@ -11,9 +11,9 @@
 #include "doom/WadFile.h"
 #include "doom/lumps/LevelLump.h"
 #include "display.h"
-#include "ProjectionClasses/Camera.h"
+#include "Camera.h"
 
-//void PlayLevel(doom::LevelLump * level);
+void PlayLevel(doom::LevelLump * level);
 int HandleGameplayInput(SDL_Event event);
 
 extern Camera *g_camera;

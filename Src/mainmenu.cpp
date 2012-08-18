@@ -14,10 +14,10 @@
 #include "doom/WadFile.h"
 #include "doom/lumps/PatchLump.h"
 #include "doom/lumps/SoundLump.h"
-#include "dxtest.cpp"
+
 // in main.cpp
 extern doom::WadFile *g_doomwad;
-//extern SDL_Surface * g_screen;
+extern SDL_Surface * g_screen;
 
 static doom::PatchLump * gs_titleBackg = NULL;
 static doom::PatchLump * gs_logo = NULL;
@@ -172,24 +172,10 @@ int HandleMenuInput()
 						{
 							if (gs_topMenuPos == 0)
 							{
-								//PlayLevel(g_doomwad->GetLevel(0));
+								PlayLevel(g_doomwad->GetLevel(0));
 								SKPlaySound(gs_menuEnter->m_soundData, gs_menuEnter->m_len);
 								DrawTopMenu();
 								DrawMenuCursor(gs_topMenuPos);
-							}
-							else if (gs_topMenuPos == 3)
-							{
-								return -1;
-							}
-						}
-					}
-					else if (event.key.keysym.sym == SDLK_BACKSPACE)
-					{
-						if (gs_whichMenu == TopMenu)
-						{
-							if (gs_topMenuPos == 0)
-							{
-								//DxTest();								
 							}
 							else if (gs_topMenuPos == 3)
 							{
@@ -211,7 +197,7 @@ void DrawSplashScreen()
 {
 	gs_whichMenu = NoMenu;
 	Rect bckg_dimensions = {0, 0, gs_titleBackg->m_w, gs_titleBackg->m_h};
-	//Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 255);
+	Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 255);
 }
 
 void DrawTopMenu()
@@ -222,24 +208,24 @@ void DrawTopMenu()
 	Rect logo_dimensions = {0, 0, gs_logo->m_w, gs_logo->m_h};
 	Rect logo_screen_where = {320/2 - gs_logo->m_w/2, 3, 0, 0};
 
-	//Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 128);
-	//Draw_320x200(g_screen, gs_logo->m_bitmap, logo_dimensions, logo_dimensions, logo_screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, bckg_dimensions, bckg_dimensions, 128);
+	Draw_320x200(g_screen, gs_logo->m_bitmap, logo_dimensions, logo_dimensions, logo_screen_where, (unsigned char)255);
 
 	Rect screen_where = {320/2 - gs_logo->m_w/2, 70, 0, 0};
 	Rect newGame_dimensions = {0, 0, gs_newGame->m_w, gs_newGame->m_h};
-	//Draw_320x200(g_screen, gs_newGame->m_bitmap, newGame_dimensions, newGame_dimensions, screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, gs_newGame->m_bitmap, newGame_dimensions, newGame_dimensions, screen_where, (unsigned char)255);
 	
 	screen_where.y = 90;
 	Rect options_dimensions = {0, 0, gs_options->m_w, gs_options->m_h};
-	//Draw_320x200(g_screen, gs_options->m_bitmap, options_dimensions, options_dimensions, screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, gs_options->m_bitmap, options_dimensions, options_dimensions, screen_where, (unsigned char)255);
 	
 	screen_where.y = 110;
 	Rect readThis_dimensions = {0, 0, gs_readThis->m_w, gs_readThis->m_h};
-	//Draw_320x200(g_screen, gs_readThis->m_bitmap, readThis_dimensions, readThis_dimensions, screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, gs_readThis->m_bitmap, readThis_dimensions, readThis_dimensions, screen_where, (unsigned char)255);
 	
 	screen_where.y = 130;
 	Rect quitGame_dimensions = {0, 0, gs_quitGame->m_w, gs_quitGame->m_h};
-	//Draw_320x200(g_screen, gs_quitGame->m_bitmap, quitGame_dimensions, quitGame_dimensions, screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, gs_quitGame->m_bitmap, quitGame_dimensions, quitGame_dimensions, screen_where, (unsigned char)255);
 
 	DrawMenuCursor(gs_topMenuPos);
 }
@@ -248,7 +234,7 @@ void EraseMenuCursor(int pos)
 {
 	Rect bckg_dimensions = {0, 0, gs_titleBackg->m_w, gs_titleBackg->m_h};
 	Rect skull1_dimensions = {320/2 - gs_logo->m_w/2-30, 70+20*pos, gs_skull1->m_w, gs_skull1->m_h};
-	//Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, skull1_dimensions, skull1_dimensions, (unsigned char)128);
+	Draw_320x200(g_screen, gs_titleBackg->m_bitmap, bckg_dimensions, skull1_dimensions, skull1_dimensions, (unsigned char)128);
 }
 void DrawMenuCursor(int pos)
 {
@@ -256,5 +242,5 @@ void DrawMenuCursor(int pos)
 	Rect screen_where = {320/2 - gs_logo->m_w/2-30, 70+20*pos, 0, 0};
 	Rect skull1_dimensions = {0, 0, gs_skull1->m_w, gs_skull1->m_h};
 	unsigned int * bitmap = gs_skullLigthenUp?gs_skull2->m_bitmap:gs_skull1->m_bitmap;
-	//Draw_320x200(g_screen, bitmap, skull1_dimensions, skull1_dimensions, screen_where, (unsigned char)255);
+	Draw_320x200(g_screen, bitmap, skull1_dimensions, skull1_dimensions, screen_where, (unsigned char)255);
 }

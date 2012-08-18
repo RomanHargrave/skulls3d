@@ -17,7 +17,7 @@
 #include "ViewPort.h"
 #include "Scene.h"
 #include "Renderer.h"
-#include "Tex.h"
+#include "Texture.h"
 #include "Vec3f.h"
 #include "RectangleTriangle.h"
 
@@ -29,10 +29,14 @@
 #include "doom/Texture.h"
 #include "doom/lumps/PatchLump.h"
 
-#include "DataClasses/Cube.h"
+#include "Cube.h"
+
+// From display.cpp
+extern unsigned int g_scr_w;
+extern unsigned int g_scr_h;
 
 // From main.cpp
-//extern SDL_Surface *g_screen;
+extern SDL_Surface *g_screen;
 LARGE_INTEGER g_renderingTime;
 unsigned int g_frameCount = 0;
 
@@ -41,15 +45,52 @@ extern float g_zoom;
 extern int g_gridZoom;
 
 Scene* BuildScene(doom::LevelLump * level);
-Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex);
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex);
 void VideoWorks();
 int HandleGameplayInput();
 
 static Scene *scene;
 Camera *g_camera;
+static ViewPort *viewport1;
+static Renderer *renderer1 = NULL;
 	
 static float g_cameraxrotation;
 static float g_camerayrotation;
+
+void PlayLevel(doom::LevelLump * level)
+{
+	if (level == NULL)
+		return;
+	if (level->Load() != true)
+		return;
+	
+	scene = BuildScene(level);
+
+	g_camera = new Camera(g_scr_w/(1.0f*g_scr_h));
+	viewport1 = new ViewPort(0, 0, g_scr_w, g_scr_h, g_screen);
+	renderer1 = new Renderer(scene, g_camera, viewport1);
+	g_camera->Translate(level->m_things[0]->m_x, 0.0f, level->m_things[0]->m_z);
+
+	//ShowMinimap(level);
+	
+	while (1)
+	{
+		VideoWorks();
+		SDL_Event event = RefreshKeybState();
+		if (event.type == SDL_QUIT)
+			exit(0);
+		else if (event.type==SDL_KEYDOWN)
+		{
+			if (event.key.keysym.sym == SDLK_TAB)
+				ShowMinimap(level);
+			else if (event.key.keysym.sym == SDLK_ESCAPE)
+				return;
+		}
+		HandleGameplayInput(event);
+	}
+	
+	return;
+}
 
 Scene* BuildScene(doom::LevelLump * level)
 {
@@ -72,7 +113,7 @@ Scene* BuildScene(doom::LevelLump * level)
 	}
 	*/
 
-	Tex *texture = new Tex(0x00FFFFFF);
+	Texture *texture = new Texture(0x00FFFFFF);
 	count = (unsigned int) level->m_sideDefs.size();
 	for (unsigned int i=0 ; i<count ; i++)
 	{
@@ -100,7 +141,7 @@ Scene* BuildScene(doom::LevelLump * level)
 			Mesh *mesh = CreateMesh(*v0, *v1,
 			                        sideDef->m_sector->m_floorHeight,
 			                        sideDef->m_sector->m_ceilingHeight,
-			                        new Tex(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h)
+			                        new Texture(sideDef->m_middleTexture->m_bitmap, sideDef->m_middleTexture->m_w, sideDef->m_middleTexture->m_h)
 			                       );
 			s->AddMesh(mesh);
 		}
@@ -191,7 +232,7 @@ Scene* BuildScene(doom::LevelLump * level)
 	return s;
 }
 
-Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex)
+Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Texture *tex)
 {
 	float wallLength = sqrtf((float)(v1.m_x-v0.m_x)*(v1.m_x-v0.m_x)+(float)(v1.m_z-v0.m_z)*(v1.m_z-v0.m_z));
 	int wallHeight = high-low;
@@ -273,11 +314,49 @@ Mesh* CreateMesh(doom::Vertex v0, doom::Vertex v1, int low, int high, Tex *tex)
 	vertexBuf[v].x = (float) v1.m_x;
 	vertexBuf[v].y = (float) high;
 	vertexBuf[v].z = (float) v1.m_z;
+
+
+	/*
+	int i=1;
+	while (nbReps > 1.0f)
+	{
+		Vec2f t0, t1, t2, t3;
+		t0.x=0;                         t0.y=tex->m_mipmaps[0].m_height;
+		t1.x=0;                         t1.y=0;
+		t2.x=tex->m_mipmaps[0].m_width; t2.y=tex->m_mipmaps[0].m_height;
+		t3.x=tex->m_mipmaps[0].m_width; t3.y=0;
+		Vec2f *texBuf = new Vec2f[6];
+		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
+		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
+		unsigned int *indexBuf = new unsigned int[4];
+		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
+		mesh->AddFan(indexBuf, texBuf, 4);
+
+		nbReps -= 1.0f;
+		i++;
+	}
+
+	if (nbReps > 0)
+	{
+		//last chunk
+		Vec2f t0, t1, t2, t3;
+		t0.x=0;          t0.y=tex->m_mipmaps[0].m_height;
+		t1.x=0;          t1.y=0;
+		t2.x=wallLength; t2.y=tex->m_mipmaps[0].m_height;
+		t3.x=wallLength; t3.y=0;
+		Vec2f *texBuf = new Vec2f[6];
+		texBuf[0]=t0; texBuf[1]=t2; texBuf[2]=t3;
+		texBuf[3]=t0; texBuf[4]=t3; texBuf[5]=t1; 
+		unsigned int *indexBuf = new unsigned int[4];
+		indexBuf[0]=0; indexBuf[1]=2; indexBuf[2]=3; indexBuf[3]=1;
+		mesh->AddFan(indexBuf, texBuf, 4);
+	}
+	*/
+
 	mesh->SetVertexBuffer(vertexBuf, nbVertexX*nbVertexY);
 	return mesh;
 }
 
-/*
 void VideoWorks()
 {
 	LARGE_INTEGER microseconds1;
@@ -320,7 +399,7 @@ void VideoWorks()
 	// Tell SDL to update the whole screen
 	SDL_UpdateRect(g_screen, 0, 0, g_scr_w, g_scr_h); 
 }
-*/
+
 int HandleGameplayInput(SDL_Event event)
 {
 	static int g_keystick = SDL_GetTicks();
