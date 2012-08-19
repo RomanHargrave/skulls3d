@@ -3,22 +3,20 @@
 
 #include <list>
 
-namespace doom
+namespace skulls
 {
-	class WadFile;
+	class Wad;
 	class LineDef;
 
 	class Vertex
 	{
 	public:
-		int m_x;
-		int m_z;	
-		std::list<LineDef*> m_lineDefs;
-
 		Vertex(int x, int z);
 
-		virtual bool Load();
-		virtual void UnLoad();
+	public:
+		int m_x;
+		int m_z;	
+		std::list<std::shared_ptr<LineDef>> m_lineDefs;
 	};
 };
 

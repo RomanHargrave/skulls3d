@@ -1,33 +1,24 @@
 
 #include <memory.h>
 #include "Sector.h"
-#include "WadFile.h"
+#include "Wad.h"
 #include "lumps/FlatLump.h"
 #include "lumps/Lump.h"
+#include "LumpDictionary.h"
+#include "Lumps\PlayPalLump.h"
 
-namespace doom
+namespace skulls
 {
-	Sector::Sector(WadFile *wadFile)
+	Sector::Sector(File & file, LumpDictionary & dictionary, Palettes & palettes)
 	{
-		wadFile->ReadInt2(&m_floorHeight);
-		wadFile->ReadInt2(&m_ceilingHeight);
+		m_floorHeight   = file.ReadInt2();
+		m_ceilingHeight = file.ReadInt2();
 
-		char texName[9];
-		
-		memset(texName, 0, 9);
-		wadFile->ReadString(texName, 8);
-		m_floorTexture = wadFile->GetLump((FlatLump*)wadFile->Get(texName));
-		if (m_floorTexture != NULL)
-			m_floorTexture->Load();
+		m_floorTexture   = dictionary.GetFlat(file, file.ReadString(8), palettes);
+		m_ceilingTexture = dictionary.GetFlat(file, file.ReadString(8), palettes);
 
-		memset(texName, 0, 9);
-		wadFile->ReadString(texName, 8);
-		m_ceilingTexture = wadFile->GetLump((FlatLump*)wadFile->Get(texName));
-		if (m_ceilingTexture != NULL)
-			m_ceilingTexture->Load();
-
-		wadFile->ReadInt2((short*)&m_lightLevel);
-		wadFile->ReadInt2((short*)&m_type);
-		wadFile->ReadInt2((short*)&m_tag);
+		m_lightLevel = file.ReadInt2();
+		m_type       = file.ReadInt2();
+		m_tag        = file.ReadInt2();
 	}
 };

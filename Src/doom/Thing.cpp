@@ -1,8 +1,10 @@
 
 #include <stdlib.h>
 #include "Thing.h"
-#include "WadFile.h"
+#include "Wad.h"
 #include "lumps/PatchLump.h"
+#include "Patches.h"
+#include "..\File.h"
 
 	typedef struct
 	{
@@ -143,18 +145,16 @@
 		{3006, 16, "SKUL", "A",	false, false,  true,  true}
 	};
 
-namespace doom
+namespace skulls
 {
 
-	Thing::Thing(WadFile * wadFile)
+	Thing::Thing(File & file, Patches & patches)
 	{
-		m_sprites.resize(0);
-		wadFile->ReadInt2(&m_x);
-		wadFile->ReadInt2(&m_z);
-		wadFile->ReadInt2(&m_angle);
-		wadFile->ReadInt2((short*)&m_type);
-		short flags;
-		wadFile->ReadInt2(&flags);
+		m_x     = file.ReadInt2();
+		m_z     = file.ReadInt2();
+		m_angle = file.ReadInt2();
+		m_type  = file.ReadInt2();
+		short flags = file.ReadInt2();
 		if (flags & 1) m_is_on_skill_1_2 = true;
 		else           m_is_on_skill_1_2 = false;
 		if (flags & 2) m_is_on_skill_3 = true;
@@ -180,7 +180,7 @@ namespace doom
 			printf("Thing type %d not found\n", m_type);
 		else
 		{
-			PatchLump * sprite = NULL;
+			std::shared_ptr<Patch> sprite;
 
 			if (thingdefs[type].sprite != NULL)
 			{
@@ -188,28 +188,26 @@ namespace doom
 				{
 					char spriteName[9];
 					sprintf_s(spriteName, "%s%c0", thingdefs[type].sprite, thingdefs[type].sequence[0]);
-					sprite = wadFile->GetLump((PatchLump*)wadFile->Get(spriteName));
+					sprite = patches.Get(spriteName);
 					if (sprite == NULL)
 					{
 						sprintf_s(spriteName, "%s%c1", thingdefs[type].sprite, thingdefs[type].sequence[0]);
-						sprite = wadFile->GetLump((PatchLump*)wadFile->Get(spriteName));
+						sprite = patches.Get(spriteName);
 					}
 				}
 				else
 				{
-					sprite = wadFile->GetLump((PatchLump*)wadFile->Get(thingdefs[type].sprite));
+					sprite = patches.Get(thingdefs[type].sprite);
 				}
 			}
 			if (sprite == NULL)
 			{
-				sprite = wadFile->GetLump((PatchLump*)wadFile->Get("PLAYA1"));
+				sprite = patches.Get("PLAYA1");
 			}
 
 			if (sprite != NULL)
 			{
-				sprite->Load();
-				m_sprites.resize(1);
-				m_sprites[0] = sprite;
+				m_sprites.push_back(sprite);
 			}
 		}
 	}

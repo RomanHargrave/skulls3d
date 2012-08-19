@@ -2,52 +2,43 @@
 #include <memory.h>
 #include "SideDef.h"
 #include "Sector.h"
-#include "WadFile.h"
+#include "Wad.h"
 #include "Texture.h"
 #include "lumps/LevelLump.h"
+#include "..\File.h"
 
-namespace doom
+namespace skulls
 {
-	SideDef::SideDef(WadFile *wadFile, LevelLump *level)
+	SideDef::SideDef(File & file, Level & level, std::map<std::string,std::shared_ptr<Texture>> & textures)
+		:m_upperTexture(nullptr),
+		m_lowerTexture(nullptr),
+		m_middleTexture(nullptr)
 	{
-		wadFile->ReadInt2((short*)&m_xoffset);
-		wadFile->ReadInt2((short*)&m_yoffset);
+		m_xoffset = file.ReadInt2();
+		m_yoffset = file.ReadInt2();
 
-		char texName[9];
-
-		memset(texName, 0, 9);
-		wadFile->ReadString(texName, 8);
-		m_upperTexture = wadFile->GetTexture(texName);
-		if (m_upperTexture != NULL)
 		{
-			int pos = wadFile->GetPos();
-			m_upperTexture->Load();
-			wadFile->MoveTo(pos);
+			auto tex = textures.find(file.ReadString(8));
+			if (tex != textures.end())
+				m_upperTexture  = tex->second;
+		}
+		{
+			auto tex = textures.find(file.ReadString(8));
+			if (tex != textures.end())
+				m_lowerTexture  = tex->second;
+		}
+		{
+			auto tex = textures.find(file.ReadString(8));
+			if (tex != textures.end())
+				m_middleTexture = tex->second;
 		}
 
-		memset(texName, 0, 9);
-		wadFile->ReadString(texName, 8);
-		m_lowerTexture = wadFile->GetTexture(texName);
-		if (m_lowerTexture != NULL)
-		{
-			int pos = wadFile->GetPos();
-			m_lowerTexture->Load();
-			wadFile->MoveTo(pos);
-		}
-
-		memset(texName, 0, 9);
-		wadFile->ReadString(texName, 8);
-		m_middleTexture = wadFile->GetTexture(texName);
-		if (m_middleTexture != NULL)
-		{
-			int pos = wadFile->GetPos();
-			m_middleTexture->Load();
-			wadFile->MoveTo(pos);
-		}
-
-		unsigned short sectorId;
-		wadFile->ReadInt2((short*)&sectorId);
-		m_sector = level->m_sectors[sectorId];
-		m_sector->m_sideDefs.push_back(this);
+		m_sector = level.m_sectors[file.ReadInt2()];
 	}
+
+	void SideDef::Resolve()
+	{
+		m_sector->m_sideDefs.push_back(shared_from_this());
+	}
+
 };

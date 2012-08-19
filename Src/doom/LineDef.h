@@ -2,19 +2,27 @@
 #ifndef SK_LINEDEF
 #define SK_LINEDEF
 
-namespace doom
+#include "..\File.h"
+#include "Vertex.h"
+#include "Sector.h"
+#include "SideDef.h"
+
+namespace skulls
 {
-	class WadFile;
-	class Vertex;
+	class Wad;
 	class SideDef;
 	class Sector;
-	class LevelLump;
+	class Level;
 
-	class LineDef
+	class LineDef : public std::enable_shared_from_this<LineDef>
 	{
 	public:
-		Vertex *m_start_vtx;
-		Vertex *m_end_vtx;		
+		LineDef(File & file, Level & level);
+		void Resolve();
+		
+	public:
+		std::shared_ptr<Vertex> m_start_vtx;
+		std::shared_ptr<Vertex> m_end_vtx;		
 		//Flags - Start
 		bool m_block_p_m;
 		bool m_block_m;
@@ -27,11 +35,9 @@ namespace doom
         bool m_always_automap;
 		//Flag - End
 		unsigned short m_type;
-		Sector *m_tagSector;
-		SideDef *m_rightSideDef;
-		SideDef *m_leftSideDef;
-
-		LineDef(WadFile * wadFile, LevelLump *level);
+		std::shared_ptr<Sector > m_tagSector;
+		std::shared_ptr<SideDef> m_rightSideDef;
+		std::shared_ptr<SideDef> m_leftSideDef;
 	};
 };
 

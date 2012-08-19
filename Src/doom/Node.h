@@ -2,11 +2,14 @@
 #ifndef SK_NODE
 #define SK_NODE
 
-namespace doom
+#include "SSector.h"
+#include "..\File.h"
+#include "lumps/LevelLump.h"
+#include "Vertex.h"
+
+namespace skulls
 {
-	class SSector;
-	class Vertex;
-	class LevelLump;
+	class Level;
 
 	typedef struct
 	{
@@ -17,26 +20,29 @@ namespace doom
 	class Node
 	{
 	public:
+		Node(File & file, Level & level, unsigned int lumpPosition, unsigned int nodeIndex, Node *parent);
+
+		bool IsOnRight(const float x, const float z) const;
+		SSector * GetSSByPosition(float x, float z);
+		void BuildMissingSegs();
+		int Count();
+
+	public:
 		Node *m_parent;
 
 		bool m_isLeftSSector, m_isRightSSector;
 		union {
 			Node *m_leftNode;
-			SSector *m_leftSSector;
+			SSector * m_leftSSector;
 		};
 		union {
 			Node *m_rightNode;
-			SSector *m_rightSSector;
+			SSector * m_rightSSector;
 		};
 
-		Vertex *m_startVertex, *m_endVertex;
+		Vertex m_startVertex;
+		Vertex m_endVertex;
 		Rect m_rightBoundingBox, m_leftBoundingBox;
-
-		Node(LevelLump *level, unsigned int lumpPosition, unsigned int nodeIndex, Node *parent);
-		bool IsOnRight(const float x, const float z) const;
-		SSector* GetSSByPosition(float x, float z);
-		void BuildMissingSegs();
-		int Count();
 	};
 };
 

@@ -1,66 +1,49 @@
 
 #include <stdlib.h>
 #include "Texture.h"
-#include "WadFile.h"
+#include "Wad.h"
 #include "lumps/PatchLump.h"
+#include "..\File.h"
+#include "Patches.h"
 
-namespace doom
+namespace skulls
 {
-	Texture::Texture(WadFile * wadfile, int position)
-	{
-		m_name = NULL;
-		m_bitmap = NULL;
-		m_wadfile = wadfile;
-		m_position = position;
 
+	Texture::Texture(File & file, int position, Patches & patches)
+		:m_bitmap(nullptr)
+	{
 		// Load name
-		int pos = wadfile->GetPos();
-		wadfile->MoveTo(position);
-		char buffer[9];
-		memset(buffer, 0, 9);
-		m_wadfile->ReadString(buffer, 8);
-		m_name = _strdup(buffer);
-		printf("Texture %s\n", m_name);
-		wadfile->MoveTo(pos);
-	}
+		int pos = file.GetPos();
+		file.MoveTo(position);
 
-	int Texture::Load()
-	{
-		if (m_bitmap != NULL)
-			return 0; // Already loaded
+		name = file.ReadString(8);
 
-		m_wadfile->MoveTo(m_position);
+		file.Skip(4); // skip flags
 
-		// Skipping name, already read
-		m_wadfile->Skip(8);
-
-		//Skipping flag
-		m_wadfile->Skip(4);
-
-		m_wadfile->ReadInt2((short*)&m_w);
-		m_wadfile->ReadInt2((short*)&m_h);
+		file.ReadInt2((short*)&m_w);
+		file.ReadInt2((short*)&m_h);
 
 		//Skipping columndirectory
-		m_wadfile->Skip(4);
+		file.Skip(4);
 
-		short PatchLump_count;
-		m_wadfile->ReadInt2(&PatchLump_count);
+		short patchLump_count;
+		file.ReadInt2(&patchLump_count);
 
 		m_bitmap = new unsigned int[m_w*m_h];
 
 		// Read all PatchLumpes and merge them into m_bitmap
-		for (int i=0 ; i<PatchLump_count ; i++)
+		for (int i=0 ; i<patchLump_count ; i++)
 		{
 			short orig_x, orig_y;
-			m_wadfile->ReadInt2(&orig_x);
-			m_wadfile->ReadInt2(&orig_y);
+			file.ReadInt2(&orig_x);
+			file.ReadInt2(&orig_y);
 			
-			unsigned short PatchLump_index;
-			m_wadfile->ReadInt2((short*)&PatchLump_index);
+			short patchLump_index;
+			file.ReadInt2((short*)&patchLump_index);
 
 			short stepdir, colormap;
-			m_wadfile->ReadInt2(&stepdir);
-			m_wadfile->ReadInt2(&colormap);
+			file.ReadInt2(&stepdir);
+			file.ReadInt2(&colormap);
 
 			// TODO: We can save memory when there is only one PatchLump
 			// and its orig_x and orig_y are 0. In this case this texture
@@ -68,40 +51,32 @@ namespace doom
 			// directly at the PatchLump's bitmap
 			// But beware of the UnLoad, a texture shall not free a PatchLump's bitmap
 
-			if (PatchLump_index < 0 || PatchLump_index > m_wadfile->m_patches.size())
+			if (patchLump_index < 0 || patchLump_index > (short)patches.Size())
 				continue;
 
-			int file_pos = m_wadfile->GetPos();
-			PatchLump * lump = m_wadfile->m_patches[PatchLump_index];
-			if (lump == NULL)
-				continue;
+			int file_pos = file.GetPos();
+			std::shared_ptr<Patch> patch = patches.Get(patchLump_index);
 
 			//printf("\t%s\n", PatchLump->m_name);
 
-			MergePatchLumpIntoTexture(lump, orig_x, orig_y);
-			m_wadfile->MoveTo(file_pos);
-		}
-		return 0;
-	}
-	void Texture::UnLoad()
-	{
-		// Keep the name so the texture can be found in wadfile->m_textures
-
-		if (m_bitmap != NULL)
-		{
-			delete m_bitmap;
-			m_bitmap = NULL;
+			MergePatchLumpIntoTexture(patch, orig_x, orig_y);
+			file.MoveTo(file_pos);
 		}
 	}
 	
-	void Texture::MergePatchLumpIntoTexture(PatchLump * PatchLump, short orig_x, short orig_y)
+	Texture::~Texture()
 	{
-		PatchLump->Load();
-		for (int j=0 ; j<PatchLump->m_h ; j++)
+		if (m_bitmap != nullptr)
+			delete m_bitmap;
+	}
+	
+	void Texture::MergePatchLumpIntoTexture(std::shared_ptr<Patch> & patch, short orig_x, short orig_y)
+	{
+		for (int j=0 ; j<patch->m_h ; j++)
 		{
-			for (int i=0 ; i<PatchLump->m_w ; i++)
+			for (int i=0 ; i<patch->m_w ; i++)
 			{
-				int color = PatchLump->m_bitmap[j*PatchLump->m_w + i];
+				int color = patch->m_bitmap[j*patch->m_w + i];
 				short new_x = orig_x + i;
 				short new_y = orig_y + j;
 				if (new_x < 0  ||  new_x >= this->m_w
@@ -111,4 +86,5 @@ namespace doom
 			}
 		}
 	}
+
 };

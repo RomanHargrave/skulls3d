@@ -3,26 +3,28 @@
 #define SK_SECTOR
 
 #include <list>
+#include "LumpDictionary.h"
+#include "Lumps\PlayPalLump.h"
+#include "Lumps\FlatLump.h"
+#include "Sidedef.h"
 
-namespace doom
+namespace skulls
 {
-	class WadFile;
-	class FlatLump;
-	class SideDef;
 
 	class Sector
 	{
 	public:
+		Sector::Sector(File & file, LumpDictionary & dictionary, Palettes & palettes);
+
+	public:
 		short m_floorHeight;
 		short m_ceilingHeight;
-		FlatLump *m_floorTexture;
-		FlatLump *m_ceilingTexture;
+		std::shared_ptr<Flat> m_floorTexture;
+		std::shared_ptr<Flat> m_ceilingTexture;
 		unsigned short m_lightLevel;
 		unsigned short m_type;
 		unsigned short m_tag;
-		std::list<SideDef*> m_sideDefs;
-
-		Sector(WadFile *wadFile);
+		std::list<std::shared_ptr<SideDef>> m_sideDefs;
 	};
 };
 

@@ -3,11 +3,13 @@
 #define SK_THINGLUMP
 
 #include <vector>
+#include "..\File.h"
 
-namespace doom
+namespace skulls
 {
-	class WadFile;
-	class PatchLump;
+	class Wad;
+	class Patch;
+	class Patches;
 
 	class Thing
 	{
@@ -22,11 +24,11 @@ namespace doom
 		bool m_deaf;
 		bool m_not_in_single_player;
 
-		std::vector<PatchLump*> m_sprites;
+		std::vector<std::shared_ptr<Patch>> m_sprites;
 
-		Thing(WadFile * wadFile);
+		Thing(File & file, Patches & patches);
 	};
-};
+}
 
 
 #endif // SK_THINGLUMP

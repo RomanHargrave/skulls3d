@@ -2,24 +2,24 @@
 #ifndef SK_PATCHLUMP
 #define SK_PATCHLUMP
 
+#include <vector>
 #include "Lump.h"
+#include "..\..\File.h"
+#include "PlayPalLump.h"
 
-namespace doom
+namespace skulls
 {
-	class WadFile;
-	class Lump;
+	class Wad;
 
-	class PatchLump : public Lump
+	class Patch
 	{
 	public:
-		unsigned short m_w, m_h;
-		unsigned int * m_bitmap;
+		Patch(File &, Lump &, Palettes &);
 
-		PatchLump(doom::Lump *other);
-		virtual ~PatchLump();
-		
-		virtual bool Load();
-		virtual void UnLoad();
+	public:
+		std::string name;
+		unsigned short m_w, m_h;
+		std::vector<unsigned int> m_bitmap;
 	};
 };
 

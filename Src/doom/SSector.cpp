@@ -6,7 +6,7 @@
 #include "Node.h"
 #include "Vertex.h"
 
-namespace doom
+namespace skulls
 {
 	SSector::SSector(short _id)
 	{

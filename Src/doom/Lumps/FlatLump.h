@@ -3,18 +3,18 @@
 #define SK_FLAT
 
 #include "Lump.h"
+#include "..\..\File.h"
+#include "PlayPalLump.h"
 
-namespace doom
+namespace skulls
 {
-	class FlatLump : public Lump
+	class Flat
 	{
 	public:
-		unsigned int * m_bitmap;
+		Flat(File & file, Lump & lump, Palettes & palettes);
 
-		FlatLump(Lump * other);
-		
-		virtual bool Load();
-		virtual void UnLoad();
+	public:
+		unsigned int m_bitmap[4096];
 	};
 };
 

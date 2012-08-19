@@ -4,7 +4,7 @@
 
 #include <list>
 
-namespace doom
+namespace skulls
 {
 	class Seg;
 	class Node;
@@ -12,7 +12,7 @@ namespace doom
 	class SSector
 	{
 	public:
-		std::list<Seg*> m_segs;
+		std::list<std::shared_ptr<Seg>> m_segs;
 		Node *m_parentNode;
 		short id;
 

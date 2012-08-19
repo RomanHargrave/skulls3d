@@ -2,26 +2,28 @@
 #ifndef SK_SIDEDEF
 #define SK_SIDEDEF
 
-namespace doom
-{
-	class WadFile;
-	class Sector;
-	class Texture;
-	class LevelLump;
-	class LineDef;
+#include "lumps/LevelLump.h"
+#include "..\File.h"
+#include "Texture.h"
+#include "Sector.h"
+#include "LineDef.h"
 
-	class SideDef
+namespace skulls
+{
+	class SideDef : public std::enable_shared_from_this<SideDef>
 	{
+	public:
+		SideDef::SideDef(File & file, Level & level, std::map<std::string,std::shared_ptr<Texture>> & textures);
+		void Resolve();
+
 	public:
 		short m_xoffset;
 		short m_yoffset;
-		Texture *m_upperTexture;
-		Texture *m_lowerTexture;
-		Texture *m_middleTexture;
-		Sector *m_sector;
-		LineDef *m_lineDef;
-
-		SideDef(WadFile *wadFile, LevelLump *level);
+		std::shared_ptr<Texture> m_upperTexture;
+		std::shared_ptr<Texture> m_lowerTexture;
+		std::shared_ptr<Texture> m_middleTexture;
+		std::shared_ptr<Sector > m_sector;
+		std::shared_ptr<LineDef> m_lineDef;
 	};
 };
 

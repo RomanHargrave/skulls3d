@@ -3,8 +3,8 @@
 
 #include "audio.h"
 
-#include "SDL.h"
-#include "SDL_audio.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_audio.h>
 
 void mixaudio(void *unused, Uint8 *stream, int len);
 
