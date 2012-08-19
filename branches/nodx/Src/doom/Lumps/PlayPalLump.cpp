@@ -1,43 +1,17 @@
 
 #include <stdlib.h>
 #include "PlayPalLump.h"
-#include "../WadFile.h"
+#include "../Wad.h"
 
-namespace doom
+namespace skulls
 {
-	PlayPalLump::PlayPalLump(Lump * other)
-		:Lump(other)
+	Palettes::Palettes(File & file, Lump & lump)
 	{
-		m_palette = NULL;
-	}
+		file.MoveTo(lump.m_position);
 
-	bool PlayPalLump::Load()
-	{
-		if (m_palette != NULL)
-			return true; // Already loaded
-
-		m_wadfile->MoveTo(m_position);
-
-		m_palette = new unsigned int[256];
+		m_palette.resize(256, 0);
 		for (int x=0 ; x<256 ; x++)
-		{
-			unsigned char r,g,b;
-			m_wadfile->ReadInt1((char*)&r);
-			m_wadfile->ReadInt1((char*)&g);
-			m_wadfile->ReadInt1((char*)&b);
-			m_palette[x] = (r<<16) | (g<<8) | b;
-		}
-
-		return true;
+			m_palette[x] = (((unsigned char)file.ReadInt1())<<16) | (((unsigned char)file.ReadInt1())<<8) | (unsigned char)file.ReadInt1();
 	}
-	void PlayPalLump::UnLoad()
-	{
-		Lump::UnLoad();
 
-		if (m_palette != NULL)
-		{
-			delete m_palette;
-			m_palette = NULL;
-		}
-	}
 };

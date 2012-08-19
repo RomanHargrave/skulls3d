@@ -2,19 +2,19 @@
 #ifndef SK_PLAYPALLUMP
 #define SK_PLAYPALLUMP
 
+#include <vector>
 #include "Lump.h"
+#include "..\..\File.h"
 
-namespace doom
+namespace skulls
 {
-	class PlayPalLump : public Lump
+	class Palettes
 	{
 	public:
-		unsigned int * m_palette;
+		Palettes(File &, Lump &);
 
-		PlayPalLump(Lump * lump);
-
-		virtual bool Load();
-		virtual void UnLoad();
+	public:
+		std::vector<unsigned int> m_palette;
 	};
 };
 

@@ -2,21 +2,15 @@
 #include <stdlib.h>
 #include "Vertex.h"
 #include "SideDef.h"
-#include "WadFile.h"
+#include "Wad.h"
 
-namespace doom
+namespace skulls
 {
+
 	Vertex::Vertex(int x, int z)
 	{
 		m_x = x;
 		m_z = z;
 	}
 
-	bool Vertex::Load()
-	{
-		return true;
-	}
-	void Vertex::UnLoad()
-	{
-	}
 };

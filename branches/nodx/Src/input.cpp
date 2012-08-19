@@ -1,11 +1,7 @@
 
 #include "input.h"
 
-#if defined(_MSC_VER)
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include <SDL/SDL.h>
 
 char g_keys[256];
 float g_mouse_x;

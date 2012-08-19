@@ -2,11 +2,7 @@
 #ifndef SK_INPUT
 #define SK_INPUT
 
-#if defined(_MSC_VER)
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include <SDL/SDL.h>
 
 // Keyboard state
 extern char g_keys[256];

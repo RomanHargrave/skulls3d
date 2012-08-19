@@ -1,22 +1,21 @@
 
-#ifndef SK_SOUNDLUMP
-#define SK_SOUNDLUMP
+#ifndef SK_Sound
+#define SK_Sound
 
+#include <vector>
 #include "Lump.h"
+#include "..\..\File.h"
 
-namespace doom
+namespace skulls
 {
-	class SoundLump : public Lump
+	class Sound
 	{
 	public:
-		unsigned char *m_soundData;
-		unsigned short m_len;
-
-		SoundLump(Lump *other);
-
-		virtual bool Load();
-		virtual void UnLoad();
+		Sound(File & file, Lump & lump);
+		
+	public:
+		std::vector<unsigned char> m_soundData;
 	};
 };
 
-#endif // SK_SOUNDLUMP
+#endif // SK_Sound

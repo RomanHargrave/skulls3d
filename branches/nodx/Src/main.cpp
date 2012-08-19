@@ -2,11 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#if defined(_MSC_VER)
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include <SDL/SDL.h>
+#include <swegl/swegl.hpp>
 
 #include "audio.h"
 #include "display.h"
@@ -14,13 +11,10 @@
 #include "mainmenu.h"
 #include "gameplay.h"
 #include "minimap.h"
-#include "doom/WadFile.h"
+#include "doom/Wad.h"
 
-SDL_Surface *Init();
-
-// Rendering parameters
-doom::WadFile *g_doomwad = NULL;
-SDL_Surface *g_screen;
+SDL_Surface * InitSDL();
+void CloseSDL();
 
 // Keyboard action are taken into account every KEYBOARD_RATE_MS milliseconds
 #define KEYBOARD_RATE_MS 5
@@ -30,21 +24,13 @@ int HandleInput();
 
 int main(int argc, char *argv[])
 {
-    g_screen = Init();
-	if (g_screen == NULL) return -1;
+    SDL_Surface * screen = InitSDL();
+	if (screen == nullptr) return -1;
 
-	g_doomwad = new doom::WadFile("doom.wad");
-	if (g_doomwad == NULL)
-		return -1;
-	if (g_doomwad->Open() != 0)
-		return -1;
-	//if (g_doomwad->Load() != true)
-	//	return -1;
-	g_doomwad->Load();
+	skulls::Wad doomwad(File("doom.wad"));
 
 	//ShowMainMenu();
-	doom::LevelLump *level = g_doomwad->GetLevel(0);
-	PlayLevel(level);
+	PlayLevel(*doomwad.GetLevel(0), screen);
 	
 	/*
 	while (1)
@@ -55,12 +41,12 @@ int main(int argc, char *argv[])
 	}
 	*/
 
-	CloseAudio();
+	CloseSDL();
 	return 0;
 }
 
 
-SDL_Surface *Init()
+SDL_Surface * InitSDL()
 {
 	InitKeyboardInput();
 	InitAudio();
@@ -86,3 +72,7 @@ SDL_Surface *Init()
 }
 
 
+void CloseSDL()
+{
+	CloseAudio();
+}

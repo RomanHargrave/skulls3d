@@ -1,13 +1,10 @@
 
 #include "display.h"
 #include <math.h>
-#if defined(_MSC_VER)
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
 
-#include "doom/WadFile.h"
+#include <SDL/SDL.h>
+
+#include "doom/Wad.h"
 #include "doom/Thing.h"
 #include "doom/Texture.h"
 #include "doom/lumps/LevelLump.h"
@@ -20,10 +17,6 @@ unsigned int g_scr_w = 800;
 unsigned int g_scr_h = 600;
 float g_strech_w = g_scr_w / (float)320;
 float g_strech_h = g_scr_h / (float)200;
-	
-// in main.cpp
-extern doom::WadFile *g_doomwad;
-
 
 
 void PutPixel(SDL_Surface *screen, int x, int y, int color)

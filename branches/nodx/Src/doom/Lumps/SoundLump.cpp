@@ -1,38 +1,23 @@
 
-#include "Lump.h"
 #include "SoundLump.h"
-#include "../WadFile.h"
+#include "Lump.h"
+#include "..\..\File.h"
 
-namespace doom
+namespace skulls
 {
-	SoundLump::SoundLump(Lump *other)
-		:Lump(other)
+	
+	Sound::Sound(File & file, Lump & lump)
 	{
-		m_soundData = NULL;
-		m_len = 0;
+		int oldPos = file.GetPos();
+
+		file.MoveTo(lump.m_position);
+		file.Skip(4);
+		int len = file.ReadInt2();
+		file.Skip(2);
+		m_soundData.reserve(len);
+		file.ReadString((char*)&m_soundData[0], len);
+
+		file.MoveTo(oldPos);
 	}
 
-	bool SoundLump::Load()
-	{
-		if (m_soundData != NULL)
-			return true; // Already loaded
-
-		m_wadfile->MoveTo(m_position);
-		m_wadfile->Skip(4);
-		m_wadfile->ReadInt2((short*)&m_len);
-		m_wadfile->Skip(2);
-		m_soundData = new unsigned char[m_len];
-		m_wadfile->ReadString((char*)m_soundData, m_len);
-
-		return true;
-	}
-	void SoundLump::UnLoad()
-	{
-		if (m_soundData != NULL)
-		{
-			delete m_soundData;
-			m_soundData = NULL;
-			m_len = 0;
-		}
-	}
 };

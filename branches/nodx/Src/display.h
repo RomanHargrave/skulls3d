@@ -2,11 +2,7 @@
 #ifndef SK_DISPLAY
 #define SK_DISPLAY
 
-#if defined(_MSC_VER)
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include <SDL/SDL.h>
 
 typedef struct { unsigned int x,y,w,h; }Rect;
 

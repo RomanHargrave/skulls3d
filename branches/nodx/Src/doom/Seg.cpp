@@ -10,12 +10,12 @@ double round(double d)
 }
 
 
-namespace doom
+namespace skulls
 {
-	Seg::Seg(Vertex *vert1, Vertex *vert2)
+	Seg::Seg(std::shared_ptr<Vertex> vert1, std::shared_ptr<Vertex> vert2)
+		:m_v1(vert1),
+		m_v2(vert2)
 	{
-		m_v1 = vert1;
-		m_v2 = vert2;
 		m_valid = true;
 	}
 
@@ -56,6 +56,7 @@ namespace doom
 			return false;
 	}
 	
+	/*
 	void Seg::CutEachOther(Seg *other)
 	{
 		// see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
@@ -83,7 +84,7 @@ namespace doom
 		int otherDirZ = (int)other->m_v2->m_z - (int)other->m_v1->m_z;
 		int dotProduct = (int)otherRightX*(int)thisDirX + (int)otherRightZ*(int)thisDirZ;
 
-		Vertex * intersect = new Vertex(m_v1->m_x+(int)round(ua*thisDirX), m_v1->m_z+(int)round(ua*thisDirZ));
+		Vertex intersect(m_v1->m_x+(int)round(ua*thisDirX), m_v1->m_z+(int)round(ua*thisDirZ));
 
 		if (dotProduct >= 0)
 		{
@@ -168,6 +169,7 @@ namespace doom
 		}
 		return;
 	}
+	*/
 	
 	bool Seg::IsOnRight(const int x, const int z) const
 	{

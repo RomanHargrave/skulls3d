@@ -1,13 +1,14 @@
 
 #include <stdlib.h>
 #include "Lump.h"
-#include "../WadFile.h"
+#include "../Wad.h"
 
-namespace doom
+/*
+namespace skulls
 {
-	Lump::Lump(WadFile * wadfile, int dictionary_position, char * name, int pos, int size)
+	Lump::Lump(Wad * Wad, int dictionary_position, char * name, int pos, int size)
 	{
-		this->m_wadfile = wadfile;
+		this->m_Wad = Wad;
 		this->m_dictionary_position = dictionary_position;
 		this->m_name = _strdup(name);
 		this->m_position = pos;
@@ -16,7 +17,7 @@ namespace doom
 
 	Lump::Lump(Lump * other)
 	{
-		this->m_wadfile = other->m_wadfile;
+		this->m_Wad = other->m_Wad;
 		this->m_dictionary_position = other->m_dictionary_position;
 		this->m_name = _strdup(other->m_name);
 		this->m_position = other->m_position;
@@ -41,3 +42,4 @@ namespace doom
 		}
 	}
 }
+*/
