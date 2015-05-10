@@ -1,0 +1,1 @@
+First based on Doom for its simplicity. Software rendering with [swegl](https://code.google.com/p/swegl/).
